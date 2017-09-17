@@ -1,0 +1,127 @@
+body { direction:ltr; }
+#container { text-align: left; }
+#menu table.wire td { text-align:left; }
+.fm { padding:2px 0px 2px 3px;}
+
+/* off_calc */
+#page-off_calc div.title { left: 8px; }
+#page-off_calc div.title .left div { right: -0.5ex; }
+#page-off_calc div.title .right div { left: 0.5ex; }
+#page-off_calc #army, #cpanel, #warsim { float: left; }
+#page-off_calc #result { float: right; }
+
+/* logs */
+
+#log_tabs {
+	text-align: left;
+}
+
+#main .build_name {
+	text-align:left;
+}
+
+.value {
+	text-align:right;
+}
+
+#report .notice {
+	padding-left: 30px;
+	background-position: 7px center;
+}
+
+#report .log {
+	margin-right: 20px;
+}
+
+#report .attacker .info { text-align: left; }
+
+tr td.date {
+	text-align: right;
+}
+
+
+
+/* warsim */
+.mode_switcher { float: right; }
+#sides .fm, .side .caption { text-align: right; }
+form p.new_side { float: right; }
+#sides .unitHolder, .unitHolder img, .side .caption div { float: left; }
+#sides .unitHolder { clear: right; }
+#sides .unitHolder input.d7  { float:left; clear:both; }
+#sides .unitHolder input.d2  { float:right; clear:right; }
+#sides .unitHolder .details input.d2 { float: left; clear:right; }
+.side .unitHolder .details div {
+	left: 100%;
+	border-left-width: 0;
+}
+.unitHolder.outline .details div { box-shadow: 2px 0 2px -1px silver; }
+#sides .outline .cata_details {
+	margin-bottom: -20px;
+	margin-left: -20px;
+	padding-left: 20px;
+}
+.heroHolder { border-left: 1px solid silver;}
+select.art option { padding: 0 5px 0 0; }
+.side .hero { padding-left: 10px; }
+.hero .last { padding-left: 0px !important; }
+.hero, .side_hero_item_input { float: left; }
+.simple .hero { float: right; }
+.hero .opened { clear: left; }
+.hero_items .hero_item { float: right; }
+#sides.simple .hero table, #sides.simple .hero span { float: left; }
+#sides.simple .hero table { margin-left: -7px; }
+#sides.simple .hero span { padding-left: 21px; }
+#display_alive_block { float: right; text-align: right; }
+#report #summary { float: right; }
+#report #summary .value { text-align: right; }
+#report #tabs {
+	float: left;
+	clear: right;
+}
+#report #tabs .tab {
+	float: left;
+	text-align: left;
+	padding-left: 3px;
+	border-radius: 3px 8px 0 0;
+	-moz-border-radius: 3px 8px 0 0;
+	-webkit-border-radius: 3px 8px 0 0;
+}
+#report #tabs .tab.active {
+	border-radius: 3px 12px 0 0;
+	-moz-border-radius: 3px 12px 0 0;
+	-webkit-border-radius: 3px 12px 0 0;
+}
+#report table { float: left; }
+#warsim_warns { float: left; }
+#warsim_settings {
+    float: right;
+    margin-right: 16px;
+}
+
+#page-oases #nature_troops { text-align: left; }
+#prefs_container .save { float: right; }
+#prefs_container input.fm { text-align: right; }
+#prefs_container .navi_close { float: right; }
+
+/* items */
+#page-items .item { float: left; }
+#page-items .item img {
+	float: left;
+	margin-right: 5px;
+}
+#page-items .item b { padding-left: 20px; }
+#page-items .item ol { padding-left: 110px; } 
+#page-items a.block:before { content: "►"; }
+.tab1, .tab2, .tab3 { float: left; }
+#page-items .item .tabs { float: right; }
+#page-items .item .tabs div {
+	margin-left: 1px;
+	border-width: 0 0 1px 1px;
+}
+
+/* build */
+#data_holder-close, .build_list__item .level { float: right; }
+
+/* distance */
+#x_from, #x_to { border-radius: 3px 0 0 3px; text-align: right; }
+#y_from, #y_to { border-radius: 0 3px 3px 0; text-align: left; }

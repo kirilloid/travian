@@ -1,0 +1,10 @@
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/" xmlns:moz="http://www.mozilla.org/2006/browser/search/">
+  <script/>
+  <ShortName>kirilloid's calculators for Travian</ShortName>
+  <Description>Travian search</Description>
+  <InputEncoding>UTF-8</InputEncoding>
+  <Image width="16" height="16" type="image/x-icon">/favicon.ico</Image>
+  <Url type="application/x-suggestions+json" method="GET" template="http://suggestqueries.google.com/complete/search?output=firefox&amp;q={searchTerms}" />
+  <Url type="text/html" method="GET" template="http://travian.kirilloid.ru/?s={searchTerms}" />
+  <SearchForm>http://travian.kirilloid.ru/</SearchForm>
+</OpenSearchDescription>

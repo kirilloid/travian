@@ -1,0 +1,9 @@
+[ { "icon": "troops"
+  , "path": "troops"
+  , "text": "Troops tables"
+  }
+, { "icon": "conq"
+  , "path": "conq"
+  , "text": "Conquering Simulator"
+  }
+]
