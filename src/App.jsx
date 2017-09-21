@@ -1,29 +1,48 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { HashRouter as Router, Route } from 'react-router-dom';
 
 import Menu 	from './components/Menu';
+import Server 	from './components/Server';
 
 import Conq 	from './components/Conq';
 import Troops 	from './components/Troops';
-import Server 	from './components/Server';
 
 const menuData = require('./data/menu.json');
 
-export default class App extends Component {
-	handleRoute(e) {
-		console.info("Route entered: %s", e.url);
-		//this.currentUrl = e.url;
-	};
+import lang from './lang';
+import { getInitialModel } from './model';
 
+export default class App extends Component {
+	constructor() {
+		super();
+		this.state = {
+			lang,
+			model: getInitialModel(document.referrer)
+		};
+	}
+	setModel(model) {
+		this.setState({
+			lang: this.state.lang,
+			model: model,
+		});
+	}
+	setLang(lang) {
+		this.setState({
+			lang: lang,
+			model: this.state.model,
+		});		
+	}
 	render() {
 		return (
-			<div>
-				<Router basename="/travian2">
+			<div className={'t' + this.state.base}>
+				<Router base={this.state.route}>
 					<div>
 						<Menu items={menuData} />
-						<Route path="/" exact component={Server} />
-						<Route path="/troops" component={Troops} />
-						<Route path="/conq" component={Conq} />
+						<Server lang={this.state.lang}
+							version={this.state.model.version.original}
+							onChange={model => this.setModel(model)}/>
+						<Route path="/troops" component={Troops(this.state)} />
+						<Route path="/conq" component={Conq(this.state)} />
 					</div>
 				</Router>
 			</div>

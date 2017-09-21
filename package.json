@@ -8,7 +8,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "babel-tape-runner src/**/*.spec.js | faucet"
   },
   "keywords": [
     "travian",
@@ -33,6 +33,9 @@
     "babel-preset-react": "^6.24.1",
     "eslint": "^4.6.1",
     "eslint-plugin-react": "^7.3.0",
+    "faucet": "0.0.1",
+    "flow-bin": "^0.55.0",
+    "tape": "^4.8.0",
     "webpack": "^3.5.6"
   }
 }

@@ -1,14 +1,31 @@
 import React, { Component } from 'react';
+import { getModel, getServers, parseVersion } from '../model';
 
 export default class Server extends Component {
+    mapVersion(stringVersion) {
+        const version = parseVersion(stringVersion);
+        return {
+            version,
+            ...getModel(version.full)
+        }
+    }
     render() {
-        return (<table>
-            <tbody>
-                <tr><th colSpan="2">Kingdoms</th></tr>
-                <tr><td>1x</td><td>3x</td></tr>
-                <tr><th colSpan="2">Legends</th></tr>
-                <tr><td>1x</td><td>3x</td></tr>
-            </tbody>
-        </table>);
+        const _ = this.props.lang;
+        return (<div>
+            <label htmlFor="server">Server:</label>
+            <select id="server"
+                onChange={event => this.props.onChange(this.mapVersion(event.target.value))}
+                value={this.props.version}>
+                {getServers().map(group =>
+                    <optgroup label={_(`terms.servers.${group.title}`)} key={group.title}>
+                        {group.servers.map(server =>
+                            <option value={server.version} key={server.version}>
+                                {_(`terms.servers.${server.title}`)}
+                            </option>
+                        )}
+                    </optgroup>
+                )}
+            </select>
+        </div>);
     }
 }

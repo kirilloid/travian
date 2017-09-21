@@ -1,4 +1,5 @@
 var webpack = require("webpack");
+var fs = require('fs');
 
 module.exports = {
     entry: {
@@ -21,17 +22,12 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.jsx?$/,
+                test: /[.]jsx?$/,
                 include: /src/,
+                exclude: /[.]spec[.]jsx?$/,
                 use: {
                     loader: 'babel-loader',
-                    options: {
-                        presets: ['es2015', 'react'],
-                        plugins: [
-                            'transform-object-rest-spread',
-                            'babel-plugin-transform-react-jsx'
-                        ]
-                    }
+                    options: JSON.parse(fs.readFileSync('.babelrc', 'utf-8'))
                 }
             }
         ]
