@@ -38,10 +38,11 @@ export default function Conq({ model, lang }) {
                     &times;
                     <select value={this.state.tribe}
                         onChange={event => this.setTribe(+event.target.value)}>
-                        {model.units
-                            .filter(race => race[8].l)
-                            .map((race, index) => 
-                                <option value={index} key={index}>{lang(`objects.troops.t_${index}_8`)}</option>)}
+                        {model.units.map((race, index) => race[8].l
+                            ? <option value={index} key={index}>
+                                {lang(`objects.troops.t_${index}_8`)}
+                                </option>
+                            : null)}
                     </select>
                 </label>
                 {lang('conq_times', [timesToConq(model, this.state)])}
