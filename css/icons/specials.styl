@@ -1,0 +1,27 @@
+special(version)
+	.i-spec
+        background-image url pathjoin(dpi_path(), "t" + version, "specials.png")
+
+.i-spec
+    width 16px
+    height 16px
+    background-size 200px 40px
+
+for name, i in hab cat hero exp
+    .i-spec-{name}
+        background-position -20px * i 0
+
+for name, i in traps free exp build
+    .i-spec-{name}
+        background-position -20px * i -20px
+
+for name, i in phi rec com met
+    .i-spec-ab-{name}
+        background-position -20px * i -40px
+        width 18px
+        height 18px
+
+special(2)
+special(3)
+special(4)
+special(5)

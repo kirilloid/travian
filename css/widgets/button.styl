@@ -1,0 +1,19 @@
+@import "../variables"
+
+button, input[type=button]
+    color black
+    text-shadow 0 -1px 0 white
+    background #eee
+    border 1px solid #777
+
+    &:disabled
+        color #777
+        text-shadow-color #ccc
+    &:hover
+        background {ui_green_pale}
+		border-color {ui_green}
+	&:active
+        background {ui_orange_pale}
+		border-color {ui_orange}
+    // &:focus
+	// 	background #eee

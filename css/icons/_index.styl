@@ -1,0 +1,78 @@
+dpi = 96
+
+dpi_path()
+    "../img/" + dpi
+
+@import "arts"
+@import "buildings"
+@import "crystals"
+@import "flags"
+@import "items"
+@import "menu"
+@import "res"
+@import "specials"
+@import "stats"
+@import "units"
+
+// higer-dpi
+dpi = 120 // 1.25x
+@media screen and (min-resolution: 1.118dppx), (min-resolution: 107dpi), (-webkit-min-device-pixel-ratio: 1.118)
+    art()
+    building(4)
+    crystal()
+	flag()
+    menu()
+    units(4)
+    units(5)
+    res(4)
+    res(5)
+    item_class(4)
+    item_class(5)
+
+dpi = 144 // 1.5x
+@media screen and (min-resolution: 1.369dppx), (min-resolution: 131dpi), (-webkit-min-device-pixel-ratio: 1.369)
+    art()
+    crystal()
+	flag()
+    item_class(4)
+    item_class(5)
+    menu()
+    res(4)
+    res(5)
+    units(4)
+    units(5)
+
+dpi = 192 // 2x
+@media screen and (min-resolution: 1.732dppx), (min-resolution: 166dpi), (-webkit-min-device-pixel-ratio: 1.732)
+    art()
+    building(2)
+    building(3)
+    building(4)
+    building(5)
+    crystal()
+	flag()
+    item_class(4)
+    item_class(5)
+    menu()
+    res(4)
+    res(5)
+    units(4)
+    units(5)
+
+dpi = 240 // 2.5x
+@media screen and (min-resolution: 2.236dppx), (min-resolution: 215dpi), (-webkit-min-device-pixel-ratio: 2.236)
+	flag()
+    res(4)
+    res(5)
+
+dpi = 288 // 3x
+@media screen and (min-resolution: 2.739dppx), (min-resolution: 263dpi), (-webkit-min-device-pixel-ratio: 2.739)
+    crystal()
+	flag()
+	res(4)
+
+dpi = 384 // 4x
+@media screen and (min-resolution: 3.464dppx), (min-resolution: 332dpi), (-webkit-min-device-pixel-ratio: 3.464) {
+	flag()
+
+dpi = 576 // 6x

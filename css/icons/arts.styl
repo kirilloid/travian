@@ -1,0 +1,12 @@
+art()
+    .i-art
+        background-image url pathjoin(dpi_path(), "artefacts.png")
+
+
+.i-art
+    width 16px
+    height 16px
+
+for i in (1..9)
+    .i-art-{i}
+        background-position -20px * i 0

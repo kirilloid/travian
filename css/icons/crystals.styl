@@ -1,0 +1,13 @@
+crystal()
+    background-image url pathjoin(dpi_path(), "crystals.png")
+
+.i-crystal
+    width 16px
+    height 16px
+	background-size 100px 16px
+
+for type, i in helm body left right boots
+    .i-crystal-{type}
+        background-position -20px * i 0
+
+crystal()

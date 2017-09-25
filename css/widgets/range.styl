@@ -1,0 +1,89 @@
+@import "../variables";
+
+thumb_width = 16px
+thumb_height = 16px
+thumb_color = #777
+track_bgcolor = #eee
+scroll_animate = 0.2s
+
+range_border_radius = ui_inputs_border_radius
+
+input[type=range]
+	-webkit-appearance none
+	margin 0
+	border-radius {range_border_radius}
+
+	&::-webkit-slider-runnable-track
+		width 100%
+		height {thumb_height}
+		cursor pointer
+		animate {scroll_animate}
+		box-shadow none
+		background {track_bgcolor}
+		border none
+		border-radius {range_border_radius}
+
+	&::-webkit-slider-thumb
+		box-shadow none
+		width thumb_width
+		height {thumb_height}
+		border-radius {range_border_radius}
+		border none
+		background {thumb_color}
+		cursor pointer
+		-webkit-appearance none
+
+	&:hover::-webkit-slider-thumb
+		background {lime}
+	&:active::-webkit-slider-thumb
+		background {orange}
+	&:focus::-webkit-slider-runnable-track
+		background {track_bgcolor}
+
+	&::-moz-range-track
+		width 100%
+		height {thumb_height}
+		cursor pointer
+		animate {scroll_animate}
+		box-shadow none
+		background {track_bgcolor}
+		border-radius {range_border_radius}
+		border none
+	&::-moz-range-thumb
+		box-shadow none
+		border none
+		height {thumb_height}
+		width {thumb_width}
+		border-radius {range_border_radius}
+		background {thumb_color}
+		cursor pointer
+	&::-ms-track
+		width 100%
+		height {thumb_height}
+		cursor pointer
+		animate {scroll_animate}
+		background transparent
+		border-color transparent
+		border-width {thumb_width} 0
+		color transparent
+	&::-ms-fill-lower
+		background {track_bgcolor}
+		border none
+		border-radius 0
+		box-shadow none
+	&::-ms-fill-upper
+		background {track_bgcolor}
+		border none
+		border-radius 0
+		box-shadow none
+	&::-ms-thumb
+		box-shadow none
+		width {thumb_width}
+		height {thumb_height}
+		border-radius {range_border_radius}
+		background {thumb_color}
+		cursor pointer
+	&:focus::-ms-fill-lower
+		background {track_bgcolor}
+	&:focus::-ms-fill-upper
+		background {track_bgcolor}
