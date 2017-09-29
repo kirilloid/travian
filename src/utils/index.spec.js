@@ -1,4 +1,4 @@
-import { extend } from './index.js';
+import { extend, sortBy, roundP } from './index.js';
 import tape from 'tape';
 
 tape('extend', t => {
@@ -60,5 +60,33 @@ tape('extend', t => {
         t.equal(a[0].y, a5[0].y, 'sibling property copied by reference');
         t.end();
     });
+    t.end();
+});
+
+tape('roundP', t => {
+    t.test('default rounding with base = 1', t => {
+        t.equal(roundP(1)(2), 2, '2 -> 2');
+        t.equal(roundP(1)(2.5), 3, '2.5 -> 3');
+        t.end();
+    });
+    t.test('rounding with base = 2', t => {
+        t.equal(roundP(2)(2), 2, '2 -> 2');
+        t.equal(roundP(2)(2.5), 2, '2.5 -> 2');
+        t.end();
+    });
+    t.test('rounding with base = 0.5', t => {
+        t.equal(roundP(0.5)(2), 2, '2 -> 2');
+        t.equal(roundP(0.5)(2.5), 2.5, '2.5 -> 2.5');
+        t.end();
+    });
+    t.end();
+});
+
+tape('sortBy', t => {
+    var a = [1, 10, 4];
+    sortBy(a, x => x);
+    t.deepEqual(a, [1, 4, 10], 'by default number are sorted properly');
+    sortBy(a, x => -x);
+    t.deepEqual(a, [10, 4, 1], 'inverse sort');
     t.end();
 });

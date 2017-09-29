@@ -1,24 +1,27 @@
-import { extend } from '../../utils';
+import { extend, roundP } from '../../utils';
 
-import { TimeT3 } from '../base/buildings';
+import { time, prod, ID } from '../base/buildings';
 import buildings from '../t3.6/buildings';
 
-export function wall4() {
+export const wall4 = (base, num) =>
+    lvl => [roundP(1000)(base ** lvl), num * lvl];
 
-}
+const prod4 = lvl => Math.round(prod(lvl) * 1.4);
 
 export default extend(buildings, {
-    11: undefined,
-    12: {c: [180, 250, 500, 160], nt:'b_13s', dt:'b_13s_desc' },
-    19: {b: {13:3, 22:5}},
-    22: {t: new TimeT3(2175, 1.16, 1875), dt: 'b_23_desc_t4' },
-    30: {f: wall4(1.030,10) },
-    31: {f: wall4(1.020, 6) },
-    32: {f: wall4(1.025, 8) },
-    33: {b: {15:5}},
-    37: {c: [80, 120, 70, 90]},
-    41: {f: wall4(1.025, 8) },
-    42: {f: wall4(1.015, 6) }
+    [ID.CLAYPIT]:   { f: prod4 },
+    [ID.WOODJACK]:  { f: prod4 },
+    [ID.IRONMINE]:  { f: prod4 },
+    [ID.CROPLAND]:  { f: prod4 },
+    [ID.ARMORY]: undefined,
+    [ID.BLACKSMITH]:{ c: [180, 250, 500, 160], nt:'b_13s', dt:'b_13s_desc' },
+    [ID.BARRACKS]:  { b: {[ID.BLACKSMITH]:3, [ID.ACADEMY]:5}},
+    [ID.CRANNY]:    { t: time(2175, 1.16, 1875), dt: 'b_23_desc_t4' },
+    [ID.CITY_WALL]: { f: wall4(1.030,10) },
+    [ID.EARTH_WALL]:{ f: wall4(1.020, 6) },
+    [ID.PALISADE]:  { f: wall4(1.025, 8) },
+    [ID.STONEMASON]:{ b: {[ID.MAIN_BUILDING]:5}},
+    [ID.HERO_MANSION]:{c:[80, 120, 70, 90]},
 });
 
 

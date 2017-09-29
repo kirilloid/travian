@@ -1,12 +1,15 @@
 import { extend } from '../../utils';
 
+import { Building, ID } from '../base/buildings';
 import buildings from '../t5/buildings';
 
+function getDryCost(level) {
+    return Building.prototype.getCost.call(this, level)
+        .map(r => Math.floor(r * 1.5));
+}
+
 export default extend(buildings, {
-    // cropland
-    3: { c: [ 112.5, 135, 130, 0] },
-    // grain mill
-    7: { c: [ 750, 660, 570,1860] },
-    // bakery
-    8: { c: [1800,2220,1305,2400] }
+    [ID.CROPLAND]:  { getCost: getDryCost },
+    [ID.GRAINMILL]: { getCost: getDryCost },
+    [ID.BAKERY]:    { getCost: getDryCost }
 });

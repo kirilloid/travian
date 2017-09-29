@@ -28,6 +28,11 @@ export function extend(base, mixin) {
     return copy;
 }
 
-export function round5(n) {
-    return 5 * Math.round(n / 5);
+export const roundP = precision => number =>
+    precision * Math.round(number / precision);
+
+const cmp = (a, b) => (a > b) - (a < b);
+
+export function sortBy(arr, fn) {
+    return arr.sort((a, b) => cmp(fn(a), fn(b)));
 }
