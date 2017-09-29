@@ -1,7 +1,7 @@
 export function extend(base, mixin) {
     if (typeof base !== 'object') return mixin;
     if (!Array.isArray(base)) {
-        var copy = {};
+        var copy = Object.create(Object.getPrototypeOf(base));
         for (let key in base) {
             if (!(key in mixin)
             ||  mixin[key] !== undefined) {

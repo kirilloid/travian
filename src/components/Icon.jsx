@@ -6,7 +6,7 @@ export function Icon(props) {
         classes.push('icon--scalable');
     }
     classes.push(...props.classes);
-    return <i className={"icon"}></i>
+    return <i className={classes.join(' ')}></i>
 }
 
 /**
@@ -17,5 +17,15 @@ export function Unit(props) {
         `i-unit`,
         `i-unit-${props.unit}`,
         `i-unit-tribe-${props.tribe}`,
+    ]} />;
+};
+
+/**
+ * @param {{building: number}} props 
+ */
+export function Build(props) {
+    return <Icon scalable={true} classes={[
+        `i-building`,
+        `i-building-${props.building}`,
     ]} />;
 };

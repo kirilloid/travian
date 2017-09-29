@@ -133,7 +133,11 @@
                 "b_39": "Great granary",
                 "b_40": "Wonder of the World",
                 "b_41": "Horse drinking trough",
-                "b_42": "Water ditch"
+                "b_42": "Water ditch",
+                "b_42_t4": "Stone Wall",
+                "b_43": "Makeshift Wall",
+                "b_44": "Command Center",
+                "b_45": "Waterworks"
             },
             "descriptions": {
                 "b_1_desc": "Maximum level is 10, except capital \u2014 limited by stockyards there.",

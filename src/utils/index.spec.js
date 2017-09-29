@@ -60,6 +60,15 @@ tape('extend', t => {
         t.equal(a[0].y, a5[0].y, 'sibling property copied by reference');
         t.end();
     });
+    t.test('classes', t => {
+        class A {}
+        class B extends A {}
+        var b = new B();
+        var b2 = extend(b, { x: 5 });
+        t.deepEqual(b2, { x: 5 }, 'propety is added');
+        t.ok(b2 instanceof B, 'prototype hierarchy is preserved');
+        t.end();
+    });
     t.end();
 });
 

@@ -82,8 +82,10 @@ const t5buildings = extend(t4buildings, [
     { t: timeW(), getCost: getWWCost }, // ww
     { t: timeB(16.9, 600) },
     // water ditch
-    { c: [ 740, 850, 960, 620], k:1.28, u:4, cp:3, t:timeB(19, 300), m:20, e:9, y:3, b: {16:10, 20:20}},
+    new Building({ id: ID.WATER_DITCH, c: [ 740, 850, 960, 620], k:1.28, u:4, cp:3, t:timeB(19, 300), m:20, e:9, y:3, b: {16:10, 20:20}}),
 ]);
-t5buildings[ID.NATARIAN_WALL] = t5buildings[ID.EARTH_WALL];
+t5buildings[ID.NATARIAN_WALL] = extend(t5buildings[ID.EARTH_WALL], {
+    id: ID.NATARIAN_WALL
+});
 
 export default t5buildings;

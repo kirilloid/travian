@@ -102,10 +102,10 @@ export class Building {
 		return Math.round(this.cp * 1.2 ** lvl);
 	}
 	nameKey() {
-		return 'objects.buildings.names.' + (this.nt || 'b_' + this.id);
+		return 'objects.buildings.names.' + (this.nt || 'b_' + (this.id + 1));
 	}
 	descriptionKey() {
-		return 'objects.buildings.descriptions.' + (this.dt || 'b_' + this.id);
+		return 'objects.buildings.descriptions.' + (this.dt || 'b_' + (this.id + 1));
 	}
 }
 export default [
@@ -118,7 +118,7 @@ export default [
 	new Building({id: ID.IRONFOUNDRY, 	c: [ 200, 450, 510, 120], k: 1.80, u: 6, cp:1, t:time( 6480, 1.5,  2400), m:5,  e:2, y:1, b: {[ID.IRONMINE]:10, [ID.MAIN_BUILDING]:5}, f: p5}),
 	new Building({id: ID.GRAINMILL, 	c: [ 500, 440, 380,1240], k: 1.80, u: 3, cp:1, t:time( 4240, 1.5,  2400), m:5,  e:2, y:1, b: {[ID.CROPLAND]:5,  [ID.MAIN_BUILDING]:5}, f: p5}),
 	new Building({id: ID.BAKERY, 		c: [1200,1480, 870,1600], k: 1.80, u: 4, cp:1, t:time( 6080, 1.5,  2400), m:5,  e:2, y:1, b: {[ID.CROPLAND]:10, [ID.GRAINMILL]:5, [ID.MAIN_BUILDING]:5}, f: p5}),
-	new Building({id: ID.WAREHOUS, 		c: [ 130, 160,  90,  40], k: 1.28, u: 1, cp:1, t:time( 3875),             m:20, e:3, y:1, b: {[ID.MAIN_BUILDING]:1}, r:{m:true}, f: capacity}),
+	new Building({id: ID.WAREHOUSE, 	c: [ 130, 160,  90,  40], k: 1.28, u: 1, cp:1, t:time( 3875),             m:20, e:3, y:1, b: {[ID.MAIN_BUILDING]:1}, r:{m:true}, f: capacity}),
 	new Building({id: ID.GRANARY, 		c: [  80, 100,  70,  20], k: 1.28, u: 1, cp:1, t:time( 3475),             m:20, e:3, y:1, b: {[ID.MAIN_BUILDING]:1}, r:{m:true}, f: capacity}),
 	new Building({id: ID.ARMORY, 		c: [ 170, 200, 380, 130], k: 1.28, u: 4, cp:2, t:time( 3875),             m:20, e:12,y:2, b: {[ID.MAIN_BUILDING]:3, [ID.ACADEMY]:3}, f: mb_like}),
 	new Building({id: ID.BLACKSMITH,	c: [ 130, 210, 410, 130], k: 1.28, u: 4, cp:2, t:time( 3875),             m:20, e:12,y:2, b: {[ID.MAIN_BUILDING]:3, [ID.ACADEMY]:1}, f: mb_like}),
