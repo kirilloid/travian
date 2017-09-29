@@ -1,11 +1,10 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
+import { Icon } from './Icon';
+
 function MenuIcon({ icon }) {
-    return (<img
-        src="img/x.gif"
-        className={"icon--scalable " + icon}
-    />);
+    return <Icon classes={['i-menu', 'i-menu-' + icon]} />
 }
 
 function MenuItem({ icon, text, path }) {
