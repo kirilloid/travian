@@ -8,3 +8,8 @@ ui_orange_disabled = #E5AC73
 
 ui_green_pale = #E2F2CE
 ui_orange_pale = #F2DAC2
+
+hi_dpi(lo, hi)
+    threshold = sqrt(lo * hi)
+    @media screen and (min-resolution: threshold * 1dppx), (min-resolution: threshold * 96dpi), (-webkit-min-device-pixel-ratio: threshold)
+        dpi = hi

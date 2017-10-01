@@ -1,5 +1,5 @@
 stat(version)
-	.t{version} .i-stat
+    .t{version} .i-stat
         background-image url pathjoin(dpi_path(), "t" + version, "stats.png")
         
 
@@ -16,7 +16,5 @@ for name, i in off_p nil nil def_b off_p def_p speed health
     .i-stat-{name}
         background-position -20px * i -20px
 
-stat(2)
-stat(3)
-stat(4)
-stat(5)
+for i in (2..5)
+    stat(i)
