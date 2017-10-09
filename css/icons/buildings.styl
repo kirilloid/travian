@@ -1,6 +1,9 @@
 building(version)
     .t{version} .i-building
-        background-image url pathjoin(dpi_path(), "t" + version, "buildings.png")
+        background-image unquote("url(" + pathjoin(dpi_path(), "t" + version, "buildings.png") + ")")
+
+.i-building
+    vertical-align bottom
 
 .t2 .i-building
     width 20px
@@ -13,7 +16,20 @@ building(version)
 .t4 .i-building
     width 16px
     height 16px
+    background-size 216px 116px
 
 .t5 .i-building
     width 25px
     height 25px
+    background-size 325px 175px
+
+for y in (0..4)
+    for x in (0..9)
+        id = y * 10 + x
+        .i-building-{id}
+            background-position (100% * x / 10) (100% * y / 5)
+
+building(2)
+building(3)
+building(4)
+building(5)

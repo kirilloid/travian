@@ -1,6 +1,6 @@
 item_class(version)
     .t{version} .i-item-class
-        background-image url pathjoin(dpi_path(), "t" + version, "items.png")
+        background-image unquote("url(" + pathjoin(dpi_path(), "t" + version, "items.png") + ")")
 
 .i-item-class
     width 16px
@@ -9,10 +9,10 @@ item_class(version)
 
 for type, i in helm left boots band25 scroll ointment cage art
     .i-item-class-{type}
-        background-position -20px * i 0
+        background-position (-20px * i) 0
 for type, i in body right horse band33 book bucket tables
     .i-item-class-{type}
-        background-position -20px * i -20px
+        background-position (-20px * i) -20px
 
 item_class(4)
 item_class(5)

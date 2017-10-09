@@ -1,6 +1,6 @@
 crystal()
     .i-crystal
-        background-image url pathjoin(dpi_path(), "t5", "crystals.png")
+        background-image unquote("url(" + pathjoin(dpi_path(), "t5", "crystals.png") + ")")
 
 .i-crystal
     width 16px
@@ -9,6 +9,6 @@ crystal()
 
 for type, i in helm body left right boots
     .i-crystal-{type}
-        background-position -20px * i 0
+        background-position (-20px * i) 0
 
 crystal()

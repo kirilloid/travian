@@ -20,7 +20,7 @@ export default ({ model, lang }) => class extends Component {
 }
 
 const BuildList = ({ buildings, lang }) => <ul>
-    {buildings.map(building => <Building lang={lang} building={building}/>)}
+    {buildings.map(building => <Building key={building.id} lang={lang} building={building}/>)}
 </ul>;
 
 const Building = ({ building, lang }) => <li>

@@ -35,7 +35,7 @@ export default class App extends Component {
 	}
 	render() {
 		return (
-			<div className={'t' + this.state.base}>
+			<div className={'t' + this.state.model.version.base}>
 				<Router base={this.state.route}>
 					<div>
 						<Menu items={menuData} />

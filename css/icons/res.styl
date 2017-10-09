@@ -7,11 +7,11 @@
 
 for r in (1..6)
     .i-res-{r}
-        background-position center 20px * (r - 1)
+        background-position center (20px * (r - 1))
 
 res(version)
     .t{version} .i-res
-        background-image url pathjoin(dpi_path(), "t" + version, "res.png")
+        background-image unquote("url(" + pathjoin(dpi_path(), "t" + version, "res.png") + ")")
 
 res(2)
 res(3)

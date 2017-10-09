@@ -1,6 +1,6 @@
 stat(version)
     .t{version} .i-stat
-        background-image url pathjoin(dpi_path(), "t" + version, "stats.png")
+        background-image unquote("url(" + pathjoin(dpi_path(), "t" + version, "stats.png") + ")")
         
 
 .i-stat
@@ -10,11 +10,11 @@ stat(version)
 
 for name, i in off off_i off_c def def_i def_c off_s def_s point cap
     .i-stat-{name}
-        background-position -20px * i 0
+        background-position (-20px * i) 0
 
 for name, i in off_p nil nil def_b off_p def_p speed health
     .i-stat-{name}
-        background-position -20px * i -20px
+        background-position (-20px * i) -20px
 
 for i in (2..5)
     stat(i)

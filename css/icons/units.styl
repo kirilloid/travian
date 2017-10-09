@@ -3,7 +3,7 @@ tribe_num = 0 0 5 5 7 5
 units(version)
     for tribe in (1..tribe_num[version])
         .t{version} .i-unit-tribe-{tribe}
-            background-image url pathjoin(dpi_path(), "t" + version, "tr-" + tribe + ".png")
+            background-image unquote("url(" + pathjoin(dpi_path(), "t" + version, "tr-" + tribe + ".png") + ")")
 
 .i-unit
     width 16px
@@ -12,7 +12,7 @@ units(version)
 
 for i in (1..10)
     .i-unit-{i}
-        background-position 20px * (1-i) 0
+        background-position (-20px * (i - 1)) 0
 
 units(2)
 units(3)

@@ -1,6 +1,6 @@
 special(version)
     .i-spec
-        background-image url pathjoin(dpi_path(), "t" + version, "specials.png")
+        background-image unquote("url(" + pathjoin(dpi_path(), "t" + version, "specials.png") + ")")
 
 .i-spec
     width 16px

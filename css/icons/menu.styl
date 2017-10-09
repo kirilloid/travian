@@ -3,7 +3,7 @@
 
 menu()
     .i-menu
-        background-image url pathjoin(dpi_path(), "menu.gif")
+        background-image unquote("url(" + pathjoin(dpi_path(), "menu.gif") + ")")
 
 .i-menu-index
     background-position 0 0

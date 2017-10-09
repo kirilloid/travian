@@ -1,7 +1,7 @@
 // flags
 flag()
     .i-flag
-        background-image url pathjoin(dpi_path(), "flags.png")
+        background-image unquote("url(" + pathjoin(dpi_path(), "flags.png") + ")")
 
 .i-flag
     background-size 18px 672px
@@ -13,4 +13,4 @@ flags = ae ar ba bg br cl cz de dk ee eg com es fi fr gr hk hr hu id il ine ir i
 
 for flag, i in flags
     .i-flag-{flag}
-        background-position 0 -12px * i
+        background-position 0 (-12px * i)

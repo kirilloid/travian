@@ -15,8 +15,8 @@ export function Icon(props) {
 export function Unit(props) {
     return <Icon scalable={true} classes={[
         `i-unit`,
-        `i-unit-${props.unit}`,
-        `i-unit-tribe-${props.tribe}`,
+        `i-unit-${props.unit + 1}`,
+        `i-unit-tribe-${props.tribe + 1}`,
     ]} />;
 };
 
@@ -26,6 +26,6 @@ export function Unit(props) {
 export function Build(props) {
     return <Icon scalable={true} classes={[
         `i-building`,
-        `i-building-${props.building}`,
+        `i-building-${props.id}`,
     ]} />;
 };
