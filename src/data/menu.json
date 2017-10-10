@@ -10,4 +10,8 @@
   , "path": "build"
   , "text": "Buildings tables"
   }
+, { "icon": "def"
+  , "path": "def"
+  , "text": "Defense calculator"
+  }
 ]
