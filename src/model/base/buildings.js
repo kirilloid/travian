@@ -24,9 +24,9 @@ export const percent = m => lvl => m * lvl;
 export const prod = lvl => [2,
 	5, 9, 15, 22, 33, 50, 70, 100, 145, 200,
 	280, 375, 495, 635, 800, 1000, 1300, 1600, 2000, 2450, 3050][lvl];
-const capacity = lvl => roundP(100)(2120 * 1.2 ** lvl - 1320);
+export const capacity = lvl => roundP(100)(2120 * 1.2 ** lvl - 1320);
 const cranny = lvl => roundP(10)(129.17 ** (lvl-1));
-const wall = (base) => (lvl) => ({ defBonus: roundP(0.001)(base ** lvl) });
+const wall = (base) => (lvl) => ({ defBonus: roundP(0.001)(base ** lvl) - 1 });
 const p5 = percent(5);
 const p10 = percent(10);
 const train = lvl => 0.9 ** (lvl - 1);
@@ -74,13 +74,6 @@ export const ID = {
 	EARTH_WALL: 31,
 	PALISADE: 32,
 	STONEMASON: 33,
-	BREWERY: 34,
-	TRAPPER: 35,
-	HERO_MANSION: 36,
-	GREAT_WAREHOUSE: 37,
-	GREAT_GRANARY: 38,
-	WORLD_WONDER: 39,
-	HORSE_POOL: 40,
 };
 
 const round5 = roundP(5);
@@ -129,22 +122,22 @@ export default [
 	new Building({id: ID.BLACKSMITH,	c: [ 130, 210, 410, 130], k: 1.28, u: 4, cp:2, t:time( 3875),             m:20, e:12,y:2, b: {[ID.MAIN_BUILDING]:3, [ID.ACADEMY]:1}, f: mb_like}),
 	new Building({id: ID.ARENA, 		c: [1750,2250,1530, 240], k: 1.28, u: 1, cp:1, t:time( 5375),             m:20, e:4, y:2, b: {[ID.RALLY_POINT]:15}, f: p10}),
 	new Building({id: ID.MAIN_BUILDING, c: [  70,  40,  60,  20], k: 1.28, u: 2, cp:2, t:time( 3875),             m:20, e:7, y:3, f: mb_like}),
-	new Building({id: ID.RALLY_POINT, 	c: [ 110, 160,  90,  70], k: 1.28, u: 1, cp:1, t:time( 3875),             m:20, e:13,y:2, f: id}),
+	new Building({id: ID.RALLY_POINT, 	c: [ 110, 160,  90,  70], k: 1.28, u: 1, cp:1, t:time( 3875),             m:20, e:13,y:2, f: id, s:32}),
 	new Building({id: ID.MARKETPLACE, 	c: [  80,  70, 120,  70], k: 1.28, u: 4, cp:3, t:time( 3675),             m:20, e:14,y:3, b: {[ID.MAIN_BUILDING]:3, [ID.WAREHOUSE]:1, [ID.GRANARY]:1}, f: id}),
 	new Building({id: ID.EMBASSY, 		c: [ 180, 130, 150,  80], k: 1.28, u: 3, cp:4, t:time( 3875),             m:20, e:8, y:3, b: {[ID.MAIN_BUILDING]:1}, f: id}),
 	new Building({id: ID.BARRACKS, 		c: [ 210, 140, 260, 120], k: 1.28, u: 4, cp:1, t:time( 3875),             m:20, e:7, y:2, b: {[ID.MAIN_BUILDING]:3, [ID.RALLY_POINT]:1}, f: train}),
 	new Building({id: ID.STABLES, 		c: [ 260, 140, 220, 100], k: 1.28, u: 5, cp:2, t:time( 4075),             m:20, e:7, y:2, b: {[ID.ARMORY]:3, [ID.ACADEMY]:5}, f: train}),
 	new Building({id: ID.WORKSHOP, 		c: [ 460, 510, 600, 320], k: 1.28, u: 3, cp:3, t:time( 4875),             m:20, e:7, y:2, b: {[ID.MAIN_BUILDING]:5, [ID.ACADEMY]:10}, f: train}),
-	new Building({id: ID.ACADEMY, 		c: [ 220, 160,  90,  40], k: 1.28, u: 4, cp:4, t:time( 3875),             m:20, e:0, y:2, b: {[ID.MAIN_BUILDING]:3, [ID.BARRACKS]:3}}),
+	new Building({id: ID.ACADEMY, 		c: [ 220, 160,  90,  40], k: 1.28, u: 4, cp:4, t:time( 3875),             m:20, e:0, y:2, b: {[ID.MAIN_BUILDING]:3, [ID.BARRACKS]:3}, f: mb_like}),
 	new Building({id: ID.CRANNY, 		c: [  40,  50,  30,  10], k: 1.28, u: 0, cp:1, t:time( 2625),             m:10, e:3, y:3, r: {m:true}, f: cranny}),
-	new Building({id: ID.TOWNHALL, 		c: [1250,1110,1260, 600], k: 1.28, u: 4, cp:5, t:time(14375),             m:20, e:0, y:3, b: {[ID.MAIN_BUILDING]:10, [ID.ACADEMY]:10}}),
+	new Building({id: ID.TOWNHALL, 		c: [1250,1110,1260, 600], k: 1.28, u: 4, cp:5, t:time(14375),             m:20, e:0, y:3, b: {[ID.MAIN_BUILDING]:10, [ID.ACADEMY]:10}, f: mb_like}),
 	new Building({id: ID.RESIDENCE, 	c: [ 580, 460, 350, 180], k: 1.28, u: 1, cp:2, t:time( 3875),             m:20, e:9, y:3, b: {[ID.MAIN_BUILDING]:5, [ID.PALACE]:-1}, f: residence}),
 	new Building({id: ID.PALACE, 		c: [ 550, 800, 750, 250], k: 1.28, u: 1, cp:5, t:time( 6875),             m:20, e:9, y:3, b: {[ID.MAIN_BUILDING]:5, [ID.EMBASSY]:1, [ID.RESIDENCE]:-1}, f: palace}),
 	new Building({id: ID.TREASURY, 		c: [2880,2740,2580, 990], k: 1.26, u: 4, cp:6, t:time( 9875),             m:20, e:15,y:3, b: {[ID.MAIN_BUILDING]:10, [ID.WORLD_WONDER]:-1}, f: slots2}),
 	new Building({id: ID.TRADE_OFFICE,  c: [1400,1330,1200, 400], k: 1.28, u: 3, cp:3, t:time( 4875),             m:20, e:3, y:3, b: {[ID.MARKETPLACE]:20, [ID.STABLES]:10}, f: p10}),
 	new Building({id: ID.GREAT_BARRACKS,c: [ 630, 420, 780, 360], k: 1.28, u: 4, cp:1, t:time( 3875),             m:20, e:7, y:2, b: {[ID.BARRACKS]:20}, r:{c:-1}, f: train}),
 	new Building({id: ID.GREAT_STABLES, c: [ 780, 420, 660, 300], k: 1.28, u: 5, cp:2, t:time( 4075),             m:20, e:7, y:2, b: {[ID.STABLES]:20}, r:{c:-1}, f: train}),
-	new Building({id: ID.CITY_WALL, 	c: [  70,  90, 170,  70], k: 1.28, u: 0, cp:1, t:time( 3875),             m:20, e:9, y:2, r: {r:1}, f: wall(1.03)}),
-	new Building({id: ID.EARTH_WALL, 	c: [ 120, 200,   0,  80], k: 1.28, u: 0, cp:1, t:time( 3875),             m:20, e:9, y:2, r: {r:2}, f: wall(1.02)}),
-	new Building({id: ID.PALISADE, 		c: [ 160, 100,  80,  60], k: 1.28, u: 0, cp:1, t:time( 3875),             m:20, e:9, y:2, r: {r:3}, f: wall(1.025)}),
+	new Building({id: ID.CITY_WALL, 	c: [  70,  90, 170,  70], k: 1.28, u: 0, cp:1, t:time( 3875),             m:20, e:9, y:2, r: {r:1}, f: wall(1.03), s:33}),
+	new Building({id: ID.EARTH_WALL, 	c: [ 120, 200,   0,  80], k: 1.28, u: 0, cp:1, t:time( 3875),             m:20, e:9, y:2, r: {r:2}, f: wall(1.02), s:33}),
+	new Building({id: ID.PALISADE, 		c: [ 160, 100,  80,  60], k: 1.28, u: 0, cp:1, t:time( 3875),             m:20, e:9, y:2, r: {r:3}, f: wall(1.025), s:33}),
 ];

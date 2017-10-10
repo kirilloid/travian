@@ -5,7 +5,7 @@ import buildings from '../t3.6/buildings';
 
 export const wall4 = (base, num) =>
     lvl => ({
-        defBonus: roundP(0.001)(base ** lvl),
+        defBonus: roundP(0.001)(base ** lvl) - 1,
         def: num * lvl
     });
 
