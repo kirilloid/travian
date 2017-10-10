@@ -1,4 +1,4 @@
-import { extend, sortBy, roundP } from './index.js';
+import { extend, sortBy, roundP, map } from './index.js';
 import tape from 'tape';
 
 tape('extend', t => {
@@ -98,6 +98,22 @@ tape('roundP', t => {
         t.equal(roundP(0.5)(2.5), 2.5, '2.5 -> 2.5');
         t.end();
     });
+    t.test('rounding with base = 0.5', t => {
+        var round = roundP(1);
+        for (var i = 0; i < 10; i++) {
+            var x = 100 * Math.random() - 50;
+            t.equal(round(x), Math.round(x), `${x} with Math.round`);
+        }
+        t.end();
+    });
+    t.end();
+});
+
+tape('map', t => {
+    var a = { a: 1 };
+    var a2 = map(a, x => x * 2);
+    t.deepEqual(a2, { a: 2 });
+    t.deepEqual(a, { a: 1 }, 'original is not modified');
     t.end();
 });
 

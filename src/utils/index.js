@@ -46,3 +46,10 @@ export function sortBy(arr, fn) {
 export function resSum(res) {
     return res[0] + res[1] + res[2] + res[3];
 }
+
+export function map(item, fn) {
+    const copy = {};
+    Object.keys(item)
+        .forEach(key => { copy[key] = fn(item[key]); });
+    return copy;
+}
