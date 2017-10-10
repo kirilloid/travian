@@ -35,7 +35,7 @@ const timeW = () => time(300, 0)([
     246,251,255,260,264,269,274,278,288,576]);
 
 function getWWCost(level) {
-    return Building.prototype.getCost.call(this, level)
+    return Building.prototype.cost.call(this, level)
         .map(r => Math.min(r, 1e6));
 }
 
@@ -79,7 +79,7 @@ const t5buildings = extend(t4buildings, [
     , // hero mansion
     { t: timeB(16.1, 600) },
     { t: timeB(14, 600) },
-    { t: timeW(), getCost: getWWCost }, // ww
+    { t: timeW(), cost: getWWCost }, // ww
     { t: timeB(16.9, 600) },
     // water ditch
     new Building({ id: ID.WATER_DITCH, c: [ 740, 850, 960, 620], k:1.28, u:4, cp:3, t:timeB(19, 300), m:20, e:9, y:3, b: {16:10, 20:20}}),

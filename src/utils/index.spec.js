@@ -65,8 +65,18 @@ tape('extend', t => {
         class B extends A {}
         var b = new B();
         var b2 = extend(b, { x: 5 });
-        t.deepEqual(b2, { x: 5 }, 'propety is added');
+        t.deepEqual(b2, { x: 5 }, 'property is added');
         t.ok(b2 instanceof B, 'prototype hierarchy is preserved');
+        t.end();
+    });
+    t.test('functions', t => {
+        var a = { a: 1 };
+        var b = extend(a, { a: x => x + 1 });
+        t.deepEqual(b, { a: 2 }, 'propety is changed');
+        var a = { f: () => {} };
+        var f = () => {};
+        var b = extend(a, { f: f });
+        t.deepEqual(b, { f: f }, 'function is overriden');
         t.end();
     });
     t.end();

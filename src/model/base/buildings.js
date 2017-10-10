@@ -26,7 +26,7 @@ export const prod = lvl => [2,
 	280, 375, 495, 635, 800, 1000, 1300, 1600, 2000, 2450, 3050][lvl];
 const capacity = lvl => roundP(100)(2120 * 1.2 ** lvl - 1320);
 const cranny = lvl => roundP(10)(129.17 ** (lvl-1));
-const wall = (base) => (lvl) => roundP(1000)(base ** lvl);
+const wall = (base) => (lvl) => ({ defBonus: roundP(0.001)(base ** lvl) });
 const p5 = percent(5);
 const p10 = percent(10);
 const train = lvl => 0.9 ** (lvl - 1);
@@ -34,6 +34,8 @@ const mb_like = lvl => 0.964 ** (lvl - 1);
 const id = lvl => lvl;
 export const slots2 = lvl => (lvl >= 10) + (lvl >= 20);
 export const slots3 = lvl => (lvl >= 10) + (lvl >= 15) + (lvl >= 20);
+const residence = lvl => ({ slots: slots2(lvl), def: 2 * lvl ** 2 });
+const palace = lvl => ({ slots: slots3(lvl), def: 2 * lvl ** 2 });
 
 export const ID = {
 	WOODJACK: 0,
@@ -87,7 +89,7 @@ export class Building {
 		Object.assign(this, config);
 	}
 	get maxLevel () {
-		return this.c;
+		return this.m;
 	}
 	time(lvl) {
 		return this.t(lvl);
@@ -100,6 +102,9 @@ export class Building {
 	}
 	culture(lvl) {
 		return Math.round(this.cp * 1.2 ** lvl);
+	}
+	benefit(lvl) {
+		return this.f(lvl);
 	}
 	nameKey() {
 		return 'objects.buildings.names.' + (this.nt || 'b_' + (this.id + 1));
@@ -133,8 +138,8 @@ export default [
 	new Building({id: ID.ACADEMY, 		c: [ 220, 160,  90,  40], k: 1.28, u: 4, cp:4, t:time( 3875),             m:20, e:0, y:2, b: {[ID.MAIN_BUILDING]:3, [ID.BARRACKS]:3}}),
 	new Building({id: ID.CRANNY, 		c: [  40,  50,  30,  10], k: 1.28, u: 0, cp:1, t:time( 2625),             m:10, e:3, y:3, r: {m:true}, f: cranny}),
 	new Building({id: ID.TOWNHALL, 		c: [1250,1110,1260, 600], k: 1.28, u: 4, cp:5, t:time(14375),             m:20, e:0, y:3, b: {[ID.MAIN_BUILDING]:10, [ID.ACADEMY]:10}}),
-	new Building({id: ID.RESIDENCE, 	c: [ 580, 460, 350, 180], k: 1.28, u: 1, cp:2, t:time( 3875),             m:20, e:9, y:3, b: {[ID.MAIN_BUILDING]:5, [ID.PALACE]:-1}, f: slots2}),
-	new Building({id: ID.PALACE, 		c: [ 550, 800, 750, 250], k: 1.28, u: 1, cp:5, t:time( 6875),             m:20, e:9, y:3, b: {[ID.MAIN_BUILDING]:5, [ID.EMBASSY]:1, [ID.RESIDENCE]:-1}, f: slots3}),
+	new Building({id: ID.RESIDENCE, 	c: [ 580, 460, 350, 180], k: 1.28, u: 1, cp:2, t:time( 3875),             m:20, e:9, y:3, b: {[ID.MAIN_BUILDING]:5, [ID.PALACE]:-1}, f: residence}),
+	new Building({id: ID.PALACE, 		c: [ 550, 800, 750, 250], k: 1.28, u: 1, cp:5, t:time( 6875),             m:20, e:9, y:3, b: {[ID.MAIN_BUILDING]:5, [ID.EMBASSY]:1, [ID.RESIDENCE]:-1}, f: palace}),
 	new Building({id: ID.TREASURY, 		c: [2880,2740,2580, 990], k: 1.26, u: 4, cp:6, t:time( 9875),             m:20, e:15,y:3, b: {[ID.MAIN_BUILDING]:10, [ID.WORLD_WONDER]:-1}, f: slots2}),
 	new Building({id: ID.TRADE_OFFICE,  c: [1400,1330,1200, 400], k: 1.28, u: 3, cp:3, t:time( 4875),             m:20, e:3, y:3, b: {[ID.MARKETPLACE]:20, [ID.STABLES]:10}, f: p10}),
 	new Building({id: ID.GREAT_BARRACKS,c: [ 630, 420, 780, 360], k: 1.28, u: 4, cp:1, t:time( 3875),             m:20, e:7, y:2, b: {[ID.BARRACKS]:20}, r:{c:-1}, f: train}),

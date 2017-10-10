@@ -4,7 +4,10 @@ import { time, prod, ID } from '../base/buildings';
 import buildings from '../t3.6/buildings';
 
 export const wall4 = (base, num) =>
-    lvl => [roundP(1000)(base ** lvl), num * lvl];
+    lvl => ({
+        defBonus: roundP(0.001)(base ** lvl),
+        def: num * lvl
+    });
 
 const prod4 = lvl => Math.round(prod(lvl) * 1.4);
 

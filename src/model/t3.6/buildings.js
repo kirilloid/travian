@@ -15,9 +15,9 @@ var t3buildings = extend(buildings, {
     [ID.WORLD_WONDER]:  new Building({ id: ID.WORLD_WONDER, c:[66700,69050,72200,13200],  k:1.0275,u: 1, cp:0, t:time(60857,1.014,42857),m:100,e:0, y:3, r: {c:-1}, f: ww}),
     [ID.HORSE_POOL]:    new Building({ id: ID.HORSE_POOL,   c: [ 780, 420, 660, 540],     k: 1.28, u: 5, cp:3, t:time( 5950,2),          m:20, e:7, y:3, b: {[ID.RALLY_POINT]:10, [ID.STABLES]:20}, r:{r:1}, f: percent(1)}),
 });
-t3buildings[ID.WORLD_WONDER].getCost = function getCost(level) {
+t3buildings[ID.WORLD_WONDER].cost = function cost(level) {
     if (level === 100) return [1e6, 1e6, 1e6, 193630];
-    return Building.prototype.getCost.call(this).map(r => Math.min(r, 1e6));
+    return Building.prototype.cost.call(this).map(r => Math.min(r, 1e6));
 };
 
 export default t3buildings;

@@ -1,5 +1,11 @@
 export function extend(base, mixin) {
-    if (typeof base !== 'object') return mixin;
+    if (typeof mixin === 'function'
+    &&  typeof base !== 'function') {
+        return mixin(base);
+    }
+    if (typeof base !== 'object') {
+        return mixin;
+    }
     if (!Array.isArray(base)) {
         var copy = Object.create(Object.getPrototypeOf(base));
         for (let key in base) {
@@ -35,4 +41,8 @@ const cmp = (a, b) => (a > b) - (a < b);
 
 export function sortBy(arr, fn) {
     return arr.sort((a, b) => cmp(fn(a), fn(b)));
+}
+
+export function resSum(res) {
+    return res[0] + res[1] + res[2] + res[3];
 }
