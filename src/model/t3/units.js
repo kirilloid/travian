@@ -1,6 +1,6 @@
 import { extend } from '../../utils';
 
-import units from '../base/units';
+import units, { RAM, CAT } from '../base/units';
 
 export default extend(units, [
     // more expensive settlers
@@ -26,8 +26,8 @@ export default extend(units, [
         {a:0,  di:10, dc:0,  v:25,c:[0,0,0,0], u:1, t:0, p:0, i:1, rt:1800, s:35, ds:20},
         {a:155,di:80, dc:50, v:14,c:[0,0,0,0], u:2, t:0, p:0, i:0, rt:1800},
         {a:170,di:140,dc:80, v:12,c:[0,0,0,0], u:3, t:0, p:0, i:0, rt:1800},
-        {a:250,di:120,dc:150,v:5, c:[0,0,0,0], u:4, t:0, p:0, i:1, rt:1800},
-        {a:60, di:45, dc:10, v:3, c:[0,0,0,0], u:5, t:0, p:0, i:1, rt:1800},
+        {a:250,di:120,dc:150,v:5, c:[0,0,0,0], u:4, t:0, p:0, i:1, rt:1800, tags: [RAM] },
+        {a:60, di:45, dc:10, v:3, c:[0,0,0,0], u:5, t:0, p:0, i:1, rt:1800, tags: [CAT] },
         {a:80, di:50, dc:50, v:5, c:[0,0,0,0], u:1, t:0, p:0, i:1, rt:1800, l:[200,200]},
         {a:30, di:40, dc:40, v:5, c:[0,0,0,0], u:1, t:0, p:0, i:1, rt:0}
     ]

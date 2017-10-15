@@ -1,7 +1,6 @@
-import units from '../t5/units';
+import { extend } from '../../utils';
+
+import data from '../t5';
 import buildings from './buildings';
 
-export default {
-    units,
-    buildings
-};
+export default extend(data, { buildings });

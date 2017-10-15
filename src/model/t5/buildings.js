@@ -1,14 +1,14 @@
 import { extend } from '../../utils';
 
 import buildings, { Building, prod, ID as _ID } from '../base/buildings';
-import t4buildings from '../t4/buildings';
+import t4buildings, { wall4 } from '../t4/buildings';
 
 export const ID = extend(_ID, {
     WATER_DITCH: 41,
     NATARIAN_WALL: 42,
 });
 
-const ditch = lvl => ({ defBonus: 1 + [0,1,2,3,4,5,6,7,8,9,10,11,12,13,15,17,19,21,23,25,30][lvl] / 100 });
+const ditch = lvl => ({ defBonus: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,15,17,19,21,23,25,30][lvl] / 100 });
 
 const time = (base, extra) => mul => level =>
     base * mul[level-1] + extra;
@@ -45,6 +45,18 @@ function altCost(level) {
     return level === 1 ? this.c1 : Building.prototype.cost.call(this, level);
 }
 
+function capacity(level) {
+    return [800,
+         1200,  1700,  2300,  3100,  4000,  5000,  6300,  7700,  9600, 12000,
+        14400, 18000, 22000, 26000, 32000, 38000, 45000, 55000, 66000, 80000][level];
+}
+
+function treasury(level) {
+    return level <= 10 ? level * 10 :
+           level <= 18 ? (level-6) * 250 :
+                         (level-12) * 500;
+}
+
 const t5buildings = extend(t4buildings, [
     { t: timeA(24), f: prod },
     { t: timeA(22), f: prod, m: 20 },
@@ -72,7 +84,7 @@ const t5buildings = extend(t4buildings, [
     { t: timeB(21.9, 600) },
     { t: timeB(14.6, 1300) },
     { t: timeB(16.7, 3600) },
-    { t: timeB(22.9, 2000), c: [1440,1370,1290, 495], c1: [ 720, 685, 645, 250], cost: altCost, b: { 15: 3 } },
+    { t: timeB(22.9, 2000), c: [1440,1370,1290, 495], c1: [ 720, 685, 645, 250], cost: altCost, b: { 15: 3 }, f: treasury },
     { t: timeB(22.2, 300) },
     { t: timeB(16.3, 600) },
     { t: timeB(16.2, 600) },

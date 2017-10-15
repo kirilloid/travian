@@ -1,7 +1,7 @@
-import units from './units';
-import buildings from '../base/buildings';
+import { extend } from '../../utils';
 
-export default {
-    units,
-    buildings
-};
+import data from '../base';
+import units from './units';
+import culture from './culture';
+
+export default extend(data, { units, culture });

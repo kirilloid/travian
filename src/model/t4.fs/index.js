@@ -1,9 +1,11 @@
 import { extend } from '../../utils';
 
+import data from '../t4';
 import units from './units';
 import buildings from './buildings';
+import { ID } from '../base/buildings';
 
-export default {
+export default extend(data, {
     units: extend(units, {
         5:[ { p: [ID.BARRACKS], },
             { p: [ID.BARRACKS], r: {[ID.ACADEMY]: 1, [ID.BLACKSMITH]: 1} },
@@ -27,6 +29,6 @@ export default {
             { p: [ID.RESIDENCE, ID.PALACE], r: {[ID.ACADEMY]:20, [ID.RALLY_POINT]:10} },
             { p: [ID.RESIDENCE, ID.PALACE] },
         ],
-    },
+    }),
     buildings
-};
+});

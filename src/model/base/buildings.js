@@ -13,7 +13,6 @@ export const time = (a, k = 1.16, b = 1875) => (level) =>
     r: requirements
         c: capital
         m: multi
-        v: version
         r: race
 	b: required buildings
 	f: benefit

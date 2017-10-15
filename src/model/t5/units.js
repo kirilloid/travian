@@ -1,6 +1,6 @@
 import { extend } from '../../utils';
 
-import units from '../t3.6/units';
+import units from '../t3/units';
 
 export default extend(units, [
 	[   { c:[   75,   50, 100,  0] },
