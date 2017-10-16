@@ -1,4 +1,4 @@
-import { extend, sortBy, roundP, map } from './index.js';
+import { extend, sortBy, roundP, map, limit, compose } from './index.js';
 import tape from 'tape';
 
 tape('extend', t => {
@@ -77,6 +77,8 @@ tape('extend', t => {
         var f = () => {};
         var b = extend(a, { f: f });
         t.deepEqual(b, { f: f }, 'function is overriden');
+        var c = extend({}, { f: f });
+        t.deepEqual(c, { f: f }, 'function is re-defined on missing property');
         t.end();
     });
     t.end();
@@ -123,5 +125,23 @@ tape('sortBy', t => {
     t.deepEqual(a, [1, 4, 10], 'by default number are sorted properly');
     sortBy(a, x => -x);
     t.deepEqual(a, [10, 4, 1], 'inverse sort');
+    t.end();
+});
+
+tape('limit', t => {
+    const limit1 = limit(1, 3);
+    t.equal(limit1(0), 1, 'below bound');
+    t.equal(limit1(1), 1, 'low-bound');
+    t.equal(limit1(2), 2, 'in-bound');
+    t.equal(limit1(3), 3, 'high-bound');
+    t.equal(limit1(4), 3, 'higher bound');
+    t.end();
+});
+
+tape('compose', t => {
+    const p5 = x => x + 5;
+    const m2 = x => x * 2;
+    t.equal(compose(p5, m2)(1), 7, '1 *2 +5');
+    t.equal(compose(m2, p5)(1),12, '1 +5 *2');
     t.end();
 });

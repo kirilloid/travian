@@ -1,7 +1,12 @@
 export function extend(base, mixin) {
-    if (typeof mixin === 'function'
-    &&  typeof base !== 'function') {
-        return mixin(base);
+    if (typeof mixin === 'function') {
+        switch (typeof base) {
+        case 'undefined':
+        case 'function':
+            return mixin;
+        default:
+            return mixin(base);
+        }
     }
     if (typeof base !== 'object') {
         return mixin;
@@ -37,6 +42,8 @@ export function extend(base, mixin) {
 export const roundP = precision => number =>
     precision * Math.round(number / precision);
 
+export const limit = (a, b) => (n) => Math.min(b, Math.max(a, n));
+
 const cmp = (a, b) => (a > b) - (a < b);
 
 export function sortBy(arr, fn) {
@@ -53,3 +60,5 @@ export function map(item, fn) {
         .forEach(key => { copy[key] = fn(item[key]); });
     return copy;
 }
+
+export const compose = (...a) => n => a.reduceRight((v, f) => f(v), n);

@@ -14,6 +14,7 @@ tape('existing configuration', t => {
         serverGroup.servers.forEach(server => {
             const model = getModel(parseVersion(server.version).full);
             t.ok(model, `${server.version}: model exists`);
+            t.ok(model.culture, `${server.version}: model.culture exists`);
             t.ok(model.units, `${server.version}: model.units exists`);
             t.ok(model.buildings, `${server.version}: model.buildings exists`);
         }));

@@ -2,6 +2,7 @@ import { extend } from '../../utils';
 
 import units from './units';
 import buildings, { ID } from './buildings';
+import * as combat from './combat';
 
 export default {
     units: extend(units, [
@@ -39,5 +40,6 @@ export default {
             { p: [ID.RESIDENCE, ID.PALACE] },
         ],
     ]),
-    buildings
+    buildings,
+    combat
 };
