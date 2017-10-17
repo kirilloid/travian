@@ -45,7 +45,7 @@ export default class App extends Component {
 							version={model.version.original}
 							onChange={model => this.setModel(model)}/>
 						<Route path="/troops" render={() => <Troops units={model.units} lang={lang} />} />
-						<Route path="/conq" component={Conq(this.state)} />
+						<Route path="/conq" render={() => <Conq model={model} lang={lang} />} />
 						<Route path="/build" component={Build(this.state)} />
 						<Route path="/def" component={Def(this.state)} />
 					</div>
