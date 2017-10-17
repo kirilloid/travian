@@ -35,15 +35,16 @@ export default class App extends Component {
 		});		
 	}
 	render() {
+		const { model, lang } = this.state;
 		return (
-			<div className={'t' + this.state.model.version.base}>
+			<div className={'t' + model.version.base}>
 				<Router base={this.state.route}>
 					<div>
 						<Menu items={menuData} />
-						<Server lang={this.state.lang}
-							version={this.state.model.version.original}
+						<Server lang={lang}
+							version={model.version.original}
 							onChange={model => this.setModel(model)}/>
-						<Route path="/troops" component={Troops(this.state)} />
+						<Route path="/troops" render={() => <Troops units={model.units} lang={lang} />} />
 						<Route path="/conq" component={Conq(this.state)} />
 						<Route path="/build" component={Build(this.state)} />
 						<Route path="/def" component={Def(this.state)} />
