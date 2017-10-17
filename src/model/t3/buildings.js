@@ -8,7 +8,7 @@ const traps = lvl => Math.max(Math.floor( (lvl-5) / 5), 0);
 
 function wwCost(level) {
     if (level === 100) return [1e6, 1e6, 1e6, 193630];
-    return Building.prototype.cost.call(this).map(r => Math.min(r, 1e6));
+    return Building.prototype.cost.call(this, level).map(r => Math.min(r, 1e6));
 }
 
 ID.BREWERY = 34;
