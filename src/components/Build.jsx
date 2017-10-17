@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { Build as BuildIcon } from './Icon';
 import { sortBy } from '../utils';
 
-export default ({ model, lang }) => class extends Component {
+export default class Buildings extends Component {
     render() {
-        let buildings = sortBy(
-            model.buildings.slice(),
+        const { buildings, lang } = this.props;
+        const sortedBuildings = sortBy(
+            buildings.slice(),
             b => lang(b.nameKey())
         );
         
@@ -13,7 +14,7 @@ export default ({ model, lang }) => class extends Component {
             {[1,2,3].map(type =>
                 <BuildList key={type}
                     lang={lang}
-                    buildings={buildings.filter(b => b.y === type)}/>
+                    buildings={sortedBuildings.filter(b => b.y === type)}/>
             )}
         </div>;
     }
