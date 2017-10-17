@@ -58,65 +58,70 @@ const propLevels = state =>
         .map(key => state[key].level)
         .join('_');
 
-export default ({ model, lang }) => {
-    const walls = [];
-    const bases = [];
-    const ditch = [];
-    model.buildings.forEach(building => {
-        const bonus = building.benefit(0);
-        if (typeof bonus !== 'object') return;
-        if ('defBonus' in bonus) {
-            if (building.r && building.r.r) {
-                walls.push(building);
-            } else if (building.s === 41) {
-                ditch.push(building);
+export default class Def extends Component {
+    render() {
+        const walls = [];
+        const bases = [];
+        const ditch = [];
+        const { buildings, lang } = this.props;
+        buildings.forEach(building => {
+            const bonus = building.benefit(0);
+            if (typeof bonus !== 'object') return;
+            if ('defBonus' in bonus) {
+                if (building.r && building.r.r) {
+                    walls.push(building);
+                } else if (building.s === 41) {
+                    ditch.push(building);
+                }
+            } else if ('def' in bonus) {
+                bases.push(building);
             }
-        } else if ('def' in bonus) {
-            bases.push(building);
+        });
+        return <DefInner buildings={buildings} walls={walls} bases={bases} ditch={ditch} lang={lang} />
+    }
+}
+class DefInner extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            base: props.bases[0].id,
+            wall: props.walls[0].id
+        };
+        if (props.ditch.length) {
+            this.state.ditch = props.ditch[0].id
         }
-    });
-    return class extends Component {
-        constructor() {
-            super();
-            this.state = {
-                base: bases[0].id,
-                wall: walls[0].id
-            };
-            if (ditch.length) {
-                this.state.ditch = ditch[0].id
-            }
-        }
-        setStateKey(key, value) {
-            this.setState(extend(this.state, { [key]: value }));
-        }
-        render() {
-            return <div>
-                <ButtonGroup
-                    key="base"
-                    value={this.state.base}
-                    onChange={value => this.setStateKey('base', +value)}
-                    buttons={bases.map(building => ({
-                        content: <BuildIcon id={building.id} />,
-                        value: building.id
-                    }))} 
-                />
-                <ButtonGroup
-                    key="wall"
-                    value={this.state.wall}
-                    onChange={value => this.setStateKey('wall', +value)}
-                    buttons={walls.map(building => ({
-                        content: <BuildIcon id={building.id} />,
-                        value: building.id
-                    }))}
-                />
-                {getOrder(map(this.state, id => model.buildings[id]))
-                    .map(({ state }) => <div key={propLevels(state)}>
-                        {Object.keys(state).map(key => <span key={key}>
-                            <BuildIcon id={state[key].building.id} />
-                            {state[key].level}
-                        </span>)}
-                    </div>)}
-            </div>;
-        }
+    }
+    setStateKey(key, value) {
+        this.setState(extend(this.state, { [key]: value }));
+    }
+    render() {
+        const { buildings, lang, walls, bases } = this.props;
+        return <div>
+            <ButtonGroup
+                key="base"
+                value={this.state.base}
+                onChange={value => this.setStateKey('base', +value)}
+                buttons={bases.map(building => ({
+                    content: <BuildIcon id={building.id} />,
+                    value: building.id
+                }))} 
+            />
+            <ButtonGroup
+                key="wall"
+                value={this.state.wall}
+                onChange={value => this.setStateKey('wall', +value)}
+                buttons={walls.map(building => ({
+                    content: <BuildIcon id={building.id} />,
+                    value: building.id
+                }))}
+            />
+            {getOrder(map(this.state, id => buildings[id]))
+                .map(({ state }) => <div key={propLevels(state)}>
+                    {Object.keys(state).map(key => <span key={key}>
+                        <BuildIcon id={state[key].building.id} />
+                        {state[key].level}
+                    </span>)}
+                </div>)}
+        </div>;
     }
 }

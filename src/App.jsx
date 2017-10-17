@@ -47,7 +47,7 @@ export default class App extends Component {
 						<Route path="/troops" render={() => <Troops units={model.units} lang={lang} />} />
 						<Route path="/conq" render={() => <Conq model={model} lang={lang} />} />
 						<Route path="/build" render={() => <Build buildings={model.buildings} lang={lang} />} />
-						<Route path="/def" component={Def(this.state)} />
+						<Route path="/def" component={() => <Def buildings={model.buildings} lang={lang} />} />
 					</div>
 				</Router>
 			</div>
