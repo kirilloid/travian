@@ -1,4 +1,4 @@
-import { extend, sortBy, roundP, map, limit, compose } from './index.js';
+import { extend, sortBy, roundP, map, timeI2S, limit, compose } from './index.js';
 import tape from 'tape';
 
 tape('extend', t => {
@@ -125,6 +125,16 @@ tape('sortBy', t => {
     t.deepEqual(a, [1, 4, 10], 'by default number are sorted properly');
     sortBy(a, x => -x);
     t.deepEqual(a, [10, 4, 1], 'inverse sort');
+    t.end();
+});
+
+tape('timeI2S', t => {
+    t.equal(timeI2S(0), "0:00:00", 'zero');
+    t.equal(timeI2S(1), "0:00:01", 'a second');
+    t.equal(timeI2S(70), "0:01:10", 'minute+');
+    t.equal(timeI2S(1234), "0:20:34", '1234');
+    t.equal(timeI2S(3661), "1:01:01", 'hour+minute+day');
+    t.equal(timeI2S(86400), "24:00:00", 'a day');
     t.end();
 });
 

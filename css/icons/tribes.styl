@@ -1,0 +1,25 @@
+old_tribes(version)
+    .t{version} .i-tribe
+        background-size 200px 16px
+        background-position -160px 0
+    for tribe in (1..5)
+        .t{version} .i-tribe-{tribe}
+            background-image unquote("url(" + pathjoin(dpi_path(), "t" + version, "tr-" + tribe + ".png") + ")")
+
+tribes(version)
+    .t{version} .i-tribe
+        background-image unquote("url(" + pathjoin(dpi_path(), "t" + version, "tribes.png") + ")")
+
+.i-tribe
+    width 16px
+    height 16px
+    background-size 140px 16px
+
+for tribe in (1..7)
+    .i-tribe-{tribe}
+        background-position (-20px * (tribe - 1)) 0
+
+old_tribes(2)
+old_tribes(3)
+tribes(4)
+tribes(5)

@@ -14,7 +14,7 @@
             "nature": "Nature",
             "natar": "Natars",
             "huns": "Huns",
-            "egyptians": "Egyptians"    
+            "egyptians": "Egyptians"
         },
         "troops": {
             "t_0_0": "Legionnaire",
@@ -208,7 +208,7 @@
                 "be_prod.increase": "Prod. increase",
                 "be_loyality": "Loyalty",
                 "be_durability": "Durability",
-                "be_max.members": "Max.Members"                
+                "be_max.members": "Max.Members"
             }
         },
         "items": {
@@ -379,6 +379,7 @@
         "r_3": "Crop",
         "crop_usage": "upkeep",
         "build_time": "build time",
+        "train_time": "train time",
         "total_cost": "Total cost",
         "speed": "Speed",
         "capacity": "Capacity",
@@ -388,7 +389,7 @@
         "def_s": "Counter-scouting",
         "destructive_capability": "destructive capability",
         "infantry": "infantry",
-        "cavalary": "cavalary"    
+        "cavalary": "cavalary"
     },
     "terms": {
         "Travian": "Travian",
@@ -406,12 +407,14 @@
             "finals": "Finals",
             "T2_5": "T2.5",
             "T3_6": "T3.6"
-        },        
+        },
+        "name": "name",
+        "ico": "ico",
         "troops": "Troops",
         "capital": "Capital",
         "traps": "Traps",
         "villages": "villages",
-        "oases": "Oases",    
+        "oases": "Oases",
         "culture": "culture",
         "alliance": "alliance",
         "troops_up": "troops' upgrades",
@@ -421,7 +424,7 @@
         "upgrade": "Upgrade",
         "up_lvl": "upgrade lvl",
         "squares": "fields",
-        "fields_amount": "fields' amount",        
+        "fields_amount": "fields' amount",
         "prereq": "prerequiresites",
         "abundance": "abundance",
         "celebrations": "celebrations",
@@ -431,7 +434,7 @@
         "population": "Population",
         "total_pop": "Total population",
         "natar_vil": "Natar village",
-        "loyalty": "loyalty",        
+        "loyalty": "loyalty",
         "plus": "plus",
         "task": "task",
         "quests": "quests",
@@ -444,7 +447,7 @@
     "ui": {
         "calculators": "Calculators",
         "tables": "Tables",
-        "prefs": "Preferences"        
+        "prefs": "Preferences"
     },
     "slang": {
         "EI": "Equites Imperatoris",
@@ -478,7 +481,7 @@
         "exp": "Experience",
         "mounted": "Hero is mounted",
         "health": "health",
-        "regen": "regeneration"        
+        "regen": "regeneration"
     },
     "new villages": "Culture points needed for additional villages",
     "train_build_lvl": "train.build. Lvl",
@@ -500,10 +503,10 @@
             "pp_f0": "early farm",
             "pp_d1": "late def",
             "pp_a1": "late off",
-            "pp_f1": "late farm"                    
+            "pp_f1": "late farm"
         },
         "warsim": {
-            "title": "Extended Combat Simulator",        
+            "title": "Extended Combat Simulator",
 
             "atk_type": "attack type",
             "normal": "normal",
@@ -579,12 +582,10 @@
                 "demolished_full": "Building was completely destroyed",
                 "demolished_none": "Building was not damaged",
                 "vil_captured": "Village {vil} was captured",
-                "vil_destroyed": "Village was completely destroyed"            
+                "vil_destroyed": "Village was completely destroyed"
             }
         }
     },
-    "name": "name",
-    "ico": "ico",
     "value": "value",
     "sum": "sum",
     "other": "other",

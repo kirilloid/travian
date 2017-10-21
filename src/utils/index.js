@@ -54,6 +54,15 @@ export function resSum(res) {
     return res[0] + res[1] + res[2] + res[3];
 }
 
+const d = (p, n) => (p + ~~n).slice(-2);
+export function timeI2S(seconds) {
+    return [
+        d('', seconds / 3600),
+        d('0', (seconds / 60) % 60),
+        d('0', seconds % 60)
+    ].join(':');
+}
+
 export function map(item, fn) {
     const copy = {};
     Object.keys(item)
