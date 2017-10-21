@@ -32,7 +32,7 @@ export default class App extends Component {
 		this.setState({
 			lang: lang,
 			model: this.state.model,
-		});		
+		});
 	}
 	render() {
 		const { model, lang } = this.state;

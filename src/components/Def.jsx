@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ID } from '../model/base/buildings';
 import { Build as BuildIcon } from './Icon';
-import ButtonGroup from '../widgets/ButtonGroup';
+import RadioGroup from '../widgets/RadioGroup';
 import { extend, sortBy, resSum, map } from '../utils';
 
 function totalDef(state) {
@@ -97,16 +97,16 @@ class DefInner extends Component {
     render() {
         const { buildings, lang, walls, bases } = this.props;
         return <div>
-            <ButtonGroup
+            <RadioGroup
                 key="base"
                 value={this.state.base}
                 onChange={value => this.setStateKey('base', +value)}
                 buttons={bases.map(building => ({
                     content: <BuildIcon id={building.id} />,
                     value: building.id
-                }))} 
+                }))}
             />
-            <ButtonGroup
+            <RadioGroup
                 key="wall"
                 value={this.state.wall}
                 onChange={value => this.setStateKey('wall', +value)}

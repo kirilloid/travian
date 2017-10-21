@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 
-export default class extends Component {
+export default class CheckBoxGroup extends Component {
     render() {
         return <div className="button-group">{
-            this.props.buttons.map(({ content, value, title }) => 
+            this.props.buttons.map(({ content, title, value }) => 
                 <button value={value}
                         key={value}
                         title={title || ""}
-                        className={value === this.props.value ? 'active' : ''}
-                        onClick={event => this.props.onChange(event.currentTarget.value)}>
+                        className={value === this.props.values[value] ? 'active' : ''}
+                        onClick={() => this.props.onChange(value)}>
                     {content}
                 </button>
             )
