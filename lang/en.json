@@ -468,6 +468,7 @@
     "tm_week": "week",
     "tm_month": "month",
     "tm_year": "year",
+    "per_day": "{0} / day",
     "select_hero": "Choose hero",
     "hero": {
         "hero": "hero",

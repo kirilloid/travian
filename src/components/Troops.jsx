@@ -8,39 +8,41 @@ import { timeI2S, resSum } from '../utils';
 
 const Unit = ({ lang, unit, tribe, index }) =>
     <tr>
-        <td><UnitIcon tribe={tribe} unit={index} /></td>
-        <td>{lang(`objects.troops.t_${tribe}_${index}`)}</td>
-        <td>{unit.a}</td>
-        <td>{unit.di}</td>
-        <td>{unit.dc}</td>
-        <td>{unit.v}</td>
-        <td>{unit.p}</td>
-        <td>{unit.c[0]}</td>
-        <td>{unit.c[1]}</td>
-        <td>{unit.c[2]}</td>
-        <td>{unit.c[3]}</td>
-        <td>{resSum(unit.c)}</td>
-        <td>{unit.u}</td>
-        <td>{timeI2S(unit.t)}</td>
+        <td className="value-icon"><UnitIcon tribe={tribe} unit={index} /></td>
+        <td className="value-text">{lang(`objects.troops.t_${tribe}_${index}`)}</td>
+        <td className="value-numeric">{unit.a}</td>
+        <td className="value-numeric">{unit.di}</td>
+        <td className="value-numeric">{unit.dc}</td>
+        <td className="value-numeric">{unit.v}</td>
+        <td className="value-numeric">{unit.p}</td>
+        <td className="value-numeric">{unit.c[0]}</td>
+        <td className="value-numeric">{unit.c[1]}</td>
+        <td className="value-numeric">{unit.c[2]}</td>
+        <td className="value-numeric">{unit.c[3]}</td>
+        <td className="value-numeric">{resSum(unit.c)}</td>
+        <td className="value-numeric">{unit.u}</td>
+        <td className="value-numeric"
+            title={lang('per_day', Math.floor(86400 / unit.t))}
+            >{timeI2S(unit.t)}</td>
     </tr>
 
 const TroopsTable = ({ lang, units, tribe }) =>
-    <table>
+    <table className="wire">
         <tbody>
-            <tr><td>{lang('terms.ico')}</td>
-                <td>{lang('terms.name')}</td>
-                <td><StatIcon type='off' title={lang('stats.off')} /></td>
-                <td><StatIcon type='def_i' title={lang('stats.def_i')} /></td>
-                <td><StatIcon type='def_c' title={lang('stats.def_c')} /></td>
-                <td><StatIcon type='speed' title={lang('stats.speed')} /></td>
-                <td><StatIcon type='cap' title={lang('stats.capacity')} /></td>
-                <td><ResIcon res={1} title={lang('stats.r_0')} /></td>
-                <td><ResIcon res={2} title={lang('stats.r_1')} /></td>
-                <td><ResIcon res={3} title={lang('stats.r_2')} /></td>
-                <td><ResIcon res={4} title={lang('stats.r_3')} /></td>
-                <td><ResIcon res={6} title={lang('stats.total_cost')} /></td>
-                <td><ResIcon res={5} title={lang('stats.crop_usage')} /></td>
-                <td><ResIcon res={7} title={lang('stats.train_time')} /></td>
+            <tr><th>{lang('terms.ico')}</th>
+                <th>{lang('terms.name')}</th>
+                <th><StatIcon type='off' title={lang('stats.off')} /></th>
+                <th><StatIcon type='def_i' title={lang('stats.def_i')} /></th>
+                <th><StatIcon type='def_c' title={lang('stats.def_c')} /></th>
+                <th><StatIcon type='speed' title={lang('stats.speed')} /></th>
+                <th><StatIcon type='cap' title={lang('stats.capacity')} /></th>
+                <th><ResIcon res={1} title={lang('stats.r_0')} /></th>
+                <th><ResIcon res={2} title={lang('stats.r_1')} /></th>
+                <th><ResIcon res={3} title={lang('stats.r_2')} /></th>
+                <th><ResIcon res={4} title={lang('stats.r_3')} /></th>
+                <th><ResIcon res={6} title={lang('stats.total_cost')} /></th>
+                <th><ResIcon res={5} title={lang('stats.crop_usage')} /></th>
+                <th><ResIcon res={7} title={lang('stats.train_time')} /></th>
             </tr>
             {units.map((unit, u) => <Unit key={u} lang={lang} tribe={tribe} unit={unit} index={u} />)}
         </tbody>
