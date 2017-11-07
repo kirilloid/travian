@@ -1,4 +1,4 @@
-import { extend, sortBy, roundP, map, timeI2S, limit, compose } from './index.js';
+import { extend, sortBy, roundP, map, timeI2S, limit, compose } from './index';
 import tape from 'tape';
 
 tape('extend', t => {

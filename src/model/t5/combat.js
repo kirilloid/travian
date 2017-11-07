@@ -15,3 +15,6 @@ export const raid = x => {
     const y = 1.032 / (1 + x);
     return [y, 1.032 - y];
 }
+
+// items from heroes affect all matching troops, the strongest one is chosen
+// https://forum.kingdoms.com/thread/17210-how-heroes-defence-bonus-works/?postID=113487#post113487
