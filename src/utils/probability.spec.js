@@ -1,4 +1,4 @@
-import { model, numericFloat, normalApprox } from './probability';
+import { model, multiplyRangeByOnes, numericInt, numericFloat, normalApprox } from './probability';
 import tape from 'tape';
 
 function approxEqual(t, epsilon, actual, expected, message = '') {
@@ -69,9 +69,17 @@ tape('model', t => {
     t.end();
 });
 
-/*tape('numericFloat', t => {
+tape('multiplyRangeByOnes', t => {
+    t.deepEqual(multiplyRangeByOnes([1], 1), [1], 'trivial 1x1');
+    t.deepEqual(multiplyRangeByOnes([1, 1], 2), [1, 2, 1], '2x2');
+    t.deepEqual(multiplyRangeByOnes([1, 1], 3), [1, 2, 2, 1], '3x2');
+    t.deepEqual(multiplyRangeByOnes([1, 1, 1], 2), [1, 2, 2, 1], '2x3');
+    t.end();
+});
+
+tape('numericInt', t => {
     t.test('linear', t => {
-        const dist = numericFloat(3)([
+        const dist = numericInt(3)([
             { min: 1, max: 3 }
         ]);
         approxEqual(t, 1e-3, dist(0), 1, 'sub-min');
@@ -82,7 +90,7 @@ tape('model', t => {
         t.end();
     });
     t.test('quadratic', t => {
-        const dist = numericFloat(3)([
+        const dist = numericInt(3)([
             { min: 1, max: 3 },
             { min: 1, max: 5 }
         ]);
@@ -107,15 +115,21 @@ tape('model', t => {
             { min: 1, max: 9 },
             { min: 1, max: 10},
         ];
-        const dist = numericFloat(2)(pairs);
+        const dist = numericInt(5)(pairs);
         const precise = model(pairs);
         const min = pairs.reduce((sum, pair) => sum + pair.min, 0);
         const max = pairs.reduce((sum, pair) => sum + pair.max, 0);
-        for (let k = 0; k < 100; k++) {
+        const errorHysto = Array(10).fill(0);
+        for (let k = 0; k < 1000; k++) {
             const n = min + Math.random() * (max - min);
-            approxEqual(t, 1e-3, dist(n), precise(n), n);
+            const actual = dist(n);
+            const expected = precise(n);
+            approxEqual(t, 1e-5, actual, expected, n);
+            errorHysto[Math.floor(Math.abs(actual - expected) * 1e6)]++;
         }
+        while (!errorHysto[errorHysto.length - 1]) errorHysto.pop();
+        t.test(errorHysto.join(', '), t => t.end());
         t.end();
     });
     t.end();
-});*/
+});

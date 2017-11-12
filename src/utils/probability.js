@@ -87,6 +87,74 @@ export const numericFloat = (precision = 2) => (pairs) => {
     };
 };
 
+/**
+ * multiplies one range (long int) by 11...11
+ * @param {number[]} current
+ * @param {number} ones
+ * @returns {number[]}
+ */
+export function multiplyRangeByOnes(current, ones) {
+    let range = [];
+    let slidingWindowSum = 0;
+    if (current.length >= ones) {
+        for (let i = 0; i < ones; i++) {
+            slidingWindowSum += current[i]
+            range.push(slidingWindowSum);
+        }
+        for (let i = ones; i < current.length; i++) {
+            slidingWindowSum += current[i];
+            slidingWindowSum -= current[i - ones];
+            range.push(slidingWindowSum);
+        }
+        for (let i = 0; i < ones; i++) {
+            slidingWindowSum -= current[i + current.length - ones];
+            range.push(slidingWindowSum);
+        }
+    } else {
+        for (let i = 0; i < current.length; i++) {
+            slidingWindowSum += current[i]
+            range.push(slidingWindowSum);
+        }
+        for (let i = current.length; i < ones; i++) {
+            range.push(slidingWindowSum);
+        }
+        for (let i = 0; i < current.length; i++) {
+            slidingWindowSum -= current[i];
+            range.push(slidingWindowSum);
+        }
+    }
+    range.pop();
+    return range;
+}
+
+export const numericInt = (precision = 2) => (pairs) => {
+    const SCALE = 10 ** precision;
+    let total = { min: 0, max: 0, mul: 1 };
+    let range = [1];
+    pairs.forEach(({ min, max }) => {
+        const rDiff = Math.round((max - min) * SCALE);
+        total.min += min;
+        total.max += rDiff / SCALE + min;
+        total.mul *= rDiff;
+        range = multiplyRangeByOnes(range, rDiff);
+    });
+    var sum = 0;
+    for (let i = range.length - 1; i >= 0; i--) {
+        sum += range[i];
+        range[i] = sum / total.mul;
+    }
+    return value => {
+        if (value <= total.min) return 1;
+        if (value >= total.max) return 0;
+        const point = (value - total.min) * SCALE;
+        const loPoint = Math.floor(point);
+        const hiPoint = Math.ceil(point);
+        if (hiPoint === loPoint) return range[point];
+        return range[loPoint] * (hiPoint - point)
+            +  range[hiPoint] * (point - loPoint);
+    };
+};
+
 const normalTable = [
     .50000, .50399, .50798, .51197, .51595, .51994, .52392, .52790, .53188, .53586,
     .53983, .54380, .54776, .55172, .55567, .55962, .56356, .56749, .57142, .57535,
