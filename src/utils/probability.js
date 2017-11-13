@@ -93,7 +93,7 @@ export function multiplyRangeByOnes(current, ones) {
     return range;
 }
 
-function linearApprox(values, x) {
+export function linearInterpolation(values, x) {
     const loPoint = Math.floor(x);
     const hiPoint = Math.ceil(x);
     if (hiPoint === loPoint) return values.get(x);
@@ -101,7 +101,7 @@ function linearApprox(values, x) {
         +  values.get(hiPoint) * (x - loPoint);
 }
 
-function cubicApprox(values, x) {
+export function cubicInterpolation(values, x) {
     const x0 = Math.floor(x);
     const x1 = Math.ceil(x);
     if (x1 === x0) return values.get(x);
@@ -117,7 +117,7 @@ function cubicApprox(values, x) {
     return ((a*x + b)*x + c)*x + d;
 }
 
-export const numericInt = (precision = 2) => (pairs) => {
+export const numericInt = (pairs, precision = 2) => {
     const SCALE = 10 ** precision;
     let total = { min: 0, max: 0, mul: 1 };
     let range = [1];
@@ -135,7 +135,7 @@ export const numericInt = (precision = 2) => (pairs) => {
     }
     return value => {
         value -= (pairs.length - 1) / (2 * SCALE);
-        return cubicApprox({
+        return cubicInterpolation({
             get(x) {
                 if (x < 0) return 1;
                 if (x >= range.length) return 0;

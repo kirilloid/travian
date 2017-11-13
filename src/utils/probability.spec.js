@@ -1,4 +1,9 @@
-import { model, multiplyRangeByOnes, numericInt, numericFloat, normalApprox } from './probability';
+import {
+    model,
+    linearInterpolation,
+    cubicInterpolation,
+    multiplyRangeByOnes,
+    numericInt } from './probability';
 import tape from 'tape';
 
 function approxEqual(t, epsilon, actual, expected, message = '') {
@@ -69,13 +74,29 @@ tape('multiplyRangeByOnes', t => {
     t.end();
 });
 
+tape('interpolation', t => {
+    var a = [0, 1, 8, 27];
+    a.get = function (i) { return this[i]; }
+    t.test('linear', t => {
+        t.equal(linearInterpolation(a, 0), 0, 'edge');
+        t.equal(linearInterpolation(a, 1.5), 4.5, 'half');
+        t.end();
+    });
+    t.test('cubic', t => {
+        t.equal(cubicInterpolation(a, 1), 1, 'edge');
+        t.equal(cubicInterpolation(a, 1.5), 1.5 ** 3, 'half');
+        t.end();
+    });
+    t.end();
+});
+
 tape('numericInt', t => {
     t.test('quadratic', t => {
         const pairs = [
             { min: 1, max: 3 },
             { min: 1, max: 5 }
         ];
-        const dist = numericInt(1)(pairs);
+        const dist = numericInt(pairs, 1);
         const precise = model(pairs);
         const PRECISION = 2e-4;
         let avgError = 0;
@@ -100,7 +121,7 @@ tape('numericInt', t => {
             { min: 1, max: 9 },
             { min: 1, max: 10},
         ];
-        const dist = numericInt(2)(pairs);
+        const dist = numericInt(pairs, 2);
         const precise = model(pairs);
         const min = pairs.reduce((sum, pair) => sum + pair.min, 0);
         const max = pairs.reduce((sum, pair) => sum + pair.max, 0);
