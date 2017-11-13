@@ -53,17 +53,7 @@ tape('model', t => {
         const pairs = Array(20).fill(0)
             .map((_, i) => ({ min: 1, max: i + 2 }));
         t.timeoutAfter(100);
-        const precise = model(pairs);
-        const dist = normalApprox(pairs);
-        const min = pairs.reduce((sum, pair) => sum + pair.min, 0);
-        const max = pairs.reduce((sum, pair) => sum + pair.max, 0);
-        let totalError = 0;
-        for (let k = 0; k < 1000; k++) {
-            const n = min + Math.random() * (max - min);
-            approxEqual(t, 3e-3, dist(n), precise(n), n);
-            totalError += Math.abs(dist(n) - precise(n));
-        }
-        approxEqual(t, 6e-1, totalError, 0, 'total error');
+        t.ok('can be calculated w/o timeout');
         t.end();
     });
     t.end();
@@ -72,35 +62,30 @@ tape('model', t => {
 tape('multiplyRangeByOnes', t => {
     t.deepEqual(multiplyRangeByOnes([1], 1), [1], 'trivial 1x1');
     t.deepEqual(multiplyRangeByOnes([1, 1], 2), [1, 2, 1], '2x2');
-    t.deepEqual(multiplyRangeByOnes([1, 1], 3), [1, 2, 2, 1], '3x2');
-    t.deepEqual(multiplyRangeByOnes([1, 1, 1], 2), [1, 2, 2, 1], '2x3');
+    t.deepEqual(multiplyRangeByOnes([1, 1], 3), [1, 2, 2, 1], '2x3');
+    t.deepEqual(multiplyRangeByOnes([1, 1, 1], 2), [1, 2, 2, 1], '3x2');
+    t.deepEqual(multiplyRangeByOnes([1, 1], 2.5), [1, 2, 1.5, 0.5], '2x2.5');
+    t.deepEqual(multiplyRangeByOnes([1, 1, 0.5], 2.5), [1, 2, 2, 1, 0.25], '2.5x2.5');
     t.end();
 });
 
 tape('numericInt', t => {
-    t.test('linear', t => {
-        const dist = numericInt(3)([
-            { min: 1, max: 3 }
-        ]);
-        approxEqual(t, 1e-3, dist(0), 1, 'sub-min');
-        approxEqual(t, 1e-3, dist(1), 1, 'min');
-        approxEqual(t, 1e-3, dist(2), 0.5, 'middle');
-        approxEqual(t, 1e-3, dist(3), 0, 'max');
-        approxEqual(t, 1e-3, dist(4), 0, 'over-max');
-        t.end();
-    });
     t.test('quadratic', t => {
-        const dist = numericInt(3)([
+        const pairs = [
             { min: 1, max: 3 },
             { min: 1, max: 5 }
-        ]);
-        approxEqual(t, 1e-3, dist(2), 1, '2');
-        approxEqual(t, 1e-3, dist(3),15/16, '3');
-        approxEqual(t, 1e-3, dist(4),12/16, '4');
-        approxEqual(t, 1e-3, dist(5), 8/16, '5');
-        approxEqual(t, 1e-3, dist(6), 4/16, '6');
-        approxEqual(t, 1e-3, dist(7), 1/16, '7');
-        approxEqual(t, 1e-3, dist(8), 0, '8');
+        ];
+        const dist = numericInt(1)(pairs);
+        const precise = model(pairs);
+        const PRECISION = 2e-4;
+        let avgError = 0;
+        for (let k = 0; k < 100; k++) {
+            const n = 2 + 6 * Math.random();
+            const actual = dist(n);
+            const expected = precise(n);
+            avgError += actual - expected;
+            approxEqual(t, PRECISION, actual, expected, n);
+        }
         t.end();
     });
     t.test('big model', t => {
@@ -115,20 +100,22 @@ tape('numericInt', t => {
             { min: 1, max: 9 },
             { min: 1, max: 10},
         ];
-        const dist = numericInt(5)(pairs);
+        const dist = numericInt(2)(pairs);
         const precise = model(pairs);
         const min = pairs.reduce((sum, pair) => sum + pair.min, 0);
         const max = pairs.reduce((sum, pair) => sum + pair.max, 0);
         const errorHysto = Array(10).fill(0);
+        let avgError = 0;
         for (let k = 0; k < 1000; k++) {
             const n = min + Math.random() * (max - min);
             const actual = dist(n);
             const expected = precise(n);
-            approxEqual(t, 1e-5, actual, expected, n);
-            errorHysto[Math.floor(Math.abs(actual - expected) * 1e6)]++;
+            approxEqual(t, 5e-7, actual, expected, n);
+            avgError += actual - expected;
+            errorHysto[Math.floor(Math.abs(actual - expected) * 1e7)]++;
         }
         while (!errorHysto[errorHysto.length - 1]) errorHysto.pop();
-        t.test(errorHysto.join(', '), t => t.end());
+        t.test(errorHysto.join(', ') + ' ' + (avgError * 1e6), t => t.end());
         t.end();
     });
     t.end();
