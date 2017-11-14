@@ -1,4 +1,4 @@
-# Travian _0.8.8_
+# Travian _0.8.9_
 Set of utilities for the Travian online game.<br>
 Will be available around Q1 2018 on the main site: travian.kirilloid.ru<br>
 Meanwhile work-in-progress could be seen [here](http://kirilloid.ru/travian2/)
