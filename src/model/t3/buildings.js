@@ -11,6 +11,7 @@ function wwCost(level) {
     return Building.prototype.cost.call(this, level).map(r => Math.min(r, 1e6));
 }
 
+// TODO check it doesn't effect other versions
 ID.BREWERY = 34;
 ID.TRAPPER = 35;
 ID.HERO_MANSION = 36;

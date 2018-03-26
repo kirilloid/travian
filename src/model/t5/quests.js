@@ -1,6 +1,6 @@
 import { ID } from '../base/buildings';
 
-export default quests = [
+export default [
 // Barbara
     { // each res 1
         check: { buildings: {

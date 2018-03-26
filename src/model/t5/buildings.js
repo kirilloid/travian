@@ -1,9 +1,9 @@
 import { extend } from '../../utils';
 
-import buildings, { Building, prod, ID as _ID } from '../base/buildings';
+import buildings, { Building, prod, ID as baseID } from '../base/buildings';
 import t4buildings, { wall4 } from '../t4/buildings';
 
-export const ID = extend(_ID, {
+export const ID = extend(baseID, {
     WATER_DITCH: 41,
     NATARIAN_WALL: 42,
 });
@@ -17,7 +17,7 @@ const timeA = b => time(b, 0)([
     2160, 2700, 3240, 3960, 4500, 5400, 7200, 9000, 10800, 14400]);
 
 // most buildings
-const timeB = base => time(base, 0)([
+const timeB = (base, extra=0) => time(base, extra)([
     3, 22.5, 48, 90, 210, 480, 720, 990, 1200, 1380,
     1680, 1980, 2340, 2640, 3060, 3420, 3960, 4680, 5400, 6120]);
 // factories

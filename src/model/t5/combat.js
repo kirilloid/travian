@@ -1,8 +1,6 @@
 import { compose, roundP, limit } from '../../utils';
 
-import { upgrade } from '../t4/combat';
-
-export { upgrade };
+export { upgrade } from '../t4/combat';
 
 export const immensity = compose(
     roundP(0.0001),

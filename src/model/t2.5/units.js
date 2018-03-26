@@ -1,16 +1,17 @@
 import { extend } from '../../utils';
 
+import ID from '../base/tribes';
 import units from '../base/units';
 
 export default extend(units, {
-    0: { // roman
+    [ID.ROMANS]: {
         0: { // legionnaire
             c: [ 120, 100, 180, 40]
         }
     },
-    2: { // gaulish
+    [ID.GAULS]: {
         0: { // phalanx
-            2: { p: 30 }            
+            p: 30
         }
     }
 });

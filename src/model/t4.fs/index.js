@@ -3,32 +3,37 @@ import { extend } from '../../utils';
 import data from '../t4';
 import units from './units';
 import buildings from './buildings';
-import { ID } from '../base/buildings';
+import { ID as bID } from '../base/buildings';
+import tID from './tribes';
+import Hero from './hero';
 
 export default extend(data, {
     units: extend(units, {
-        5:[ { p: [ID.BARRACKS], },
-            { p: [ID.BARRACKS], r: {[ID.ACADEMY]: 1, [ID.BLACKSMITH]: 1} },
-            { p: [ID.BARRACKS], r: {[ID.ACADEMY]: 5, [ID.BLACKSMITH]: 1} },
-            { p: [ID.STABLES],  r: {[ID.ACADEMY]: 5, [ID.STABLES]: 1} },
-            { p: [ID.STABLES],  r: {[ID.ACADEMY]: 5, [ID.STABLES]: 5} },
-            { p: [ID.STABLES],  r: {[ID.ACADEMY]: 5, [ID.STABLES]: 10} },
-            { p: [ID.WORKSHOP], r: {[ID.ACADEMY]:10, [ID.WORKSHOP]: 1} },
-            { p: [ID.WORKSHOP], r: {[ID.ACADEMY]:15, [ID.WORKSHOP]:10} },
-            { p: [ID.RESIDENCE, ID.PALACE], r: {[ID.ACADEMY]:20, [ID.RALLY_POINT]:10} },
-            { p: [ID.RESIDENCE, ID.PALACE] },
+        [tID.HUNS]: [
+            { b: [bID.BARRACKS], },
+            { b: [bID.BARRACKS], r: {[bID.ACADEMY]: 1, [bID.BLACKSMITH]: 1} },
+            { b: [bID.BARRACKS], r: {[bID.ACADEMY]: 5, [bID.BLACKSMITH]: 1} },
+            { b: [bID.STABLES],  r: {[bID.ACADEMY]: 5, [bID.STABLES]: 1} },
+            { b: [bID.STABLES],  r: {[bID.ACADEMY]: 5, [bID.STABLES]: 5} },
+            { b: [bID.STABLES],  r: {[bID.ACADEMY]: 5, [bID.STABLES]: 10} },
+            { b: [bID.WORKSHOP], r: {[bID.ACADEMY]:10, [bID.WORKSHOP]: 1} },
+            { b: [bID.WORKSHOP], r: {[bID.ACADEMY]:15, [bID.WORKSHOP]:10} },
+            { b: [bID.RESIDENCE, bID.PALACE], r: {[bID.ACADEMY]:20, [bID.RALLY_POINT]:10} },
+            { b: [bID.RESIDENCE, bID.PALACE] },
         ],
-        6:[ { p: [ID.BARRACKS], },
-            { p: [ID.BARRACKS], r: {[ID.ACADEMY]: 3, [ID.BLACKSMITH]: 1} },
-            { p: [ID.STABLES],  r: {[ID.ACADEMY]: 5, [ID.STABLES]: 1} },
-            { p: [ID.STABLES],  r: {[ID.ACADEMY]: 5, [ID.STABLES]: 3} },
-            { p: [ID.STABLES],  r: {[ID.ACADEMY]: 5, [ID.STABLES]: 5} },
-            { p: [ID.STABLES],  r: {[ID.ACADEMY]:15, [ID.STABLES]:10} },
-            { p: [ID.WORKSHOP], r: {[ID.ACADEMY]:10, [ID.WORKSHOP]: 1} },
-            { p: [ID.WORKSHOP], r: {[ID.ACADEMY]:15, [ID.WORKSHOP]:10} },
-            { p: [ID.RESIDENCE, ID.PALACE], r: {[ID.ACADEMY]:20, [ID.RALLY_POINT]:10} },
-            { p: [ID.RESIDENCE, ID.PALACE] },
+        [tID.EGYPTIANS]: [
+            { b: [bID.BARRACKS], },
+            { b: [bID.BARRACKS], r: {[bID.ACADEMY]: 3, [bID.BLACKSMITH]: 1} },
+            { b: [bID.STABLES],  r: {[bID.ACADEMY]: 5, [bID.STABLES]: 1} },
+            { b: [bID.STABLES],  r: {[bID.ACADEMY]: 5, [bID.STABLES]: 3} },
+            { b: [bID.STABLES],  r: {[bID.ACADEMY]: 5, [bID.STABLES]: 5} },
+            { b: [bID.STABLES],  r: {[bID.ACADEMY]:15, [bID.STABLES]:10} },
+            { b: [bID.WORKSHOP], r: {[bID.ACADEMY]:10, [bID.WORKSHOP]: 1} },
+            { b: [bID.WORKSHOP], r: {[bID.ACADEMY]:15, [bID.WORKSHOP]:10} },
+            { b: [bID.RESIDENCE, bID.PALACE], r: {[bID.ACADEMY]:20, [bID.RALLY_POINT]:10} },
+            { b: [bID.RESIDENCE, bID.PALACE] },
         ],
     }),
-    buildings
+    buildings,
+    Hero
 });

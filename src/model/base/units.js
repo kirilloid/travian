@@ -9,6 +9,9 @@
  p = caPacity
  i = infantry
  rt = research time
+
+ b = producing building
+ r = requirements
  */
 export const RAM = Symbol('ram');
 export const CAT = Symbol('catapult');
