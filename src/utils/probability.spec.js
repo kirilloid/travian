@@ -1,5 +1,6 @@
 import {
     model,
+    totalArray,
     linearInterpolation,
     cubicInterpolation,
     multiplyRangeByOnes,
@@ -13,6 +14,22 @@ function approxEqual(t, epsilon, actual, expected, message = '') {
         t.fail(`${actual} /~ ${expected}. ${message}`);
     }
 }
+
+tape('utilities', t => {
+    t.test('totalArray', t => {
+        const ta0 = totalArray([]);
+        t.equal(ta0(-1), 1, 'under');
+        t.equal(ta0(0), 0, 'over');
+
+        const ta1 = totalArray([0.5]);
+        t.equal(ta1(-1), 1, 'under');
+        t.equal(ta1(0), 0.5, 'inner');
+        t.equal(ta1(1), 0, 'over');
+
+        t.end();
+    });
+    t.end();
+});
 
 tape('model', t => {
     t.test('linear', t => {
@@ -54,7 +71,7 @@ tape('model', t => {
         t.equal(dist(2),   1/2, '2');
         t.end();
     });
-    t.test('extreme', t => {
+    t.test('extreme: model is optimized', t => {
         const pairs = Array(20).fill(0)
             .map((_, i) => ({ min: 1, max: i + 2 }));
         t.timeoutAfter(100);
@@ -75,23 +92,22 @@ tape('multiplyRangeByOnes', t => {
 });
 
 tape('interpolation', t => {
-    var a = [0, 1, 8, 27];
-    a.get = function (i) { return this[i]; }
+    const a = totalArray([0, 1, 8, 27]);
     t.test('linear', t => {
         t.equal(linearInterpolation(a, 0), 0, 'edge');
-        t.equal(linearInterpolation(a, 1.5), 4.5, 'half');
+        t.equal(linearInterpolation(a, 1.5), 4.5, 'middle');
         t.end();
     });
     t.test('cubic', t => {
         t.equal(cubicInterpolation(a, 1), 1, 'edge');
-        t.equal(cubicInterpolation(a, 1.5), 1.5 ** 3, 'half');
+        t.equal(cubicInterpolation(a, 1.5), 1.5 ** 3, 'middle');
         t.end();
     });
     t.end();
 });
 
 tape('numericInt', t => {
-    t.test('quadratic', t => {
+    t.test('quadratic model', t => {
         const pairs = [
             { min: 1, max: 3 },
             { min: 1, max: 5 }

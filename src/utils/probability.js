@@ -1,22 +1,47 @@
+/**
+ * This module contains probability distribution calculators (there are several)
+ * Every calculator accepts a set of ranges and then returns a function calculating distribution
+ * corresponding to distribution of sum of independantly and uniformly distributed variables
+ * 
+ * There are two approaches:
+ * - analytical
+ * - numeric modelling
+ */
+
 function factorial(n) {
     return n ? n * factorial(n - 1) : 1;
 }
 
-export const model = (pairs) => {
-    let total = { min: 0, max: 0, mul: 1 };
-    pairs.forEach(({ min, max }) => {
+/**
+ * Calculator using precise analytical model, which is stupid inclusion-exclusion formula
+ * could be improved with optimization, but the worst-case is still exponential
+ * Nonetheless, it's good to test other ways since we can control inputs
+ * @param {{min: number, max: number}[]} ranges
+ * @returns {(value: number) => number}
+ */
+export const model = (ranges) => {
+    let total = { min: 0, max: 0, volume: 1 };
+    ranges.forEach(({ min, max }) => {
         total.min += min;
         total.max += max;
-        total.mul *= max - min;
+        total.volume *= max - min;
     });
-    let variants = pairs.reduce((variants, { min, max }) => {
+
+    // we gradually build a set of inflection points, by adding dimensions
+    // in general case we'd get a set of vertices of a hyperrectangle
+    // but it's O(2^N) so we try to merge nodes with similar Manhattan distance from the origin
+    // E.g. if every range is equal it'd be a hypercube and we'd need to calculate only N nodes
+    // with binomal coefficients instead of 2^N vertices
+    const variants = ranges.reduce((variants, { min, max }) => {
         let nextVariants = [];
+        // kind of flatMap to add a dimension 
         variants.forEach(({ sum, sign }) => {
             nextVariants.push(
                 { sum: sum + min, sign:  sign },
                 { sum: sum + max, sign: -sign }
             );
         });
+        // re-order and merge duplicates
         nextVariants.sort((a, b) => a.sum - b.sum);
         let newVariants = [];
         let last = { sum: -1, sign: 1 };
@@ -29,16 +54,23 @@ export const model = (pairs) => {
         }
         return newVariants;
     }, [{ sum: 0, sign: 1 }]);
+
+    // auxiliary value
     const avg = (total.max + total.min) / 2;
+
+    // almost final version of a calculating function
     const calc = (value) => {
         if (value <= total.min) return 1;
         let sum = 0;
         for (const item of variants) {
             if (value <= item.sum) break;
-            sum += (value - item.sum) ** pairs.length * item.sign;
+            sum += (value - item.sum) ** ranges.length * item.sign;
         }
-        return 1 - sum / total.mul / factorial(pairs.length);
+        return 1 - sum / total.volume / factorial(ranges.length);
     }
+
+    // the distribution is symmetrical, but our calculation method is not
+    // so calculating towards nearest "pole" require less operations and accumulates less error
     return value => (value < avg)
         ? calc(value)
         : 1 - calc(2 * avg - value);
@@ -46,9 +78,10 @@ export const model = (pairs) => {
 
 
 /**
- * multiplies one range (long int) by 11...11
- * @param {number[]} current
- * @param {number} ones
+ * utility function: multiplies a vector by 11...11 in <em>linear</em> time
+ * works with "sub-pixel" precision
+ * @param {number[]} current a vector to multiply to
+ * @param {number} ones length of ones to generate
  * @returns {number[]}
  */
 export function multiplyRangeByOnes(current, ones) {
@@ -93,22 +126,35 @@ export function multiplyRangeByOnes(current, ones) {
     return range;
 }
 
+/**
+ * 
+ * @param {(index: number) => number} values total array
+ * @param {numer} x index
+ * @returns {number}
+ */
 export function linearInterpolation(values, x) {
     const loPoint = Math.floor(x);
     const hiPoint = Math.ceil(x);
-    if (hiPoint === loPoint) return values.get(x);
-    return values.get(loPoint) * (hiPoint - x)
-        +  values.get(hiPoint) * (x - loPoint);
+    if (hiPoint === loPoint) return values(x);
+    return values(loPoint) * (hiPoint - x)
+        +  values(hiPoint) * (x - loPoint);
 }
 
+/**
+ * @param {(index: number) => number} values total array
+ * @param {number} x index
+ * @returns {number}
+ */
 export function cubicInterpolation(values, x) {
     const x0 = Math.floor(x);
     const x1 = Math.ceil(x);
-    if (x1 === x0) return values.get(x);
-    const f0 = values.get(x0 - 1);
-    const f1 = values.get(x0) - f0;
-    const f2 = values.get(x1) - f0;
-    const f3 = values.get(x1 + 1) - f0;
+    if (x1 === x0) return values(x);
+    const f0 = values(x0 - 1);
+    const f1 = values(x0) - f0;
+    const f2 = values(x1) - f0;
+    const f3 = values(x1 + 1) - f0;
+    // I don't remember exactly where did I get these coefficients,
+    // but I think it's Bézier curve interpolation
     const a = ( f3 - 3*f2 + 3*f1) / 6;
     const b = (-f3 + 4*f2 - 5*f1) / 2;
     const c = (2*f3 -9*f2 +18*f1) / 6;
@@ -117,30 +163,53 @@ export function cubicInterpolation(values, x) {
     return ((a*x + b)*x + c)*x + d;
 }
 
-export const numericInt = (pairs, precision = 2) => {
+/**
+ * transforms array into a total function with 1 on the left side and 0 on the right
+ * @param {number[]} array
+ * @returns {(index: number) => number}
+ */
+export function totalArray(array) {
+    return index => {
+        if (index < 0) return 1;
+        if (index >= array.length) return 0;
+        return array[index];
+    };
+}
+
+/**
+ * Distributino calculator based on numeric modelling approach
+ * 'int' means it doesn't try to calculate ranges with "subpixel" precision
+ * total running time is quadratic, but also depends on precision
+ * @param {{min: number, max: number}[]} ranges
+ * @param {number} precision number of decimal digits / order of magnitude
+ * @returns {(value: number) => number}
+ */
+export const numericInt = (ranges, precision = 2) => {
     const SCALE = 10 ** precision;
-    let total = { min: 0, max: 0, mul: 1 };
-    let range = [1];
-    pairs.forEach(({ min, max }) => {
-        const rDiff = Math.round((max - min) * SCALE);
+
+    // calculate aggregated values
+    let total = { min: 0, max: 0, volume: 1 };
+    ranges.forEach(({ min, max }) => {
+        const rangeWidth = Math.round((max - min) * SCALE);
         total.min += min;
-        total.max += rDiff / SCALE + min;
-        total.mul *= rDiff;
-        range = multiplyRangeByOnes(range, rDiff);
+        // we use integer width of the pixel-aligned range
+        total.max += rangeWidth / SCALE + min;
+        total.volume *= rangeWidth;
     });
+    const dist = ranges.reduce((dist, { min, max }) => {
+        const rangeWidth = Math.round((max - min) * SCALE);
+        return multiplyRangeByOnes(dist, rangeWidth);
+    }, [1]);
     var sum = 0;
-    for (let i = range.length - 1; i >= 0; i--) {
-        sum += range[i];
-        range[i] = sum / total.mul;
+    // integrate distribution density, reverse and normalize it
+    for (let i = dist.length - 1; i >= 0; i--) {
+        sum += dist[i];
+        dist[i] = sum / total.volume;
     }
+    const totalDist = totalArray(dist);
     return value => {
-        value -= (pairs.length - 1) / (2 * SCALE);
-        return cubicInterpolation({
-            get(x) {
-                if (x < 0) return 1;
-                if (x >= range.length) return 0;
-                return range[x];
-            }
-        }, (value - total.min) * SCALE);
+        // adjusting exactly by (N-1)/2 pixels is empirical, but crucial for precision
+        value -= (ranges.length - 1) / (2 * SCALE);
+        return cubicInterpolation(totalDist, (value - total.min) * SCALE);
     };
 };
