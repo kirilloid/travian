@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
-import update from 'react-addons-update';
+import * as React from 'react';
+import * as update from 'react-addons-update';
 
 import { roundP, limit, compose } from '../utils';
 import { numericInt } from '../utils/probability';
 
 const popMalus = compose(roundP(1e-3), limit(0.667, 1));
 
-function timesToConq({ units }, { loyalty, def, off }) {
-    const pairs = [];
+function timesToConq({ units }, { def, off }) {
+    const ranges = [];
     let totalMin = 0;
     let totalMax = 0;
     const steps = off.map(attacker => {
@@ -16,10 +16,10 @@ function timesToConq({ units }, { loyalty, def, off }) {
         const party = (attacker.party - def.party) * 5;
         let [min, max] = units[attacker.tribe][8].l
             .map(value => (value + party) * malus * attacker.admins);
-        pairs.push({ min, max });
+        ranges.push({ min, max });
         totalMin += min;
         totalMax += max;
-        return numericInt(pairs);
+        return numericInt(ranges);
     });
     return {
         steps,
@@ -38,7 +38,7 @@ function formatPercent(f, loyalty) {
     return (number * 100).toFixed(2).replace(/\.?0+$/, '') + '%';
 }
 
-export default class Conq extends Component {
+export default class Conq extends React.Component {
     constructor() {
         super();
         this.aid = 0;

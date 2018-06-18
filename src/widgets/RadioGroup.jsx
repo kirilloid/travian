@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 
-export default class RadioGroup extends Component {
+export default class RadioGroup extends React.Component {
     render() {
         return <div className="button-group">{
             this.props.buttons.map(({ content, title, value }) => 

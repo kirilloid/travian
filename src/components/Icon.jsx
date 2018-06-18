@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 
 export function Icon(props) {
     let classes = ['icon'];

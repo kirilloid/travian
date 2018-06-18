@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 import { HashRouter as Router, Route } from 'react-router-dom';
 
 import Menu 	from './components/Menu';
@@ -14,7 +14,7 @@ const menuData = require('./data/menu.json');
 import lang from './lang';
 import { getInitialModel } from './model';
 
-export default class App extends Component {
+export default class App extends React.Component {
 	constructor() {
 		super();
 		this.state = {

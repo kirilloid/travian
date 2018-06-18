@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 import { ID } from '../model/base/buildings';
 import { Build as BuildIcon } from './Icon';
 import RadioGroup from '../widgets/RadioGroup';
@@ -58,7 +58,7 @@ const propLevels = state =>
         .map(key => state[key].level)
         .join('_');
 
-export default class Def extends Component {
+export default class Def extends React.Component {
     render() {
         const walls = [];
         const bases = [];
@@ -80,7 +80,7 @@ export default class Def extends Component {
         return <DefInner buildings={buildings} walls={walls} bases={bases} ditch={ditch} lang={lang} />
     }
 }
-class DefInner extends Component {
+class DefInner extends React.Component {
     constructor(props) {
         super(props);
         this.state = {

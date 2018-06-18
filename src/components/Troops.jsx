@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 import RadioGroup from '../widgets/RadioGroup';
 import { Unit as UnitIcon,
          Stat as StatIcon,
@@ -48,7 +48,7 @@ const TroopsTable = ({ lang, units, tribe }) =>
         </tbody>
     </table>
 
-export default class Troops extends Component {
+export default class Troops extends React.Component {
     constructor() {
         super();
         this.state = { tribe: 0 };

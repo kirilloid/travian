@@ -1,26 +1,36 @@
-var webpack = require("webpack");
-var fs = require('fs');
+const path = require('path');
 
 module.exports = {
-    entry: {
-        app: './src/index.jsx',
-        vendor: ['react', 'react-dom', 'react-router-dom'],
-    },
+    mode: 'development',
+    entry: './src/index.jsx',
+    // devtool: 'inline-source-map',
     output: {
-        filename: 'js/app.bundle.js',
-        //libraryTarget: "commonjs"
+        filename: 'app.bundle.js',
+        path: path.resolve(__dirname, 'js'),
     },
-    plugins: [
-        new webpack.optimize.CommonsChunkPlugin({
-            name: "vendor",
-            filename: "js/vendor.bundle.js"
-        })
-    ],
+    optimization: {
+        splitChunks: {},
+    },
     resolve: {
-        extensions: ['.js', '.jsx', '.json'],
+        extensions: [
+            '.js', '.jsx',
+            '.ts', '.tsx',
+            '.json'
+        ]
     },
     module: {
         rules: [
+            {
+                test: /\.[tj]sx?$/,
+                include: /src/,
+                exclude: [/\.spec\.[tj]sx?$/, /node_modules/],
+                use: 'ts-loader',
+            }/*,
+            {   enforce: "pre",
+                test: /\.js$/,
+                loader: "source-map-loader"
+            }
+            ,
             {
                 test: /[.]jsx?$/,
                 include: /src/,
@@ -29,7 +39,7 @@ module.exports = {
                     loader: 'babel-loader',
                     options: JSON.parse(fs.readFileSync('.babelrc', 'utf-8'))
                 }
-            }
+            }*/
         ]
     }
 }

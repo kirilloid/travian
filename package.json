@@ -20,6 +20,7 @@
   "author": "kirilloid",
   "license": "ISC",
   "dependencies": {
+    "ramda": "0.25.0",
     "react": "^15.6.1",
     "react-addons-update": "^15.6.2",
     "react-dom": "^15.6.1",
@@ -27,6 +28,9 @@
     "react-router-dom": "^4.2.2"
   },
   "devDependencies": {
+    "@types/ramda": "^0.25.33",
+    "@types/react": "^15.6.1",
+    "almond": "^0.3.3",
     "babel": "^6.23.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.0.0",
@@ -39,8 +43,12 @@
     "eslint-plugin-react": "^7.3.0",
     "faucet": "0.0.1",
     "flow-bin": "^0.55.0",
+    "source-map-loader": "^0.2.3",
     "stylus": "^0.54.5",
     "tape": "^4.8.0",
-    "webpack": "^3.5.6"
+    "ts-loader": "^4.4.1",
+    "typescript": "^2.7.0",
+    "webpack": "^4.12.0",
+    "webpack-cli": "^3.0.8"
   }
 }

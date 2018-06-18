@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 import { getModel, getServers, parseVersion } from '../model';
 
-export default class Server extends Component {
+export default class Server extends React.Component {
     mapVersion(stringVersion) {
         const version = parseVersion(stringVersion);
         return {

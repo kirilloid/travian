@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 import { Build as BuildIcon } from './Icon';
 import { sortBy } from '../utils';
 
-export default class Buildings extends Component {
+export default class Buildings extends React.Component {
     render() {
         const { buildings, lang } = this.props;
         const sortedBuildings = sortBy(

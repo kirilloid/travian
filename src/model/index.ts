@@ -1,26 +1,35 @@
-import t5 from './t5';
-import t5dry from './t5.dry';
-import t4 from './t4';
-import t4fin from './t4.fin';
-import t4fs from './t4.fs';
-import t36 from './t3.6';
-import t25 from './t2.5';
+import { VersionInfo, ServerGroup, Model } from './types';
 
-export function getModel(version) {
-    return {
-        5: t5,
-        '5.dry': t5dry,
-        4: t4,
-        '4.fin': t4fin,
-        '4.fs': t4fs,
-        '3.6': t36,
-        '2.5': t25
-    }[version.replace(/^t/, '')];
+import t5 from './t5/index';
+import t5dry from './t5.dry/index';
+import t4 from './t4/index';
+import t4fin from './t4.fin/index';
+import t4fs from './t4.fs/index';
+import t36 from './t3.6/index';
+import t25 from './t2.5/index';
+
+const model: { [version: string]: Model } = {
+    '5': t5,
+    '5.dry': t5dry,
+    '4': t4,
+    '4.fin': t4fin,
+    '4.fs': t4fs,
+    '3.6': t36,
+    '2.5': t25
 };
 
-export function parseVersion(version) {
-    const [, fullVersion, base, variation, speed] =
-        version.match(/^t((\d+)(?:\.(\w+))?)(?:-x(\d+))?$/);
+export function getModel(version: string): Model {
+    return model[version.replace(/^t/, '')];
+};
+
+export function parseVersion(version: string): VersionInfo {
+    const [,
+        fullVersion = '4.4',
+        base = '4',
+        variation = '4',
+        speed = '1'
+    ] = version.match(/^t((\d+)(?:\.(\w+))?)(?:-x(\d+))?$/) || [];
+
     return {
         original: version,
         full: fullVersion,
@@ -30,22 +39,7 @@ export function parseVersion(version) {
     };
 }
 
-/**
- * @typedef {ServerGroup}
- * @property {string} title
- * @property {Server[]} servers
- */
-
-/**
- * @typedef {Server}
- * @property {string} title
- * @property {string} version
- */
-
-/**
- * @returns ServerGroup[]
- */
-export function getServers() {
+export function getServers(): ServerGroup[] {
     return [{
         title: 'kingdoms',
         servers: [{
@@ -88,19 +82,19 @@ export function getServers() {
     }];
 }
 
-function extractDomain(url) {
+function extractDomain(url: string): string | null {
     const m = url.match(/https?:\/\/([\w-.]+)/);
     return m && m[1];
 }
 
-function detectServerVersion(url) {
+function detectServerVersion(url: string): string | null {
     const domain = extractDomain(url);
     if (!domain) return null;
     var m;
     if (m = domain.match(/\[a-z]+\d+(?:x(\d+))?[.]kingdoms[.]com/)) {
         return 't5-x' + m[1];
     }
-    if (domain.endsWith('kingdoms.com')) return 't5';
+    if (/kingdoms\.com$/.test(domain)) return 't5';
     if (/tx2[.]travian[.]\w+/.test(domain)) return 't4.fin';
     if (/tx3[.]travian[.]\w+/.test(domain)) return 't4-x3';
     if ('ts8.travian.com' === domain) return 't4.fs';
@@ -108,19 +102,20 @@ function detectServerVersion(url) {
     return null;
 }
 
-function detectVersion(url) {
-    var fromServer = detectServerVersion(url);
+function detectVersion(url: string): string {
+    const fromServer = detectServerVersion(url);
+    
     if (fromServer === null) {
-        return localStorage.version || 't4.fs';
+        return localStorage.getItem('version') || 't4.fs';
     }
     try {
-        localStorage.version = fromServer;
+        localStorage.setItem('version', fromServer);
     } finally {
         return fromServer;
     }
 }
 
-export function getInitialModel(url) {
+export function getInitialModel(url: string): Model & { version: VersionInfo } {
     var versionString = detectVersion(url);
     var version = parseVersion(versionString);
     return {

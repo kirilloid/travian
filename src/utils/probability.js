@@ -8,6 +8,10 @@
  * - numeric modelling
  */
 
+/**
+ * @param {number} n
+ * @returns {number}
+ */
 function factorial(n) {
     return n ? n * factorial(n - 1) : 1;
 }
@@ -17,7 +21,7 @@ function factorial(n) {
  * could be improved with optimization, but the worst-case is still exponential
  * Nonetheless, it's good to test other ways since we can control inputs
  * @param {{min: number, max: number}[]} ranges
- * @returns {(value: number) => number}
+ * @returns {function(number): number}
  */
 export const model = (ranges) => {
     let total = { min: 0, max: 0, volume: 1 };
@@ -59,6 +63,10 @@ export const model = (ranges) => {
     const avg = (total.max + total.min) / 2;
 
     // almost final version of a calculating function
+    /**
+     * @param {number} value
+     * @returns {number}
+     */
     const calc = (value) => {
         if (value <= total.min) return 1;
         let sum = 0;
@@ -71,6 +79,10 @@ export const model = (ranges) => {
 
     // the distribution is symmetrical, but our calculation method is not
     // so calculating towards nearest "pole" require less operations and accumulates less error
+    /**
+     * @param {number} value
+     * @returns {number}
+     */
     return value => (value < avg)
         ? calc(value)
         : 1 - calc(2 * avg - value);
@@ -128,7 +140,7 @@ export function multiplyRangeByOnes(current, ones) {
 
 /**
  * 
- * @param {(index: number) => number} values total array
+ * @param {function(number): number} values total array
  * @param {numer} x index
  * @returns {number}
  */
@@ -141,7 +153,7 @@ export function linearInterpolation(values, x) {
 }
 
 /**
- * @param {(index: number) => number} values total array
+ * @param {function(number): number} values total array
  * @param {number} x index
  * @returns {number}
  */
@@ -166,7 +178,7 @@ export function cubicInterpolation(values, x) {
 /**
  * transforms array into a total function with 1 on the left side and 0 on the right
  * @param {number[]} array
- * @returns {(index: number) => number}
+ * @returns {function(number): number}
  */
 export function totalArray(array) {
     return index => {
@@ -177,12 +189,12 @@ export function totalArray(array) {
 }
 
 /**
- * Distributino calculator based on numeric modelling approach
+ * Distribution calculator based on numeric modelling approach
  * 'int' means it doesn't try to calculate ranges with "subpixel" precision
  * total running time is quadratic, but also depends on precision
  * @param {{min: number, max: number}[]} ranges
  * @param {number} precision number of decimal digits / order of magnitude
- * @returns {(value: number) => number}
+ * @returns {function(number): number}
  */
 export const numericInt = (ranges, precision = 2) => {
     const SCALE = 10 ** precision;
