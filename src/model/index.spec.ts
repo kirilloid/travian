@@ -1,5 +1,5 @@
 import { parseVersion, getModel, getServers } from './index';
-import tape from 'tape';
+import * as tape from 'tape';
 
 tape('parseVersion', t => {
     t.deepEqual(parseVersion('t1.a'), { original: 't1.a', full: '1.a', base: '1', variation: 'a', speed: 1 });

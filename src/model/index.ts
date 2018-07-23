@@ -24,9 +24,9 @@ export function getModel(version: string): Model {
 
 export function parseVersion(version: string): VersionInfo {
     const [,
-        fullVersion = '4.4',
-        base = '4',
-        variation = '4',
+        fullVersion = '#',
+        base = '#',
+        variation = '',
         speed = '1'
     ] = version.match(/^t((\d+)(?:\.(\w+))?)(?:-x(\d+))?$/) || [];
 
