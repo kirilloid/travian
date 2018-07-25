@@ -9,7 +9,7 @@ function MenuIcon({ icon }: { icon: string }) {
 
 type MenuItemProp = { icon: string, text: string, path: string };
 function MenuItem({ icon, text, path }: MenuItemProp) {
-    return (<NavLink to={path} activeClassName="selected">
+    return (<NavLink to={'/' + path} activeClassName="selected">
         <MenuIcon icon={icon} />
         <span>{text}</span>
     </NavLink>);

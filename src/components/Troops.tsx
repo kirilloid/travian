@@ -10,6 +10,8 @@ import { Unit } from '../model/base';
 
 type UnitProps = { lang: Lang, unit: Unit, tribe: number, index: number };
 
+const tribeNames = ['romans','teutons','gauls','nature','natar','egyptians','huns'];
+
 const UnitComponent = ({ lang, unit, tribe, index } : UnitProps) =>
     <tr>
         <td className="value-icon"><UnitIcon tribe={tribe} unit={index} /></td>
@@ -53,8 +55,9 @@ const TroopsTable = ({ lang, units, tribe } : { lang: Lang, units: Unit[], tribe
     </table>
 
 type TroopsProps = {
-    units: Unit[][],
+    units: Unit[][]
     lang: Lang
+    tribe?: string
 }
 type TroopsState = {
     tribe: number
@@ -63,12 +66,22 @@ type TroopsState = {
 export default class Troops extends React.Component<TroopsProps, TroopsState> {
     constructor(props: TroopsProps) {
         super(props);
-        this.state = { tribe: 0 };
+        let tribe = 0;
+        if (typeof props.tribe !== 'undefined') {
+            tribe = parseInt(props.tribe) - 1;
+        }
+        this.state = { tribe };
+    }
+    static getDerivedStateFromProps(nextProps: TroopsProps, prevState: TroopsState) {
+        if (prevState.tribe >= nextProps.units.length) {
+            // TODO: notify user about changed tribe
+            return { tribe: 0 };
+        }
+        return null;
     }
     render() {
         const { lang, units } = this.props;
         const { tribe } = this.state;
-        const tribeNames = ['romans','teutons','gauls','nature','natar','egyptians','huns'];
         return <div>
             <RadioGroup
                 value={tribe}
