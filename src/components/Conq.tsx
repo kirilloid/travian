@@ -56,19 +56,20 @@ function formatPercent(f: (v: number) => number, loyalty: number) {
     return (number * 100).toFixed(2).replace(/\.?0+$/, '') + '%';
 }
 
+type ConqProps = {
+    model: Model
+    lang: Lang
+}
 type ConqState = {
     loyalty: number
     def: DefSide
     off: OffSide[]
 }
-export default class Conq extends React.Component<{
-    model: Model
-    lang: Lang
-}, ConqState> {
+export default class Conq extends React.Component<ConqProps, ConqState> {
     private aid: number;
     private lastOff: OffSide
-    constructor() {
-        super();
+    constructor(props: ConqProps) {
+        super(props);
         this.aid = 0;
         this.lastOff = {
             id: this.aid++,

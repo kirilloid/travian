@@ -8,7 +8,9 @@ import { timeI2S, resSum } from '../utils';
 import { Lang } from '../lang';
 import { Unit } from '../model/base';
 
-const Unit = ({ lang, unit, tribe, index } : { lang: Lang, unit: Unit, tribe: number, index: number }) =>
+type UnitProps = { lang: Lang, unit: Unit, tribe: number, index: number };
+
+const UnitComponent = ({ lang, unit, tribe, index } : UnitProps) =>
     <tr>
         <td className="value-icon"><UnitIcon tribe={tribe} unit={index} /></td>
         <td className="value-text">{lang(`objects.troops.t_${tribe}_${index}`)}</td>
@@ -46,23 +48,26 @@ const TroopsTable = ({ lang, units, tribe } : { lang: Lang, units: Unit[], tribe
                 <th><ResIcon res={5} title={lang('stats.crop_usage')} /></th>
                 <th><ResIcon res={7} title={lang('stats.train_time')} /></th>
             </tr>
-            {units.map((unit, u) => <Unit key={u} lang={lang} tribe={tribe} unit={unit} index={u} />)}
+            {units.map((unit, u) => <UnitComponent key={u} lang={lang} tribe={tribe} unit={unit} index={u} />)}
         </tbody>
     </table>
 
-export default class Troops extends React.Component<{
+type TroopsProps = {
     units: Unit[][],
     lang: Lang
-}, {
+}
+type TroopsState = {
     tribe: number
-}> {
-    constructor() {
-        super();
+}
+
+export default class Troops extends React.Component<TroopsProps, TroopsState> {
+    constructor(props: TroopsProps) {
+        super(props);
         this.state = { tribe: 0 };
     }
     render() {
         const { lang, units } = this.props;
-        const tribe = this.state.tribe;
+        const { tribe } = this.state;
         const tribeNames = ['romans','teutons','gauls','nature','natar','egyptians','huns'];
         return <div>
             <RadioGroup

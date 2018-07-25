@@ -22,8 +22,8 @@ export default class App extends React.Component<
 	{  },
 	{ lang: Lang, route?: string, model: VModel }
 > {
-	constructor() {
-		super();
+	constructor(props: {}) {
+		super(props);
 		this.state = {
 			lang,
 			model: getInitialModel(document.referrer)
