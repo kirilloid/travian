@@ -12,6 +12,6 @@
     "allowJs": true,
     "allowSyntheticDefaultImports": true
   },
-  "files": ["./src/index.jsx"],
+  "files": ["./src/index.tsx"],
   "exclude": ["node_modules"]
 }

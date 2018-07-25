@@ -1,3 +1,7 @@
 node_modules
 js
 css/_index.css
+
+# thumbs cache
+.DS_Store
+thumbs.db

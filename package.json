@@ -30,6 +30,9 @@
   "devDependencies": {
     "@types/ramda": "^0.25.33",
     "@types/react": "^15.6.1",
+    "@types/react-addons-update": "^0.14.19",
+    "@types/react-dom": "^16.0.6",
+    "@types/react-router-dom": "^4.3.0",
     "@types/tape": "^4.2.32",
     "almond": "^0.3.3",
     "babel": "^6.23.0",

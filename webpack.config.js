@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
     mode: 'development',
-    entry: './src/index.jsx',
+    entry: './src/index.tsx',
     // devtool: 'inline-source-map',
     output: {
         filename: 'app.bundle.js',
@@ -21,15 +21,15 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.[tj]sx?$/,
+                test: /\.tsx?$/,
                 include: /src/,
-                exclude: [/\.spec\.[tj]sx?$/, /node_modules/],
+                exclude: [/\.spec\.tsx?$/, /node_modules/],
                 use: 'ts-loader',
-            }/*,
+            },
             {   enforce: "pre",
-                test: /\.js$/,
+                test: /\.ts$/,
                 loader: "source-map-loader"
-            }
+            }/*
             ,
             {
                 test: /[.]jsx?$/,

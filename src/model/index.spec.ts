@@ -1,4 +1,4 @@
-import { parseVersion, getModel, getServers } from './index';
+import { parseVersion, getModel, getServers } from '.';
 import * as tape from 'tape';
 
 tape('parseVersion', t => {

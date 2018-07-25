@@ -1,21 +1,21 @@
 import { VersionInfo, ServerGroup, Model } from './types';
 
-import t5 from './t5/index';
-import t5dry from './t5.dry/index';
-import t4 from './t4/index';
-import t4fin from './t4.fin/index';
-import t4fs from './t4.fs/index';
-import t36 from './t3.6/index';
-import t25 from './t2.5/index';
+import t5 from './t5';
+import t5dry from './t5.dry';
+import t4 from './t4';
+import t4fin from './t4.fin';
+import t4fs from './t4.fs';
+import t36 from './t3.6';
+import t25 from './t2.5';
 
 const model: { [version: string]: Model } = {
-    '5': t5,
-    '5.dry': t5dry,
+    '2.5': t25,
+    '3.6': t36,
     '4': t4,
     '4.fin': t4fin,
     '4.fs': t4fs,
-    '3.6': t36,
-    '2.5': t25
+    '5.dry': t5dry,
+    '5': t5,
 };
 
 export function getModel(version: string): Model {
