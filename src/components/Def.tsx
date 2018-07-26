@@ -6,7 +6,7 @@ import RadioGroup from '../widgets/RadioGroup';
 import { extend, sortBy, resSum, map } from '../utils';
 
 type T1 = { building: Building, level: number }
-type T2 = { [P: number]: T1 }
+type T2 = { [P: string]: T1 }
 type T3 = { def: number, cost: number, state: T2 }
 
 function totalDef(state: T2): number {
@@ -16,14 +16,14 @@ function totalDef(state: T2): number {
     };
     for (let key in state) {
         const { building, level } = state[key];
-        const { def = 0, defBonus = 0 } = building.benefit(level);
+        const { def = 0, defBonus = 0 } = building.f(level);
         total.def += def;
         total.defBonus += defBonus;
     }
     return Math.round(total.def * total.defBonus);
 }
 
-function incBuildLevel({ state, cost }: T3, type: keyof T2): T3 | null {
+function incBuildLevel({ state, cost }: T3, type: string): T3 | null {
     const { building, level } = state[type];
     const nextLevel = level + 1;
     const nextState = extend(state, { [type]: { level: nextLevel } });
@@ -39,7 +39,7 @@ function getNext(current: T3): T3 {
     const { cost, def } = current;
     const nextStates: T3[] = [];
     for (const key in current.state) {
-        const next = incBuildLevel(current, +key);
+        const next = incBuildLevel(current, key);
         if (next !== null) {
             nextStates.push(next);
         }
@@ -64,7 +64,7 @@ function getOrder(buildings: {[P: string]: Building}): T3[] {
 
 const propLevels = (state: T2) =>
     Object.keys(state)
-        .map(key => state[+key].level)
+        .map(key => state[key].level)
         .join('_');
 
 export default class Def extends React.Component<
@@ -77,7 +77,7 @@ export default class Def extends React.Component<
         const ditch: Building[] = [];
         const { buildings, lang } = this.props;
         buildings.forEach(building => {
-            const bonus = building.benefit(0);
+            const bonus = building.f(0);
             if (typeof bonus !== 'object') return;
             if ('defBonus' in bonus) {
                 if (building.r && building.r.r) {
@@ -120,7 +120,7 @@ class DefInner extends React.Component<DefInnerProps, {
         this.setState(extend(this.state, { [key]: value }));
     }
     render() {
-        const { buildings, lang, walls, bases } = this.props;
+        const { buildings, walls, bases } = this.props;
         return <div>
             <RadioGroup
                 key="base"
@@ -142,10 +142,10 @@ class DefInner extends React.Component<DefInnerProps, {
             />
             {getOrder(map(this.state, id => buildings[id]))
                 .map(({ state }) => <div key={propLevels(state)}>
-                    {Object.keys(state).map(key => <span key={key}>
-                        <BuildIcon id={state[+key].building.id} />
-                        {state[+key].level}
-                    </span>)}
+                    {Object.keys(state).sort().map(key => state[key].building.id ? <span key={key}>
+                        <BuildIcon id={state[key].building.id} />
+                        {state[key].level}
+                    </span> : null)}
                 </div>)}
         </div>;
     }

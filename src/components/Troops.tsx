@@ -83,7 +83,7 @@ export default class Troops extends React.Component<TroopsProps, TroopsState> {
         const { lang, units } = this.props;
         const { tribe } = this.state;
         return [
-            <p>
+            <div className="line">
                 <RadioGroup
                     value={tribe}
                     onChange={value => this.setState({ tribe: value })}
@@ -95,7 +95,7 @@ export default class Troops extends React.Component<TroopsProps, TroopsState> {
                             value: idx
                         }))}
                 />
-            </p>,
+            </div>,
             <TroopsTable lang={lang} units={units[tribe]} tribe={tribe} />
         ];
     }

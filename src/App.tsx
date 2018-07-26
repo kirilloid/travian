@@ -48,11 +48,11 @@ export default class App extends React.Component<
         <Router basename={this.state.route}>
           <div>
             <Menu items={menuData} />
-            <p>
+            <div className="line">
               <Server lang={lang}
                 version={model.version.original}
                 onChange={model => this.setModel(model)}/>
-            </p>
+            </div>
             <Switch>
               <Route path="/troops/:tribe" render={(props) =>
                 <Troops units={model.units}

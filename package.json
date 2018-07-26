@@ -20,9 +20,9 @@
   "author": "kirilloid",
   "license": "ISC",
   "dependencies": {
+    "immutability-helper": "^2.7.1",
     "ramda": "0.25.0",
     "react": "^16.4.1",
-    "react-addons-update": "^15.6.2",
     "react-dom": "^16.4.1",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1"
@@ -30,7 +30,6 @@
   "devDependencies": {
     "@types/ramda": "^0.25.33",
     "@types/react": "^16.4.7",
-    "@types/react-addons-update": "^0.14.19",
     "@types/react-dom": "^16.0.6",
     "@types/react-router": "^4.0.29",
     "@types/react-router-dom": "^4.3.0",
