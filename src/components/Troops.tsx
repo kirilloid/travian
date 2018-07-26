@@ -82,19 +82,21 @@ export default class Troops extends React.Component<TroopsProps, TroopsState> {
     render() {
         const { lang, units } = this.props;
         const { tribe } = this.state;
-        return <div>
-            <RadioGroup
-                value={tribe}
-                onChange={value => this.setState({ tribe: value })}
-                buttons={tribeNames
-                    .slice(0, units.length)
-                    .map((name, idx) => ({
-                        content: <TribeIcon tribe={idx+1} />,
-                        title: lang(`objects.tribes.${name}`),
-                        value: idx
-                    }))}
-            />
+        return [
+            <p>
+                <RadioGroup
+                    value={tribe}
+                    onChange={value => this.setState({ tribe: value })}
+                    buttons={tribeNames
+                        .slice(0, units.length)
+                        .map((name, idx) => ({
+                            content: <TribeIcon tribe={idx+1} />,
+                            title: lang(`objects.tribes.${name}`),
+                            value: idx
+                        }))}
+                />
+            </p>,
             <TroopsTable lang={lang} units={units[tribe]} tribe={tribe} />
-        </div>
+        ];
     }
 }

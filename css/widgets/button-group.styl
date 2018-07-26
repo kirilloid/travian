@@ -4,15 +4,24 @@
     display inline-block
     cursor pointer
     & > *
-        margin-left -1px
+        width 27px
+        min-height 19px
+        border-right-width 0
+        box-sizing content-box
     & > *:first-child
         border-top-left-radius 4px
         border-bottom-left-radius 4px
-        margin-left 0
     & > *:last-child
         border-top-right-radius 4px
         border-bottom-right-radius 4px
+        border-right-width 1px
     & > .active
         background-color ui_orange_pale
         border-color ui_orange
         position relative
+    & > *:hover
+    & > .active
+        border-right-width 1px
+    & > *:hover + *
+    & > .active + *
+        border-left-width 0

@@ -48,9 +48,11 @@ export default class App extends React.Component<
         <Router basename={this.state.route}>
           <div>
             <Menu items={menuData} />
-            <Server lang={lang}
-              version={model.version.original}
-              onChange={model => this.setModel(model)}/>
+            <p>
+              <Server lang={lang}
+                version={model.version.original}
+                onChange={model => this.setModel(model)}/>
+            </p>
             <Switch>
               <Route path="/troops/:tribe" render={(props) =>
                 <Troops units={model.units}
