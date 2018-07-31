@@ -2,6 +2,8 @@ import { roundP, extend } from '../../utils';
 
 import { res } from '../types';
 
+import TRIBES from './tribes';
+
 export const time = (a: number, k = 1.16, b = 1875) => (level: number) =>
     a * k ** (level - 1) - b;
 /*
@@ -74,60 +76,65 @@ export const ID = {
 	CITY_WALL: 30,
 	EARTH_WALL: 31,
 	PALISADE: 32,
-	STONEMASON: 33,
-    BREWERY: 34,
-    TRAPPER: 35,
-    HERO_MANSION: 36,
-    GREAT_WAREHOUSE: 37,
-    GREAT_GRANARY: 38,
-    WORLD_WONDER: 39,
 };
 
-type BConfig = {
-	id: number // typeof ID[keyof typeof ID]
-	m: number
-	c: [number, number, number, number]
-	k: number
-	u: number
-	cp: number
-	t: (l: number) => number
-	e: number
-	y: number
-	f: (l: number) => any
-	r?: { c?: number, m?: true, r?: number }
-	b?: { [P: number]: number }
-	nt?: string
-	dt?: string
-	s?: number
+type slot = number | [number, number];
+
+export const SLOT: {[P: string]: slot} = {
+	RES: [1, 18],
+	RALLY: 32,
+	WALL: 33,
+}
+
+export type BConfig = {
+	id: number
+	m: number   // max level
+	c: res      // cost
+	k: number   // cost growth base
+	u: number   // upkeep/population base
+	cp: number  // culture points base
+	t: (l: number) => number // time
+	f: (l: number) => any // benefit (numeric)
+	e: number   // extra (benefit)
+	y: number   // type (benefit)
+	r?: { 		
+		m?: true,	// can we have multiple instances of it
+		r?: number, // race (tribe), 1-based
+		c?: number  // limitations for capital, it's simpler to have it in the base type
+	}
+	b?: { [P: number]: number } // prerequisites: other buildings id -> level map
+	nt?: string // name translation key override
+	dt?: string // description translation key override
+	s?: slot // does it belong to a specific slot
 }
 
 const round5 = roundP(5);
-class BMethods {
-	constructor(config: BConfig) {
-		return Object.assign<BMethods, BConfig>(this, config);
+export class BMethods<C extends BConfig = BConfig> {
+	constructor(config: C) {
+		return Object.assign<BMethods<C>, C>(this, config);
 	}
-	get maxLevel(this: BMethods & BConfig) {
+	get maxLevel(this: BMethods & C) {
 		return this.m;
 	}
-	time(this: BMethods & BConfig, lvl: number) {
+	time(this: BMethods & C, lvl: number) {
 		return this.t(lvl);
 	}
-	cost(this: BMethods & BConfig, lvl: number): res {
+	cost(this: BMethods & C, lvl: number): res {
 		return <res>this.c.map((res: number) => round5(res * this.k ** (lvl - 1)));
 	}
-	upkeep(this: BMethods & BConfig, lvl: number) {
+	upkeep(this: BMethods & C, lvl: number) {
 		return lvl === 1 ? this.u : Math.round((5 * this.u + lvl - 1) / 10);
 	}
-	culture(this: BMethods & BConfig, lvl: number) {
+	culture(this: BMethods & C, lvl: number) {
 		return Math.round(this.cp * 1.2 ** lvl);
 	}
-	benefit(this: BMethods & BConfig, lvl: number) {
+	benefit(this: BMethods & C, lvl: number) {
 		return this.f(lvl);
 	}
-	nameKey(this: BMethods & BConfig) {
+	nameKey(this: BMethods & C) {
 		return 'objects.buildings.names.' + (this.nt || 'b_' + (this.id + 1));
 	}
-	descriptionKey(this: BMethods & BConfig) {
+	descriptionKey(this: BMethods & C) {
 		return 'objects.buildings.descriptions.' + (this.dt || 'b_' + (this.id + 1));
 	}
 }
@@ -137,10 +144,10 @@ export function building(config: BConfig & Partial<Building>): Building {
 }
 export type Building = BMethods & BConfig;
 export default extend([
-	building({id: ID.WOODJACK, 		c: [  40, 100,  50,  60], k: 1.67, u: 2, cp:1, t:time(1780/3,1.6, 1000/3),m:20, e:1, y:1, r: {c: 10}, f: prod}),
-	building({id: ID.CLAYPIT, 		c: [  80,  40,  80,  50], k: 1.67, u: 2, cp:1, t:time(1660/3,1.6, 1000/3),m:21, e:1, y:1, r: {c: 10}, f: prod}),
-	building({id: ID.IRONMINE,		c: [ 100,  80,  30,  60], k: 1.67, u: 3, cp:1, t:time(2350/3,1.6, 1000/3),m:20, e:1, y:1, r: {c: 10}, f: prod}),
-	building({id: ID.CROPLAND, 		c: [  70,  90,  70,  20], k: 1.67, u: 0, cp:1, t:time(1450/3,1.6, 1000/3),m:21, e:1, y:1, r: {c: 10}, f: prod}),
+	building({id: ID.WOODJACK, 		c: [  40, 100,  50,  60], k: 1.67, u: 2, cp:1, t:time(1780/3,1.6, 1000/3),m:20, e:1, y:1, f: prod, s: SLOT.RES }),
+	building({id: ID.CLAYPIT, 		c: [  80,  40,  80,  50], k: 1.67, u: 2, cp:1, t:time(1660/3,1.6, 1000/3),m:21, e:1, y:1, f: prod, s: SLOT.RES}),
+	building({id: ID.IRONMINE,		c: [ 100,  80,  30,  60], k: 1.67, u: 3, cp:1, t:time(2350/3,1.6, 1000/3),m:20, e:1, y:1, f: prod, s: SLOT.RES}),
+	building({id: ID.CROPLAND, 		c: [  70,  90,  70,  20], k: 1.67, u: 0, cp:1, t:time(1450/3,1.6, 1000/3),m:21, e:1, y:1, f: prod, s: SLOT.RES}),
 	building({id: ID.SAWMILL, 		c: [ 520, 380, 290,  90], k: 1.80, u: 4, cp:1, t:time( 5400, 1.5,  2400), m:5,  e:2, y:1, b: {[ID.CLAYPIT]: 10, [ID.MAIN_BUILDING]:5}, f: p5}),
 	building({id: ID.BRICKYARD, 	c: [ 440, 480, 320,  50], k: 1.80, u: 3, cp:1, t:time( 5240, 1.5,  2400), m:5,  e:2, y:1, b: {[ID.WOODJACK]:10, [ID.MAIN_BUILDING]:5}, f: p5}),
 	building({id: ID.IRONFOUNDRY, 	c: [ 200, 450, 510, 120], k: 1.80, u: 6, cp:1, t:time( 6480, 1.5,  2400), m:5,  e:2, y:1, b: {[ID.IRONMINE]:10, [ID.MAIN_BUILDING]:5}, f: p5}),
@@ -152,7 +159,7 @@ export default extend([
 	building({id: ID.BLACKSMITH,	c: [ 130, 210, 410, 130], k: 1.28, u: 4, cp:2, t:time( 3875),             m:20, e:12,y:2, b: {[ID.MAIN_BUILDING]:3, [ID.ACADEMY]:1}, f: mb_like}),
 	building({id: ID.ARENA, 		c: [1750,2250,1530, 240], k: 1.28, u: 1, cp:1, t:time( 5375),             m:20, e:4, y:2, b: {[ID.RALLY_POINT]:15}, f: p10}),
 	building({id: ID.MAIN_BUILDING, c: [  70,  40,  60,  20], k: 1.28, u: 2, cp:2, t:time( 3875),             m:20, e:7, y:3, f: mb_like}),
-	building({id: ID.RALLY_POINT, 	c: [ 110, 160,  90,  70], k: 1.28, u: 1, cp:1, t:time( 3875),             m:20, e:13,y:2, f: id, s:32}),
+	building({id: ID.RALLY_POINT, 	c: [ 110, 160,  90,  70], k: 1.28, u: 1, cp:1, t:time( 3875),             m:20, e:13,y:2, f: id, s: SLOT.RALLY}),
 	building({id: ID.MARKETPLACE, 	c: [  80,  70, 120,  70], k: 1.28, u: 4, cp:3, t:time( 3675),             m:20, e:14,y:3, b: {[ID.MAIN_BUILDING]:3, [ID.WAREHOUSE]:1, [ID.GRANARY]:1}, f: id}),
 	building({id: ID.EMBASSY, 		c: [ 180, 130, 150,  80], k: 1.28, u: 3, cp:4, t:time( 3875),             m:20, e:8, y:3, b: {[ID.MAIN_BUILDING]:1}, f: id}),
 	building({id: ID.BARRACKS, 		c: [ 210, 140, 260, 120], k: 1.28, u: 4, cp:1, t:time( 3875),             m:20, e:7, y:2, b: {[ID.MAIN_BUILDING]:3, [ID.RALLY_POINT]:1}, f: train}),
@@ -164,7 +171,7 @@ export default extend([
 	building({id: ID.RESIDENCE, 	c: [ 580, 460, 350, 180], k: 1.28, u: 1, cp:2, t:time( 3875),             m:20, e:9, y:3, b: {[ID.MAIN_BUILDING]:5, [ID.PALACE]:-1}, f: residence}),
 	building({id: ID.PALACE, 		c: [ 550, 800, 750, 250], k: 1.28, u: 1, cp:5, t:time( 6875),             m:20, e:9, y:3, b: {[ID.MAIN_BUILDING]:5, [ID.EMBASSY]:1, [ID.RESIDENCE]:-1}, f: palace}),
 ], {
-	[ID.CITY_WALL]:     building({id: ID.CITY_WALL, 	c: [  70,  90, 170,  70],   k: 1.28, u: 0, cp:1, t:time( 3875),     m:20, e:9, y:2, r: {r:1}, f: wall(1.03), s:33}),
-	[ID.EARTH_WALL]:    building({id: ID.EARTH_WALL, 	c: [ 120, 200,   0,  80],   k: 1.28, u: 0, cp:1, t:time( 3875),     m:20, e:9, y:2, r: {r:2}, f: wall(1.02), s:33}),
-	[ID.PALISADE]:      building({id: ID.PALISADE, 		c: [ 160, 100,  80,  60],   k: 1.28, u: 0, cp:1, t:time( 3875),     m:20, e:9, y:2, r: {r:3}, f: wall(1.025), s:33}),
+	[ID.CITY_WALL]:     building({id: ID.CITY_WALL, 	c: [  70,  90, 170,  70],   k: 1.28, u: 0, cp:1, t:time( 3875),     m:20, e:9, y:2, r: {r:TRIBES.ROMANS}, f: wall(1.03), s: SLOT.WALL}),
+	[ID.EARTH_WALL]:    building({id: ID.EARTH_WALL, 	c: [ 120, 200,   0,  80],   k: 1.28, u: 0, cp:1, t:time( 3875),     m:20, e:9, y:2, r: {r:TRIBES.TEUTONS}, f: wall(1.02), s: SLOT.WALL}),
+	[ID.PALISADE]:      building({id: ID.PALISADE, 		c: [ 160, 100,  80,  60],   k: 1.28, u: 0, cp:1, t:time( 3875),     m:20, e:9, y:2, r: {r:TRIBES.GAULS}, f: wall(1.025), s: SLOT.WALL}),
 }) as Building[];

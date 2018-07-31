@@ -1,7 +1,7 @@
 import { extend, roundP } from '../../utils';
 
-import { time, prod, ID } from '../base/buildings';
-import buildings from '../t3.6/buildings';
+import { time, prod } from '../base/buildings';
+import buildings, { ID as bID } from '../t3.6/buildings';
 
 export const wall4 = (base: number, num: number) =>
     (lvl: number) => ({
@@ -10,6 +10,8 @@ export const wall4 = (base: number, num: number) =>
     });
 
 const prod4 = (lvl: number) => Math.round(prod(lvl) * 1.4);
+
+export const ID = bID;
 
 export default extend(buildings, {
     [ID.CLAYPIT]:   { f: prod4 },

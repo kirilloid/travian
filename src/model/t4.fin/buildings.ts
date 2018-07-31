@@ -1,7 +1,6 @@
 import { extend, toObjArray } from '../../utils';
 
-import { ID } from '../base/buildings';
-import buildings from '../t4/buildings';
+import buildings, { ID } from '../t4/buildings';
 
 const f = buildings[ID.TRADE_OFFICE].f;
 

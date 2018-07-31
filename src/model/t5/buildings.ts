@@ -1,12 +1,16 @@
 import { extend } from '../../utils';
 
 import { res } from '../types';
-import { Building as B, building, prod, ID as baseID } from '../base/buildings';
-import t4buildings from '../t4/buildings';
+import { Building as B, SLOT as bSLOT, building, prod } from '../base/buildings';
+import t4buildings, { ID as bID } from '../t4/buildings';
 
-export const ID = extend(baseID, {
+export const ID = extend(bID, {
     WATER_DITCH: 41,
     NATARIAN_WALL: 42,
+});
+
+export const SLOT = Object.assign(bSLOT, {
+    DITCH: 41
 });
 
 type Building = B & { c1?: res };
@@ -70,8 +74,8 @@ const t5buildings = extend(t4buildings, [
     { t: timeC(), },
     { t: timeC(), },
     { t: timeC(300), },
-    { t: timeB(11.5), c: [ 140, 180, 100,   0], k: 1.33 },
-    { t: timeB(11),   c: [  80, 100,  70,  20], k: 1.33 },
+    { t: timeB(11.5), c: [ 140, 180, 100,   0], k: 1.33, f: capacity },
+    { t: timeB(11),   c: [  80, 100,  70,  20], k: 1.33, f: capacity },
     , // old armory
     { t: timeB(13.3), c: [ 180, 250, 500, 160], nt: 'b_13s', dt:'b_13s_desc' },
     { t: timeB(26.1, 300) },
@@ -103,7 +107,7 @@ const t5buildings = extend(t4buildings, [
     { t: timeW(), cost: wwCost }, // ww
     { t: timeB(16.9, 600) },
     // water ditch
-    building({ id: ID.WATER_DITCH, c: [ 740, 850, 960, 620], k:1.28, u:4, cp:3, t:timeB(19, 300), m:20, e:9, y:3, b: {16:10, 20:20}, f: ditch, s:41}),
+    building({ id: ID.WATER_DITCH, c: [ 740, 850, 960, 620], k:1.28, u:4, cp:3, t:timeB(19, 300), m:20, e:9, y:3, b: {16:10, 20:20}, f: ditch, s: SLOT.DITCH }),
 ]);
 t5buildings[ID.NATARIAN_WALL] = extend(t5buildings[ID.EARTH_WALL], {
     id: ID.NATARIAN_WALL,

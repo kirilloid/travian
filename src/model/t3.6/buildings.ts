@@ -1,11 +1,11 @@
 import { extend } from '../../utils';
 
-import { ID, building, Building, time, percent } from '../base/buildings';
-import buildings from '../t3/buildings';
+import { building, Building, time, percent } from '../base/buildings';
+import buildings, { ID as bID } from '../t3.1/buildings';
+import TRIBES from '../t3/tribes';
 
-const HORSE_POOL = 40;
-Object.assign(ID, { HORSE_POOL });
+export const ID = Object.assign(bID, { HORSE_POOL: 40 });
 
 export default extend(buildings, {
-    [HORSE_POOL]:    building({ id: HORSE_POOL,   c: [ 780, 420, 660, 540],     k: 1.28, u: 5, cp:3, t:time( 5950,2),          m:20, e:7, y:3, b: {[ID.RALLY_POINT]:10, [ID.STABLES]:20}, r:{r:1}, f: percent(1)}),
+    [ID.HORSE_POOL]:    building({ id: ID.HORSE_POOL,   c: [ 780, 420, 660, 540],     k: 1.28, u: 5, cp:3, t:time( 5950,2),          m:20, e:7, y:3, b: {[ID.RALLY_POINT]:10, [ID.STABLES]:20}, r:{r:TRIBES.ROMANS}, f: percent(1)}),
 }) as Building[];

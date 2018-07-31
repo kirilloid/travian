@@ -5,6 +5,7 @@ import t5dry from './t5.dry';
 import t4 from './t4';
 import t4fin from './t4.fin';
 import t4fs from './t4.fs';
+import t4pp from './t4.pp';
 import t36 from './t3.6';
 import t25 from './t2.5';
 
@@ -13,11 +14,17 @@ const model: { [version: string]: Model } = {
     '3.6': t36,
     '4': t4,
     '4.fin': t4fin,
-    '4.fs': t4fs,
+    '4.fs': t4fs, 
+    '4.pp': t4pp, 
     '5.dry': t5dry,
     '5': t5,
 };
 
+// Ancient Europe (2014) -items +al.boni
+// Scattered Empire (2015) -items +al.boni https://wbb.forum.travian.com/thread/168794
+// Rise of Alliance (2016)
+// Fire and Sand (2017)
+// Path to Pandora (2018)
 export function getModel(version: string): Model {
     return model[version.replace(/^t/, '')];
 };
