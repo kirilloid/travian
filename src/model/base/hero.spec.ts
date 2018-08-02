@@ -1,4 +1,4 @@
-import tape from 'tape';
+import * as tape from 'tape';
 
 import Hero from './hero';
 import { res } from '../types';
@@ -13,18 +13,18 @@ class RealHero extends Hero<{}, 'a' | 'b'> {
 tape('hero (base)', t => {
     const hero = new RealHero(['a', 'b']);
     t.test('levels', t => {
-        t.equal(hero.neededLvl, 0, '0 sp');
+        t.equal(hero.getNeededLvl(), 0, '0 sp');
         hero.setSkill('a', 2);
-        t.equal(hero.neededLvl, 0, 'full 0 level');
+        t.equal(hero.getNeededLvl(), 0, 'full 0 level');
         hero.setSkill('a', 50);
-        t.equal(hero.neededLvl, 24, '1/4');
+        t.equal(hero.getNeededLvl(), 24, '1/4');
         hero.setSkill('a', 51);
-        t.equal(hero.neededLvl, 25, '1/4 + 1 sp');
+        t.equal(hero.getNeededLvl(), 25, '1/4 + 1 sp');
         hero.setSkill('a', 52);
-        t.equal(hero.neededLvl, 25, '1/4 + max sp');
+        t.equal(hero.getNeededLvl(), 25, '1/4 + max sp');
         hero.setSkill('a', 50);
         hero.setSkill('b', 100);
-        t.equal(hero.neededLvl, 74, '3/4');
+        t.equal(hero.getNeededLvl(), 74, '3/4');
         t.end();
     });
     t.test('edge cases', t => {

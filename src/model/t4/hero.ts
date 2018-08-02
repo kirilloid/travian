@@ -59,7 +59,7 @@ export default class Hero4 extends Hero<H4S, H4K> {
         };
     }
     getCost(): res {
-        return <res>tribeCosts[this.tribe].map(resCost, this);
+        return this.tribeCosts[this.tribe].map(resCost, this) as res;
     }
     getTime() {
         return limitLvl(this.getNeededLvl()) * 3600;
