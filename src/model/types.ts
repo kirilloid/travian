@@ -1,3 +1,5 @@
+import { Building } from './base/buildings';
+
 export interface VersionInfo {
     original: string
     full: string
@@ -18,7 +20,7 @@ export interface Server {
 
 export interface Model<H=IHero> {
     units: Unit[][]
-    buildings: any[]
+    buildings: Building[]
     culture: any
     combat: any
     // Hero?: H
@@ -26,6 +28,7 @@ export interface Model<H=IHero> {
 
 export type res = [number, number, number, number];
 
+// hero
 export type HeroCombatStats = {
     a: number
     di: number
@@ -47,6 +50,7 @@ export interface IHero<S={}, K='string'> {
     getTime(): number
 }
 
+// units
 export type BaseUnit = {
 	a: number
 	di: number
@@ -68,5 +72,78 @@ export type UnitSettler = BaseUnit & { k: 't' };
 export type Unit = UnitRegular | UnitSpy | UnitRam | UnitCat | UnitAdmin | UnitSettler
 
 export function isAdmin(u: Unit): u is UnitAdmin { return u.k === 'a'; }
-export function isCatapult(u: Unit): u is UnitAdmin { return u.k === 'c'; }
-export function isRam(u: Unit): u is UnitAdmin { return u.k === 'r'; }
+export function isCatapult(u: Unit): u is UnitCat { return u.k === 'c'; }
+export function isRam(u: Unit): u is UnitRam { return u.k === 'r'; }
+export function isSpy(u: Unit): u is UnitSpy { return u.k === 's'; }
+
+// combat
+export type CombatPoints = {
+    i: number
+    c: number
+}
+
+export type Off = {
+    kind: 'off'
+    pop: number
+    units: Unit[]
+    numbers: number[]
+    upgrades: number[]
+    type: 'attack' | 'raid'
+    targets?: [number] | [number, number]
+    // hero: Hero
+    // metallurgy: number
+    party: boolean
+    brew: number
+}
+
+export type Def = {
+    kind: 'def'
+    units: Unit[]
+    numbers: number[]
+    upgrades: number[]
+
+    // hero: Hero
+    // metallurgy: number
+}
+
+export type Side = Off | Def
+
+// all fields should be are pre-computed
+export type Place = {
+    tribe: number
+    pop: number
+    wall: number
+    residence: number
+    stonemason: number
+    party: boolean
+    // traps: number
+}
+
+export type CombatResult = {
+    offLosses: number
+    defLosses: number,
+    buildings?: number[]
+    wall?: number
+}
+
+type ReportSide = {
+    units: number[]
+    losses: number[]
+}
+
+type ReportInfo = {
+    demolished: [number, number][]
+    noneReturn: boolean
+    conquered: boolean
+}
+
+type ReportStats = {
+
+}
+
+export type Report = {
+    off: ReportSide
+    def: { [key: number]: ReportSide }
+    info: ReportInfo
+    stats: ReportStats
+}

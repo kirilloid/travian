@@ -70,6 +70,10 @@ export function resSum(res: [number, number, number, number]): number {
     return res[0] + res[1] + res[2] + res[3];
 }
 
+export function sum(array: number[]): number {
+    return array.reduce((a, b) => a + b, 0);
+}
+
 const d = (p: string, n: number): string => (p + ~~n).slice(-2);
 export function timeI2S(seconds: number): string {
     return [
@@ -91,3 +95,21 @@ interface Compose {
     <A, B, C, D>(f3: (c: C) => D, f2: (b: B) => C, f1: (a: A) => B): (a: A) => D
 }
 export const compose: Compose = (...a: Function[]) => (n: any): any => a.reduceRight((v, f) => f(v), n);
+
+export function zipWith<A, B, C>(fn: (a: A, b: B) => C, a: A[], b: B[]): C[] {
+    var n = Math.min(a.length, b.length);
+    var out = [];
+    for (let i = 0; i < n; i++) {
+        out.push(fn(a[i], b[i]));
+    }
+    return out;
+}
+
+export function zipWith3<A, B, C, D>(fn: (a: A, b: B, c: C) => D, a: A[], b: B[], c: C[]): D[] {
+    var n = Math.min(a.length, b.length, c.length);
+    var out = [];
+    for (let i = 0; i < n; i++) {
+        out.push(fn(a[i], b[i], c[i]));
+    }
+    return out;
+}

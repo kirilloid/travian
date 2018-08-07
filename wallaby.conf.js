@@ -7,7 +7,8 @@ module.exports = function(wallaby) {
             'src/**/*.spec.ts'
         ],
         env: {
-            type: 'node'
+            type: 'node',
+            runner: 'ts-node'
         }
     };
-}
+};

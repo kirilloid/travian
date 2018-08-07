@@ -1,51 +1,83 @@
-import tape from 'tape';
+import * as tape from 'tape';
+import units from './units';
 
-import { sigma, demolishPoints, demolish } from './combat';
+import { place, def, off } from '../../utils/test';
 
-tape('sigma', t => {
-    t.equal(sigma(0), 0);
-    t.equal(sigma(1), 0.5);
-    t.equal(sigma(Infinity), 1);
-    t.end();
-});
+import combat from './combat';
+import { CombatResult } from '../types';
 
-tape('demolish', t => {
-    t.equal(demolish(6, 0), 6, 'lower edge');
-    t.equal(demolish(6, 6), 6, 'before the first cliff');
-    t.equal(demolish(6, 7), 5, 'after the first cliff');
-    t.equal(demolish(6, 15), 4, 'before mid cliff');
-    t.equal(demolish(6, 16), 3, 'after mid cliff');
-    t.equal(demolish(6, 21), 1, 'before the last cliff');
-    t.equal(demolish(6, 21.5), 0, 'exactly the last cliff');
-    t.equal(demolish(6, 22), 0, 'over the last cliff');
-    t.end();
-});
-
-tape('demolishPoints', t => {
-    const testRange = ({
-        catas,
-        upg = 0,
-        durability = 1,
-        x,
-        dx = 1e-8,
-        threshold
-    }, msg) => {
-        t.test(msg, t => {
-            const low = demolishPoints(catas, upg, durability, x - dx);
-            const high = demolishPoints(catas, upg, durability, x + dx);
-            
-            if (low < threshold
-            &&  high > threshold) {
-                t.ok(true);
-            } else {
-                t.fail(`Not in range: ${low} ≤ ${threshold} ≤ ${high}`);
-            }
-            t.end();
+tape('combat e2e (base)', t => {
+    t.test('classic: 100 imps vs 100 phalx', t => {
+        t.test('basic variation', t => {
+            const result = combat.combat(
+                place({ tribe: 3 }),
+                [ def({ units: units[2], numbers: [100] }),
+                  off({ units: units[0], numbers: [0,0,100] })]);
+            t.equal(result[0].defLosses, 1);
+            t.equal(result[0].offLosses.toFixed(3), '0.434');
+            t.end(); 
+        })
+        t.test('raid', t => {
+            const result = combat.combat(
+                place({ tribe: 3 }),
+                [ def({ units: units[2], numbers: [100] }),
+                off({ units: units[0], numbers: [0,0,100], type: 'raid' })]);
+            t.equal(result[0].defLosses.toFixed(3), '0.698');
+            t.equal(result[0].offLosses.toFixed(3), '0.302');
+            t.end();    
         });
-    };
-    testRange({ catas: 1, x: 0.825481812, threshold: 1.5 }, 'basic level 1');
-    testRange({ catas: 13, x: 0.88100169, threshold: 21.5 }, 'basic level 6');
-    testRange({ catas: 100, durability: 1.3, x: 0.18910846, threshold: 12.5 }, 'stonemason');
-    testRange({ catas: 230, durability: 3, upg: 1, x: 0.1866283009, dx: 1e-10, threshold: 12.5 }, 'art & upgrades');
+        t.test('double-wave', t => {
+            const result = combat.combat(
+                place({ tribe: 3 }),
+                [ def({ units: units[2], numbers: [100] }),
+                  off({ units: units[0], numbers: [0,0,100], type: 'raid' }),
+                  def({ units: units[2], numbers: [100] }),
+                  off({ units: units[0], numbers: [0,0,100], type: 'raid' })]);
+            t.equal(result[0].offLosses.toFixed(3), '0.302');
+            t.equal(result[1].offLosses.toFixed(3), '0.391');
+            t.end();    
+        });
+        t.end();
+    });
+
+    t.test('lone attacker', t => {
+        let result: CombatResult[];
+        result = combat.combat(
+            place({ tribe: 3 }),
+            [ def({ units: [] }),
+              off({ units: units[0], numbers: [0,0,1], upgrades: [0,0,17] })]);
+        t.equal(Math.round(result[0].offLosses), 1, 'imperian dies');
+        result = combat.combat(
+            place({ tribe: 3 }),
+            [ def({ units: [] }),
+              off({ units: units[0], numbers: [0,0,1], upgrades: [0,0,18] })]);
+        t.equal(Math.round(result[0].offLosses), 0, 'imperian lives');
+
+        result = combat.combat(
+            place({ tribe: 3 }),
+            [ def({ units: [] }),
+              off({ units: units[0], numbers: [0,0,0, 0,1], upgrades: [0,0,0, 0,3], pop: 100 })]);
+        t.equal(Math.round(result[0].offLosses), 1, 'EI dies');
+        result = combat.combat(
+            place({ tribe: 3 }),
+            [ def({ units: [] }),
+              off({ units: units[0], numbers: [0,0,0, 0,1], upgrades: [0,0,0, 0,4], pop: 100 })]);
+        t.equal(Math.round(result[0].offLosses), 0, 'EI lives');
+        t.end();    
+    });
     t.end();
+
+    t.test('morale', t => {
+        let result: CombatResult[];
+        result = combat.combat(
+            place({ tribe: 3 }),
+            [ def({ units: [] }),
+              off({ units: units[0], numbers: [0,0,1], upgrades: [0,0,17] })]);
+        t.equal(Math.round(result[0].offLosses), 1, 'imperian dies');
+        result = combat.combat(
+            place({ tribe: 3 }),
+            [ def({ units: [] }),
+              off({ units: units[0], numbers: [0,0,1], upgrades: [0,0,18] })]);
+        t.equal(Math.round(result[0].offLosses), 0, 'imperian lives');
+    });
 });

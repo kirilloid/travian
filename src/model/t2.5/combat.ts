@@ -1,3 +1,7 @@
-export { raid, upgrade } from '../base/combat';
+import { extend } from '../../utils';
 
-export const immensity = () => 1.5;
+import combat from '../base/combat';
+
+const immensity = () => 1.5;
+
+export default extend(combat, { immensity });
