@@ -1,4 +1,4 @@
-import { extend, toObjArray } from '../../utils';
+import { extend } from '../../utils';
 
 import units from '../base/units';
 import { Unit } from '../base';

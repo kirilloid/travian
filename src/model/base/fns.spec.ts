@@ -30,6 +30,9 @@ tape('morale', t => {
     t.equal(fns.morale(20, 10), 0.871);
     t.equal(fns.morale(100, 100), 1);
     t.equal(fns.morale(10, 100), 1);
+    
+    // remorale
+    t.equal(fns.morale(100, 10, 0.5), 0.794);
 
     t.end();
 });
@@ -72,8 +75,8 @@ tape('demolishPoints', t => {
         threshold
     } : RangeTestConfig, msg: string) => {
         t.test(msg, t => {
-            const low = fns.demolishPoints(catas, upg, durability, x - dx);
-            const high = fns.demolishPoints(catas, upg, durability, x + dx);
+            const low = fns.demolishPoints(catas, upg, durability, x - dx, 1);
+            const high = fns.demolishPoints(catas, upg, durability, x + dx, 1);
             
             if (low < threshold
             &&  high > threshold) {

@@ -5,16 +5,13 @@ import { CombatPoints } from '../types';
 const roundPercent = roundP(1e-4);
 
 export default {
-    morale(offPop: number, defPop: number) {
+    morale(offPop: number, defPop: number, ptsRatio = 1) {
         if (offPop <= defPop) { return 1; }
         const popRatio = offPop / Math.max(defPop, 3);
-        return Math.max(0.667, roundP(1e-3)(popRatio ** -0.2));
+        return Math.max(0.667, roundP(1e-3)(popRatio ** (-0.2 * Math.min(ptsRatio, 1))));
     },
     cataMorale(offPop: number, defPop: number) {
-        return compose(
-            limit(0.3333, 1),
-            roundP(1e-4)
-        )((offPop / defPop) ** -0.3);
+        return limit(0.3333, 1)((offPop / defPop) ** -0.3);
     },
     immensity(n: number) {
         return compose(
@@ -38,10 +35,10 @@ export default {
     siegeUpgrade(level: number): number {
         return roundP(0.005)(1.0205 ** level);
     },
-    demolishPoints(catas: number, upg: number, durability: number, x: number) {
+    demolishPoints(catas: number, upg: number, durability: number, ptsRatio: number, morale: number) {
         // D = 4σ∙C – ½
-        const effCatas = Math.floor(catas / durability);
-        return 4 * this.sigma(x) * effCatas * this.siegeUpgrade(upg);
+        const effCatas = Math.floor(catas / durability) * morale;
+        return 4 * this.sigma(ptsRatio) * effCatas * this.siegeUpgrade(upg);
     },
     adducedDef(off: CombatPoints, def: CombatPoints): [number, number] {
         const totalOff = off.i + off.c;

@@ -89,7 +89,7 @@ export type Off = {
     numbers: number[]
     upgrades: number[]
     type: 'attack' | 'raid'
-    targets?: [number] | [number, number]
+    targets: number[]
     // hero: Hero
     // metallurgy: number
     party: boolean
@@ -112,9 +112,9 @@ export type Side = Off | Def
 export type Place = {
     tribe: number
     pop: number
-    wall: number
-    residence: number
-    stonemason: number
+    def: number
+    defBonus: number
+    durBonus: number
     party: boolean
     // traps: number
 }

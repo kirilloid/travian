@@ -47,14 +47,6 @@ export function extend<A, B=Partial<A>>(base: A, mixin: B): A & B {
     return copy;
 }
 
-export function toObjArray<T>(source: {[key: number]: T}): T[] {
-    const out: T[] = [];
-    for (let key in source) {
-        out[key] = source[key];
-    }
-    return out;
-}
-
 export const roundP = (precision: number) => (number: number): number =>
     precision * Math.round(number / precision);
 

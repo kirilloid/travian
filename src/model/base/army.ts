@@ -18,7 +18,7 @@ export default class Army {
         this.upgrades = side.upgrades;
     }
     applyLosses(percent: number) {
-        this.numbers = this.numbers.map(n => Math.round(n * percent));
+        this.numbers = this.numbers.map(n => Math.round(n * (1 - percent)));
     }
     upgrade(unit: Unit, stat: number, level: number): number {
         return roundStat(stat + (stat + 300 * unit.u / 7) * (1.007 ** level - 1));

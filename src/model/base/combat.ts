@@ -17,18 +17,21 @@ export default {
         def: 0,
         total: 0,
         imm: 1,
+        ratio: 1,
     },
     result: {} as CombatResult,
-    morale() {
-        return this.fns.morale(this.off.pop, this.place.pop);
+    morale(remorale = false) {
+        return this.fns.morale(
+            this.off.pop, this.place.pop,
+            remorale ? this.current.off / this.current.def : 1);
     },
     cataMorale() {
         return this.fns.cataMorale(this.off.pop, this.place.pop);
     },
     calcScan() {
         const offPoints = new this.Army(this.off).scan * this.morale();
-        const defPoints = this.def.reduce((a, b) => a + b.scanDef, 0) * this.place.wall;
-        const losses = Math.min((offPoints / defPoints) ** 1.5, 1);
+        const defPoints = this.def.reduce((a, b) => a + b.scanDef, 0) * this.place.defBonus;
+        const losses = Math.min((defPoints / offPoints) ** 1.5, 1);
         this.result = {
             offLosses: losses,
             defLosses: 0
@@ -37,7 +40,7 @@ export default {
     loneAttackerDies() {
         if (this.offArmy.total === 1) {
             const off = (this.offArmy.off.i + this.offArmy.off.c);
-            const morale = this.morale();
+            const morale = this.morale(false);
             this.log(`lone attacker: ${off} * ${morale} = ${off * morale}`);
             if (off * morale < 84.5) this.result.offLosses = 1;
         }
@@ -47,13 +50,14 @@ export default {
         const defPts = this.def.map(e => e.def).reduce(addCP);
         const cur = this.current;
         [cur.off, cur.def] = this.fns.adducedDef(offPts, defPts);
-        const morale = this.morale();
         cur.total = this.def.reduce((n, d) => n + d.total, this.offArmy.total);
-        cur.def += this.BASE_VILLAGE_DEF + this.place.residence;
-        cur.def *= this.place.wall;
+        cur.def += this.BASE_VILLAGE_DEF + this.place.def;
+        cur.def *= this.place.defBonus;
+        const morale = this.morale(true);
         cur.off *= morale;
         cur.imm = this.fns.immensity(cur.total);
-        const x = (Math.round(cur.off) / Math.round(cur.def)) ** cur.imm;
+        cur.ratio = Math.round(cur.off) / Math.round(cur.def);
+        const x = cur.ratio ** cur.imm;
         this.log("immensity = " + cur.imm);
         this.log("x = " + x);
         return x;
@@ -63,12 +67,24 @@ export default {
         const [offLosses, defLosses] = this.fns.raid(x);
         this.result = { offLosses, defLosses };
     },
+    calcCatapults() {
+        const { targets } = this.off;
+        const morale = this.cataMorale();
+        if (targets.length > 0) {
+            let [cats, catUps] = this.offArmy.cats;
+            cats /= targets.length;
+            const points = fns.demolishPoints(cats, catUps, this.place.durBonus, this.current.ratio, morale);
+            this.log("cata points = " + points);
+            this.result.buildings = this.off.targets.map(b => fns.demolish(b, points));
+        }
+    },
     calcNormal() {
         const x = this.calcRatio();
         this.result = {
             offLosses: Math.min(1/x, 1),
             defLosses: Math.min(x, 1)
         };
+        this.calcCatapults();
     },
     calcWave() {
         if (this.offArmy.isScan()) {

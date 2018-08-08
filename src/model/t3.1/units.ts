@@ -1,4 +1,4 @@
-import { extend, toObjArray } from '../../utils';
+import { extend } from '../../utils';
 
 import units from '../t3/units';
 import TRIBES from '../t3/tribes';

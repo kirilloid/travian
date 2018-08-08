@@ -1,4 +1,4 @@
-import { extend, toObjArray } from '../../utils';
+import { extend } from '../../utils';
 
 import buildings, { ID } from '../t4/buildings';
 

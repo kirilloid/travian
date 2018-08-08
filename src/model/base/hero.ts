@@ -1,6 +1,5 @@
+import { sum } from '../../utils';
 import { res, HeroStats, HeroCombatStats, IHero } from '../types';
-
-const sum = (a: number, b: number) => a + b;
 
 export default abstract class Hero<S extends {}, K extends string=string> implements IHero<S, K> {
     protected skills: {[P: string]: number}
@@ -46,7 +45,7 @@ export default abstract class Hero<S extends {}, K extends string=string> implem
         }
         this.getStats();
         this.skills[skill] = level;
-        this.totalPoints = this.skillKeys.map(skill => this.skills[skill]).reduce(sum, 0);
+        this.totalPoints = sum(this.skillKeys.map(skill => this.skills[skill]));
     }
     protected levelExp(level: number) {
         return 50 * level * (level + 1);
