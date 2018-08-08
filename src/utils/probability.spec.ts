@@ -10,10 +10,18 @@ import {
 import * as tape from 'tape';
 
 function approxEqual(t: tape.Test, epsilon: number, actual: number, expected: number, message = '') {
+    const actStr = actual.toString();
+    const expStr = expected.toString();
+    const len = Math.min(actStr.length, expStr.length);
+    let i;
+    for (i = 0; i < len; i++) {
+        if (actStr[i] !== expStr[i]) break;
+    }
+    const diffStr = `${actStr.slice(0, i)}{${actStr.slice(i, i+2)}~${expStr.slice(i, i+2)}}`;
     if (Math.abs(actual - expected) < epsilon) {
-        t.pass(`${actual} ~ ${expected}. ${message}`);
+        t.pass(`${diffStr}. ${message}`);
     } else {
-        t.fail(`${actual} /~ ${expected}. ${message}`);
+        t.fail(`${diffStr}. ${message}`);
     }
 }
 
@@ -123,7 +131,7 @@ tape('numericInt', t => {
             const actual = dist(n);
             const expected = precise(n);
             avgError += actual - expected;
-            approxEqual(t, PRECISION, actual, expected, n.toString());
+            approxEqual(t, PRECISION, actual, expected, n.toFixed(0));
         }
         t.end();
     });

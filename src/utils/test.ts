@@ -16,7 +16,7 @@ const ZEROES = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 export function place(obj: Partial<Place> = {}) {
     return extend({
         tribe: 1,
-        pop: 1,
+        pop: 100,
         wall: 1,
         residence: 0,
         stonemason: 1,
@@ -35,7 +35,7 @@ export function def(obj: Partial<Def> & { units: Unit[] }): Def {
 export function off(obj: Partial<Off> & { units: Unit[] }): Off {
     return extend({
         kind: 'off',
-        pop: 1,
+        pop: 100,
         numbers: ZEROES,
         upgrades: ZEROES,
         type: 'attack',

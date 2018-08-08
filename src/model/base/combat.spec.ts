@@ -16,7 +16,7 @@ tape('combat e2e (base)', t => {
             t.equal(result[0].defLosses, 1);
             t.equal(result[0].offLosses.toFixed(3), '0.434');
             t.end(); 
-        })
+        });
         t.test('raid', t => {
             const result = combat.combat(
                 place({ tribe: 3 }),
@@ -56,12 +56,12 @@ tape('combat e2e (base)', t => {
         result = combat.combat(
             place({ tribe: 3 }),
             [ def({ units: [] }),
-              off({ units: units[0], numbers: [0,0,0, 0,1], upgrades: [0,0,0, 0,3], pop: 100 })]);
+              off({ units: units[0], numbers: [0,0,0, 0,1], upgrades: [0,0,0, 0,3], pop: 1000 })]);
         t.equal(Math.round(result[0].offLosses), 1, 'EI dies');
         result = combat.combat(
             place({ tribe: 3 }),
             [ def({ units: [] }),
-              off({ units: units[0], numbers: [0,0,0, 0,1], upgrades: [0,0,0, 0,4], pop: 100 })]);
+              off({ units: units[0], numbers: [0,0,0, 0,1], upgrades: [0,0,0, 0,4], pop: 1000 })]);
         t.equal(Math.round(result[0].offLosses), 0, 'EI lives');
         t.end();    
     });

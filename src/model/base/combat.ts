@@ -1,4 +1,4 @@
-import { Unit, Place, Side, Off, CombatResult } from '../types';
+import { Place, Side, Off, CombatResult } from '../types';
 
 import Army, { addCP } from './army';
 import fns from './fns';
@@ -15,7 +15,8 @@ export default {
     current: {
         off: 0,
         def: 0,
-        total: 0
+        total: 0,
+        imm: 1,
     },
     result: {} as CombatResult,
     morale() {
@@ -46,17 +47,14 @@ export default {
         const defPts = this.def.map(e => e.def).reduce(addCP);
         const cur = this.current;
         [cur.off, cur.def] = this.fns.adducedDef(offPts, defPts);
-        this.log('off: ' + JSON.stringify(offPts) + ' = ' + cur.off);
-        this.log('def: ' + JSON.stringify(defPts) + ' = ' + cur.def);
         const morale = this.morale();
-        this.log('morale = ' + morale);
         cur.total = this.def.reduce((n, d) => n + d.total, this.offArmy.total);
         cur.def += this.BASE_VILLAGE_DEF + this.place.residence;
         cur.def *= this.place.wall;
         cur.off *= morale;
-        const immensity = this.fns.immensity(cur.total);
-        const x = (Math.round(cur.off) / Math.round(cur.def)) ** immensity;
-        this.log("immensity = " + immensity);
+        cur.imm = this.fns.immensity(cur.total);
+        const x = (Math.round(cur.off) / Math.round(cur.def)) ** cur.imm;
+        this.log("immensity = " + cur.imm);
         this.log("x = " + x);
         return x;
     },
