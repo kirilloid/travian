@@ -4,7 +4,7 @@ export function extend<A, B=Partial<A>>(base: A, mixin: B): A & B {
         switch (typeof base) {
         case 'undefined':
         case 'function':
-            return mixin;
+            return <A & B><any>mixin;
         default:
             return (<Function><any>mixin)(base);
         }
