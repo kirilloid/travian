@@ -112,18 +112,19 @@ export type Side = Off | Def
 export type Place = {
     tribe: number
     pop: number
-    def: number
-    defBonus: number
     durBonus: number
+    wall: number
+    def: number
     party: boolean
+    wallBonus: (lvl: number) => { defBonus: number }
     // traps: number
 }
 
 export type CombatResult = {
     offLosses: number
     defLosses: number,
-    buildings?: number[]
-    wall?: number
+    buildings: number[]
+    wall: number
 }
 
 type ReportSide = {

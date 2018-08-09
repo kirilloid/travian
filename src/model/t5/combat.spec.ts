@@ -2,7 +2,7 @@ import * as tape from 'tape';
 import { almostEqual } from '../../utils/test';
 
 import combat from './combat';
-const { raid, immensity } = combat.fn;
+const { raid, immensity } = combat.fns;
 
 tape('raid', t => {
     t.equal(Math.round(raid(1e-2 ** 1.22)[0] * 1e6),1000000, '<<');

@@ -14,7 +14,7 @@ const raid = (x: number) => {
     return [y, 1.032 - y];
 }
 
-export default extend(combat, { fn: { raid, immensity } });
+export default extend(combat, { fns: { raid, immensity } });
 
 // items from heroes affect all matching troops, the strongest one is chosen
 // https://forum.kingdoms.com/thread/17210-how-heroes-defence-bonus-works/?postID=113487#post113487

@@ -1,7 +1,11 @@
 import { extend } from '../../utils';
 
 import { res } from '../types';
-import { Building as B, SLOT as bSLOT, building, prod } from '../base/buildings';
+import {
+    Building as B,
+    SLOT as bSLOT,
+    BMethods,
+    building, prod } from '../base/buildings';
 import t4buildings, { ID as bID } from '../t4/buildings';
 
 export const ID = extend(bID, {
@@ -44,12 +48,12 @@ const timeW = () => time(300, 0)([
     246,251,255,260,264,269,274,278,288,576]);
 
 function wwCost(this: Building, level: number): res {
-    return this.constructor.prototype.cost.call(this, level)
+    return BMethods.prototype.cost.call(this, level)
         .map((r: number) => Math.min(r, 1e6));
 }
 
 function altCost(this: Building, level: number): res {
-    return level === 1 ? this.c1 : this.constructor.prototype.cost.call(this, level);
+    return level === 1 ? this.c1 : BMethods.prototype.cost.call(this, level);
 }
 
 function capacity(level: number) {

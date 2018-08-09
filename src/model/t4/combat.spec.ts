@@ -1,10 +1,14 @@
 import * as tape from 'tape';
 
-import { extend } from '../../utils';
-import { almostEqual, place, def, off } from '../../utils/test';
+import { factory } from '../base/combat-factory';
+import TRIBES from '../t3/tribes';
+import { almostEqual } from '../../utils/test';
 
 import combat from './combat';
 import units from './units';
+import buildings from './buildings';
+
+const { place, def, off } = factory({ units, buildings });
 
 tape('combat (new upgrade formula)', (t) => {
     const { upgrade } = combat.Army.prototype;
@@ -14,11 +18,10 @@ tape('combat (new upgrade formula)', (t) => {
 });
 
 tape('combat (e2e)', (t) => {
-    const tcombat = extend(combat, { units });
     t.test('minor change in upgrades', t => {
-        const { offLosses, defLosses } = tcombat.combat(place(), [
-            def({ units: units[1], numbers: [999999] }),
-            off({ units: units[0], numbers: [499999] }),
+        const { offLosses, defLosses } = combat.combat(place({}), [
+            def({ tribe: TRIBES.TEUTONS, numbers: [999999] }),
+            off({ tribe: TRIBES.ROMANS, numbers: [499999] }),
         ])[0];
         t.equal(offLosses, 1, 'off');
         t.equal(Math.round(defLosses * 999999), 999931, 'def');
@@ -33,15 +36,15 @@ tape('combat (e2e)', (t) => {
      * cata_morale = 2 ^ -0.3
      */
     t.test('catapults with remorale', t => {
-        t.equal(tcombat.combat(
+        t.equal(combat.combat(
             place({ pop: 1000 }),
-            [ def({ units: units[0], numbers: [0,999999] }),
-              off({ units: units[2], numbers: [0,670175,0, 0,0,0, 0,20], pop: 2000, targets: [5] }),
+            [ def({ tribe: TRIBES.ROMANS, numbers: [0,999999] }),
+              off({ tribe: TRIBES.GAULS, numbers: [0,670175,0, 0,0,0, 0,20], pop: 2000, targets: [5] }),
             ])[0].buildings[0], 0);
-        t.equal(tcombat.combat(
+        t.equal(combat.combat(
             place({ pop: 1000 }),
-            [ def({ units: units[0], numbers: [0,999999] }),
-              off({ units: units[2], numbers: [0,670174,0, 0,0,0, 0,20], pop: 2000, targets: [5] }),
+            [ def({ tribe: TRIBES.ROMANS, numbers: [0,999999] }),
+              off({ tribe: TRIBES.GAULS, numbers: [0,670174,0, 0,0,0, 0,20], pop: 2000, targets: [5] }),
             ])[0].buildings[0], 1);
         t.end();
     });
