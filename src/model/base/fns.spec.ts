@@ -61,20 +61,20 @@ tape('combat-fns', t => {
         // romans 20
         [0,  39,  74, 105, 132, 155, 174, 189, 200, 207, 210,
             230, 281, 334, 390, 449, 510, 573, 639, 708, 779].forEach((v, l) => {
-            t.equal(fns.demolishWall(1, 20, v*(1-Number.EPSILON)), Math.max(0,l-1));
-            t.equal(fns.demolishWall(1, 20, v), l);
+            t.equal(fns.demolishWall(1, 20, v*(1-Number.EPSILON)), Math.max(0,Math.min(20,21-l)));
+            t.equal(fns.demolishWall(1, 20, v), 20-l);
         });
         // tuetons 20
         [0, 195, 370, 525, 660, 775, 870, 945,1000,1035,1050,
         1150,1405,1672,1952,2245,2550,2867,3197,3540,3895].forEach((v, l) => {
-            t.equal(fns.demolishWall(5, 20, v*(1-Number.EPSILON)), Math.max(0,l-1));
-            t.equal(fns.demolishWall(5, 20, v), l);
+            t.equal(fns.demolishWall(5, 20, v*(1-Number.EPSILON)), Math.max(0,Math.min(20,21-l)));
+            t.equal(fns.demolishWall(5, 20, v), 20-l);
         });
         // gauls 19
         [0,  74, 140, 198, 248, 290, 324, 350, 368, 378,
             420, 522, 629, 741, 858, 980,1107,1239,1376,1518].forEach((v, l) => {
-            t.equal(fns.demolishWall(2, 19, v*(1-Number.EPSILON)), Math.max(0,l-1));
-            t.equal(fns.demolishWall(2, 19, v), l);
+            t.equal(fns.demolishWall(2, 19, v*(1-Number.EPSILON)), Math.max(0,Math.min(19,20-l)));
+            t.equal(fns.demolishWall(2, 19, v), 19-l);
         });
         t.end();
     });

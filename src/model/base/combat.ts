@@ -84,15 +84,17 @@ export default {
         return this.state.ratio ** this.state.immensity;
     },
     calcRams() {
-        const { wall } = this.state;
         const [rams, ramUps] = this.offArmy.rams;
-        if (!rams || !wall) return;
-        const points = this.fns.demolishPoints(rams, ramUps, this.place.durBonus, this.state.ratio);
-        this.log("rams points = " + points);
-        this.state.wall = this.place.wall.level - this.fns.demolishWall(this.place.wall.durability, this.place.wall.level, points);
+        if (!rams || !this.state.wall) return;
+        const { wall } = this.place;
+        const earlyPoints = this.fns.demolishPoints(rams, ramUps, this.place.durBonus, this.state.ratio);
+        // get in-battle wall level 
+        this.state.wall = this.fns.demolishWall(wall.durability, wall.level, earlyPoints);
+        // recalculate points with new wall bonus
         this.calcTotalPoints();
-        const points2 = this.fns.demolishPoints(rams, ramUps, this.place.durBonus, this.state.ratio);
-        this.result.wall = this.fns.demolish(this.place.wall.level, points2);
+        // finally demolish wall
+        const points = this.fns.demolishPoints(rams, ramUps, this.place.durBonus, this.state.ratio);
+        this.result.wall = this.fns.demolish(wall.level, points);
     },
     calcCatapults() {
         const { targets } = this.off;

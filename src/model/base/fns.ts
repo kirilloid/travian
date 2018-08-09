@@ -35,24 +35,6 @@ export default {
         const totalDef = def.i * infantryPart + def.c * cavalryPart;
         return [totalOff, totalDef];
     },
-    /** returns how many levels of wall was demolished */
-    demolishWall(tribeDur: number, level: number, points: number): number {
-        const row = earlyRamTable[level];
-        let dem = 0;
-        while (Math.floor(tribeDur * row[dem+1]) <= points) dem++;
-        return dem;
-    },
-    wallDurability(tribeDur: number, level: number, levelDec: number): number {
-        let points;
-        if (levelDec <= level / 2) {
-            points = -2 * levelDec ** 2 + (2 * level + 1) * levelDec;
-        } else {
-            const base = level * (level + 1) / 2 + 20;
-            const dl = levelDec - Math.floor(level / 2) - 1;
-            points = 1.25 * dl**2 + 49.75 * dl + base;
-        }
-        return Math.floor(tribeDur * points) + 0.5;
-    },
     immensity(n: number) {
         return compose(
             roundP(0.0002),
@@ -69,15 +51,22 @@ export default {
     siegeUpgrade(level: number): number {
         return roundP(0.005)(1.0205 ** level);
     },
+    demolishPoints(catas: number, upg: number, durability: number, ptsRatio: number, morale: number = 1) {
+        // D = 4σ∙C – ½
+        const effCatas = Math.floor(catas / durability) * morale;
+        return 4 * this.sigma(ptsRatio) * effCatas * this.siegeUpgrade(upg);
+    },
     demolish(level: number, damage: number) {
         damage -= 0.5;
         if (damage < 0) return level;
         while (damage >= level && level) damage -= level--;
         return level;
     },
-    demolishPoints(catas: number, upg: number, durability: number, ptsRatio: number, morale: number = 1) {
-        // D = 4σ∙C – ½
-        const effCatas = Math.floor(catas / durability) * morale;
-        return 4 * this.sigma(ptsRatio) * effCatas * this.siegeUpgrade(upg);
-    },
+    /** returns how many levels of wall was demolished */
+    demolishWall(tribeDur: number, level: number, points: number): number {
+        const row = earlyRamTable[level];
+        let dem = 0;
+        while (Math.floor(tribeDur * row[dem+1]) <= points) dem++;
+        return level - dem;
+    }
 }
