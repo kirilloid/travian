@@ -113,10 +113,13 @@ export type Place = {
     tribe: number
     pop: number
     durBonus: number
-    wall: number
+    wall: {
+        level: number
+        durability: number
+        bonus: (lvl: number) => { defBonus: number, def?: number }
+    }
     def: number
     party: boolean
-    wallBonus: (lvl: number) => { defBonus: number }
     // traps: number
 }
 

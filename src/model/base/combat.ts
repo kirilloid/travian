@@ -56,11 +56,12 @@ export default {
         return this.fns.cataMorale(this.off.pop, this.place.pop);
     },
     getDefBonus() {
-        return 1 + this.place.wallBonus(this.place.wall).defBonus;
+        return 1 + this.place.wall.bonus(this.place.wall.level).defBonus;
     },
     getDefAbsolute() {
         return this.BASE_VILLAGE_DEF
              + (this.place.def || 0)
+             + (this.place.wall.bonus(this.place.wall.level).def || 0)
     },
     calcDefBoni() {
         this.state.final.def = (this.state.base.def + this.getDefAbsolute()) * this.getDefBonus();
@@ -88,10 +89,10 @@ export default {
         if (!rams || !wall) return;
         const points = this.fns.demolishPoints(rams, ramUps, this.place.durBonus, this.state.ratio);
         this.log("rams points = " + points);
-        this.state.wall = this.place.wall - this.fns.demolishWall(1, this.place.wall, points);
+        this.state.wall = this.place.wall.level - this.fns.demolishWall(this.place.wall.durability, this.place.wall.level, points);
         this.calcTotalPoints();
         const points2 = this.fns.demolishPoints(rams, ramUps, this.place.durBonus, this.state.ratio);
-        this.result.wall = this.fns.demolish(this.place.wall, points2);
+        this.result.wall = this.fns.demolish(this.place.wall.level, points2);
     },
     calcCatapults() {
         const { targets } = this.off;
@@ -131,10 +132,10 @@ export default {
         this.result = {
             offLosses: 0,
             defLosses: 0,
-            wall: this.place.wall,
+            wall: this.place.wall.level,
             buildings: []
         };
-        this.state.wall = this.place.wall;
+        this.state.wall = this.place.wall.level;
         if (this.offArmy.isScan()) {
             this.scan();
         } else if (this.off.type === 'raid') {

@@ -9,10 +9,13 @@ export function place(obj: Partial<Place>): Place {
         tribe: 0,
         pop: 100,
         durBonus: 1,
-        wall: 0,
+        wall: {
+            level: 0,
+            durability: 1,
+            bonus: (lvl: number) => ({ defBonus: 0 })
+        },
         def: 0,
         party: false,
-        wallBonus: (lvl: number) => ({ defBonus: 0 })
     }, obj);
 }
 
@@ -41,6 +44,15 @@ export function off(obj: Partial<Off>) {
     }, obj);
 }
 
+type PlaceWoWall = {
+    tribe: number
+    pop: number
+    durBonus: number
+    def: number
+    party: boolean
+    wall: number
+}
+
 export function factory(
     { units, buildings }: { units: Unit[][], buildings: Building[] }
 ) {
@@ -57,9 +69,16 @@ export function factory(
             const result = def(obj);
             return extend(result, { units: units[result.tribe] });
         },
-        place: obj => {
-            const result = place(obj);
-            return extend(result, { wallBonus: walls[result.tribe].f });
+        place: (obj: Partial<PlaceWoWall>): Place => {
+            const { wall, ...rest } = obj;
+            const result = place(rest);
+            const building = walls[result.tribe];
+            result.wall = {
+                level: wall || 0,
+                bonus: building.f,
+                durability: building.d
+            };
+            return result;
         }
     }
 }

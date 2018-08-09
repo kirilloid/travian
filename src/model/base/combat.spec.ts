@@ -29,6 +29,7 @@ tape('combat (base) per-method', t => {
     combat.state.final.off = combat.state.base.off;
     const wall = +(1.03 ** 5).toFixed(3);
     const morale = +(2 ** -0.2).toFixed(3);
+
     combat.calcTotalPoints();
     almostEqual.call(t, combat.state.final.off, offPts * morale);
     almostEqual.call(t, combat.state.final.def, (defPts + 10) * wall);

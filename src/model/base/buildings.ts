@@ -88,7 +88,7 @@ export const SLOT: {[P: string]: slot} = {
 
 export type BConfig = {
 	id: number
-	m: number   // max level
+	m?: number  // max level
 	c: res      // cost
 	k: number   // cost growth base
 	u: number   // upkeep/population base
@@ -106,6 +106,7 @@ export type BConfig = {
 	nt?: string // name translation key override
 	dt?: string // description translation key override
 	s?: slot // does it belong to a specific slot
+	d?: number // durability
 }
 
 const round5 = roundP(5);
@@ -138,40 +139,41 @@ export class BMethods<C extends BConfig = BConfig> {
 		return 'objects.buildings.descriptions.' + (this.dt || 'b_' + (this.id + 1));
 	}
 }
+const BUILDING_DEFAULTS = { d: 1, m: 20 }
 export function building(config: BConfig & Partial<Building>): Building {
 	return Object.assign(
-		Object.create(BMethods.prototype), config);
+		Object.create(BMethods.prototype), BUILDING_DEFAULTS, config);
 }
-export type Building = BMethods & BConfig;
+export type Building = BMethods & BConfig & typeof BUILDING_DEFAULTS;
 export default extend([
-	building({id: ID.WOODJACK, 		c: [  40, 100,  50,  60], k: 1.67, u: 2, cp:1, t:time(1780/3,1.6, 1000/3),m:20, e:1, y:1, f: prod, s: SLOT.RES }),
-	building({id: ID.CLAYPIT, 		c: [  80,  40,  80,  50], k: 1.67, u: 2, cp:1, t:time(1660/3,1.6, 1000/3),m:21, e:1, y:1, f: prod, s: SLOT.RES}),
-	building({id: ID.IRONMINE,		c: [ 100,  80,  30,  60], k: 1.67, u: 3, cp:1, t:time(2350/3,1.6, 1000/3),m:20, e:1, y:1, f: prod, s: SLOT.RES}),
-	building({id: ID.CROPLAND, 		c: [  70,  90,  70,  20], k: 1.67, u: 0, cp:1, t:time(1450/3,1.6, 1000/3),m:21, e:1, y:1, f: prod, s: SLOT.RES}),
-	building({id: ID.SAWMILL, 		c: [ 520, 380, 290,  90], k: 1.80, u: 4, cp:1, t:time( 5400, 1.5,  2400), m:5,  e:2, y:1, b: {[ID.CLAYPIT]: 10, [ID.MAIN_BUILDING]:5}, f: p5}),
-	building({id: ID.BRICKYARD, 	c: [ 440, 480, 320,  50], k: 1.80, u: 3, cp:1, t:time( 5240, 1.5,  2400), m:5,  e:2, y:1, b: {[ID.WOODJACK]:10, [ID.MAIN_BUILDING]:5}, f: p5}),
-	building({id: ID.IRONFOUNDRY, 	c: [ 200, 450, 510, 120], k: 1.80, u: 6, cp:1, t:time( 6480, 1.5,  2400), m:5,  e:2, y:1, b: {[ID.IRONMINE]:10, [ID.MAIN_BUILDING]:5}, f: p5}),
-	building({id: ID.GRAINMILL, 	c: [ 500, 440, 380,1240], k: 1.80, u: 3, cp:1, t:time( 4240, 1.5,  2400), m:5,  e:2, y:1, b: {[ID.CROPLAND]:5,  [ID.MAIN_BUILDING]:5}, f: p5}),
-	building({id: ID.BAKERY, 		c: [1200,1480, 870,1600], k: 1.80, u: 4, cp:1, t:time( 6080, 1.5,  2400), m:5,  e:2, y:1, b: {[ID.CROPLAND]:10, [ID.GRAINMILL]:5, [ID.MAIN_BUILDING]:5}, f: p5}),
-	building({id: ID.WAREHOUSE, 	c: [ 130, 160,  90,  40], k: 1.28, u: 1, cp:1, t:time( 3875),             m:20, e:3, y:1, b: {[ID.MAIN_BUILDING]:1}, r:{m:true}, f: capacity}),
-	building({id: ID.GRANARY, 		c: [  80, 100,  70,  20], k: 1.28, u: 1, cp:1, t:time( 3475),             m:20, e:3, y:1, b: {[ID.MAIN_BUILDING]:1}, r:{m:true}, f: capacity}),
-	building({id: ID.ARMORY, 		c: [ 170, 200, 380, 130], k: 1.28, u: 4, cp:2, t:time( 3875),             m:20, e:12,y:2, b: {[ID.MAIN_BUILDING]:3, [ID.ACADEMY]:3}, f: mb_like}),
-	building({id: ID.BLACKSMITH,	c: [ 130, 210, 410, 130], k: 1.28, u: 4, cp:2, t:time( 3875),             m:20, e:12,y:2, b: {[ID.MAIN_BUILDING]:3, [ID.ACADEMY]:1}, f: mb_like}),
-	building({id: ID.ARENA, 		c: [1750,2250,1530, 240], k: 1.28, u: 1, cp:1, t:time( 5375),             m:20, e:4, y:2, b: {[ID.RALLY_POINT]:15}, f: p10}),
-	building({id: ID.MAIN_BUILDING, c: [  70,  40,  60,  20], k: 1.28, u: 2, cp:2, t:time( 3875),             m:20, e:7, y:3, f: mb_like}),
-	building({id: ID.RALLY_POINT, 	c: [ 110, 160,  90,  70], k: 1.28, u: 1, cp:1, t:time( 3875),             m:20, e:13,y:2, f: id, s: SLOT.RALLY}),
-	building({id: ID.MARKETPLACE, 	c: [  80,  70, 120,  70], k: 1.28, u: 4, cp:3, t:time( 3675),             m:20, e:14,y:3, b: {[ID.MAIN_BUILDING]:3, [ID.WAREHOUSE]:1, [ID.GRANARY]:1}, f: id}),
-	building({id: ID.EMBASSY, 		c: [ 180, 130, 150,  80], k: 1.28, u: 3, cp:4, t:time( 3875),             m:20, e:8, y:3, b: {[ID.MAIN_BUILDING]:1}, f: id}),
-	building({id: ID.BARRACKS, 		c: [ 210, 140, 260, 120], k: 1.28, u: 4, cp:1, t:time( 3875),             m:20, e:7, y:2, b: {[ID.MAIN_BUILDING]:3, [ID.RALLY_POINT]:1}, f: train}),
-	building({id: ID.STABLES, 		c: [ 260, 140, 220, 100], k: 1.28, u: 5, cp:2, t:time( 4075),             m:20, e:7, y:2, b: {[ID.ARMORY]:3, [ID.ACADEMY]:5}, f: train}),
-	building({id: ID.WORKSHOP, 		c: [ 460, 510, 600, 320], k: 1.28, u: 3, cp:3, t:time( 4875),             m:20, e:7, y:2, b: {[ID.MAIN_BUILDING]:5, [ID.ACADEMY]:10}, f: train}),
-	building({id: ID.ACADEMY, 		c: [ 220, 160,  90,  40], k: 1.28, u: 4, cp:4, t:time( 3875),             m:20, e:0, y:2, b: {[ID.MAIN_BUILDING]:3, [ID.BARRACKS]:3}, f: mb_like}),
-	building({id: ID.CRANNY, 		c: [  40,  50,  30,  10], k: 1.28, u: 0, cp:1, t:time( 2625),             m:10, e:3, y:3, r: {m:true}, f: cranny}),
-	building({id: ID.TOWNHALL, 		c: [1250,1110,1260, 600], k: 1.28, u: 4, cp:5, t:time(14375),             m:20, e:0, y:3, b: {[ID.MAIN_BUILDING]:10, [ID.ACADEMY]:10}, f: mb_like}),
-	building({id: ID.RESIDENCE, 	c: [ 580, 460, 350, 180], k: 1.28, u: 1, cp:2, t:time( 3875),             m:20, e:9, y:3, b: {[ID.MAIN_BUILDING]:5, [ID.PALACE]:-1}, f: residence}),
-	building({id: ID.PALACE, 		c: [ 550, 800, 750, 250], k: 1.28, u: 1, cp:5, t:time( 6875),             m:20, e:9, y:3, b: {[ID.MAIN_BUILDING]:5, [ID.EMBASSY]:1, [ID.RESIDENCE]:-1}, f: palace}),
+	building({id: ID.WOODJACK, 		c: [  40, 100,  50,  60], k: 1.67, u: 2, cp:1, t:time(1780/3,1.6, 1000/3),e:1, y:1, f: prod, s: SLOT.RES, m:20, }),
+	building({id: ID.CLAYPIT, 		c: [  80,  40,  80,  50], k: 1.67, u: 2, cp:1, t:time(1660/3,1.6, 1000/3),e:1, y:1, f: prod, s: SLOT.RES, m:21, }),
+	building({id: ID.IRONMINE,		c: [ 100,  80,  30,  60], k: 1.67, u: 3, cp:1, t:time(2350/3,1.6, 1000/3),e:1, y:1, f: prod, s: SLOT.RES, m:20, }),
+	building({id: ID.CROPLAND, 		c: [  70,  90,  70,  20], k: 1.67, u: 0, cp:1, t:time(1450/3,1.6, 1000/3),e:1, y:1, f: prod, s: SLOT.RES, m:21, }),
+	building({id: ID.SAWMILL, 		c: [ 520, 380, 290,  90], k: 1.80, u: 4, cp:1, t:time( 5400, 1.5,  2400), e:2, y:1, b: {[ID.CLAYPIT]: 10, [ID.MAIN_BUILDING]:5}, m:5, f: p5}),
+	building({id: ID.BRICKYARD, 	c: [ 440, 480, 320,  50], k: 1.80, u: 3, cp:1, t:time( 5240, 1.5,  2400), e:2, y:1, b: {[ID.WOODJACK]:10, [ID.MAIN_BUILDING]:5}, m:5, f: p5}),
+	building({id: ID.IRONFOUNDRY, 	c: [ 200, 450, 510, 120], k: 1.80, u: 6, cp:1, t:time( 6480, 1.5,  2400), e:2, y:1, b: {[ID.IRONMINE]:10, [ID.MAIN_BUILDING]:5}, m:5, f: p5}),
+	building({id: ID.GRAINMILL, 	c: [ 500, 440, 380,1240], k: 1.80, u: 3, cp:1, t:time( 4240, 1.5,  2400), e:2, y:1, b: {[ID.CROPLAND]:5,  [ID.MAIN_BUILDING]:5}, m:5, f: p5}),
+	building({id: ID.BAKERY, 		c: [1200,1480, 870,1600], k: 1.80, u: 4, cp:1, t:time( 6080, 1.5,  2400), e:2, y:1, b: {[ID.CROPLAND]:10, [ID.GRAINMILL]:5, [ID.MAIN_BUILDING]:5}, m:5, f: p5}),
+	building({id: ID.WAREHOUSE, 	c: [ 130, 160,  90,  40], k: 1.28, u: 1, cp:1, t:time( 3875),             e:3, y:1, b: {[ID.MAIN_BUILDING]:1}, r:{m:true}, f: capacity}),
+	building({id: ID.GRANARY, 		c: [  80, 100,  70,  20], k: 1.28, u: 1, cp:1, t:time( 3475),             e:3, y:1, b: {[ID.MAIN_BUILDING]:1}, r:{m:true}, f: capacity}),
+	building({id: ID.ARMORY, 		c: [ 170, 200, 380, 130], k: 1.28, u: 4, cp:2, t:time( 3875),             e:12,y:2, b: {[ID.MAIN_BUILDING]:3, [ID.ACADEMY]:3}, f: mb_like}),
+	building({id: ID.BLACKSMITH,	c: [ 130, 210, 410, 130], k: 1.28, u: 4, cp:2, t:time( 3875),             e:12,y:2, b: {[ID.MAIN_BUILDING]:3, [ID.ACADEMY]:1}, f: mb_like}),
+	building({id: ID.ARENA, 		c: [1750,2250,1530, 240], k: 1.28, u: 1, cp:1, t:time( 5375),             e:4, y:2, b: {[ID.RALLY_POINT]:15}, f: p10}),
+	building({id: ID.MAIN_BUILDING, c: [  70,  40,  60,  20], k: 1.28, u: 2, cp:2, t:time( 3875),             e:7, y:3, f: mb_like}),
+	building({id: ID.RALLY_POINT, 	c: [ 110, 160,  90,  70], k: 1.28, u: 1, cp:1, t:time( 3875),             e:13,y:2, f: id, s: SLOT.RALLY}),
+	building({id: ID.MARKETPLACE, 	c: [  80,  70, 120,  70], k: 1.28, u: 4, cp:3, t:time( 3675),             e:14,y:3, b: {[ID.MAIN_BUILDING]:3, [ID.WAREHOUSE]:1, [ID.GRANARY]:1}, f: id}),
+	building({id: ID.EMBASSY, 		c: [ 180, 130, 150,  80], k: 1.28, u: 3, cp:4, t:time( 3875),             e:8, y:3, b: {[ID.MAIN_BUILDING]:1}, f: id}),
+	building({id: ID.BARRACKS, 		c: [ 210, 140, 260, 120], k: 1.28, u: 4, cp:1, t:time( 3875),             e:7, y:2, b: {[ID.MAIN_BUILDING]:3, [ID.RALLY_POINT]:1}, f: train}),
+	building({id: ID.STABLES, 		c: [ 260, 140, 220, 100], k: 1.28, u: 5, cp:2, t:time( 4075),             e:7, y:2, b: {[ID.ARMORY]:3, [ID.ACADEMY]:5}, f: train}),
+	building({id: ID.WORKSHOP, 		c: [ 460, 510, 600, 320], k: 1.28, u: 3, cp:3, t:time( 4875),             e:7, y:2, b: {[ID.MAIN_BUILDING]:5, [ID.ACADEMY]:10}, f: train}),
+	building({id: ID.ACADEMY, 		c: [ 220, 160,  90,  40], k: 1.28, u: 4, cp:4, t:time( 3875),             e:0, y:2, b: {[ID.MAIN_BUILDING]:3, [ID.BARRACKS]:3}, f: mb_like}),
+	building({id: ID.CRANNY, 		c: [  40,  50,  30,  10], k: 1.28, u: 0, cp:1, t:time( 2625),             e:3, y:3, r: {m:true}, f: cranny}),
+	building({id: ID.TOWNHALL, 		c: [1250,1110,1260, 600], k: 1.28, u: 4, cp:5, t:time(14375),             e:0, y:3, b: {[ID.MAIN_BUILDING]:10, [ID.ACADEMY]:10}, f: mb_like}),
+	building({id: ID.RESIDENCE, 	c: [ 580, 460, 350, 180], k: 1.28, u: 1, cp:2, t:time( 3875),             e:9, y:3, b: {[ID.MAIN_BUILDING]:5, [ID.PALACE]:-1}, f: residence}),
+	building({id: ID.PALACE, 		c: [ 550, 800, 750, 250], k: 1.28, u: 1, cp:5, t:time( 6875),             e:9, y:3, b: {[ID.MAIN_BUILDING]:5, [ID.EMBASSY]:1, [ID.RESIDENCE]:-1}, f: palace}),
 ], {
-	[ID.CITY_WALL]:     building({id: ID.CITY_WALL, 	c: [  70,  90, 170,  70],   k: 1.28, u: 0, cp:1, t:time( 3875),     m:20, e:9, y:2, r: {r:TRIBES.ROMANS}, f: wall(1.03), s: SLOT.WALL}),
-	[ID.EARTH_WALL]:    building({id: ID.EARTH_WALL, 	c: [ 120, 200,   0,  80],   k: 1.28, u: 0, cp:1, t:time( 3875),     m:20, e:9, y:2, r: {r:TRIBES.TEUTONS}, f: wall(1.02), s: SLOT.WALL}),
-	[ID.PALISADE]:      building({id: ID.PALISADE, 		c: [ 160, 100,  80,  60],   k: 1.28, u: 0, cp:1, t:time( 3875),     m:20, e:9, y:2, r: {r:TRIBES.GAULS}, f: wall(1.025), s: SLOT.WALL}),
+	[ID.CITY_WALL]:     building({id: ID.CITY_WALL, 	c: [  70,  90, 170,  70],   k: 1.28, u: 0, cp:1, t:time( 3875), e:9, y:2, r: {r:TRIBES.ROMANS}, f: wall(1.03), s: SLOT.WALL}),
+	[ID.EARTH_WALL]:    building({id: ID.EARTH_WALL, 	c: [ 120, 200,   0,  80],   k: 1.28, u: 0, cp:1, t:time( 3875), e:9, y:2, r: {r:TRIBES.TEUTONS}, f: wall(1.02), s: SLOT.WALL}),
+	[ID.PALISADE]:      building({id: ID.PALISADE, 		c: [ 160, 100,  80,  60],   k: 1.28, u: 0, cp:1, t:time( 3875), e:9, y:2, r: {r:TRIBES.GAULS}, f: wall(1.025), s: SLOT.WALL}),
 }) as Building[];
