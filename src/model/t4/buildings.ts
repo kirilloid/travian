@@ -11,7 +11,9 @@ export const wall4 = (base: number, num: number) =>
 
 const prod4 = (lvl: number) => Math.round(prod(lvl) * 1.4);
 
-export const ID = bID;
+export const ID = extend(bID, {
+    SMITHY: bID.BLACKSMITH
+});
 
 export default extend(buildings, {
     [ID.CLAYPIT]:   { f: prod4 },
@@ -19,8 +21,8 @@ export default extend(buildings, {
     [ID.IRONMINE]:  { f: prod4 },
     [ID.CROPLAND]:  { f: prod4 },
     [ID.ARMORY]: undefined,
-    [ID.BLACKSMITH]:{ c: [180, 250, 500, 160], nt:'b_13s', dt:'b_13s_desc' },
-    [ID.BARRACKS]:  { b: {[ID.BLACKSMITH]:3, [ID.ACADEMY]:5} },
+    [ID.SMITHY]:{ c: [180, 250, 500, 160], nt:'b_13s', dt:'b_13s_desc' },
+    [ID.BARRACKS]:  { b: {[ID.SMITHY]:3, [ID.ACADEMY]:5} },
     [ID.CRANNY]:    { t: time(2175, 1.16, 1875), dt: 'b_23_desc_t4' },
     [ID.CITY_WALL]: { f: wall4(1.030,10) },
     [ID.EARTH_WALL]:{ f: wall4(1.020, 6) },

@@ -8,7 +8,7 @@ tape('extend', t => {
     });
     t.test('objects', t => {
         var a = { a: 1 };
-        t.deepEqual(extend<{a: number}, {b: number}>(a, { b: 2 }), { a: 1, b: 2 }, 'property is added');
+        t.deepEqual(extend(a, { b: 2 }), { a: 1, b: 2 }, 'property is added');
         t.deepEqual(a, { a: 1 }, 'original is not modified');
         t.deepEqual(extend(a, { a: 2 }), { a: 2 }, 'property is overwritten');
         t.deepEqual(a, { a: 1 }, 'original is not modified');
@@ -38,7 +38,7 @@ tape('extend', t => {
     });
     t.test('objects.deep', t => {
         var a = { w: { a: 1 } };
-        t.deepEqual(extend<{ w: { a: number } }, { w: { b: number } }>(a, { w: { b: 2 } }), { w: { a: 1, b: 2 } }, 'property is added');
+        t.deepEqual(extend(a, { w: { b: 2 } }), { w: { a: 1, b: 2 } }, 'property is added');
         t.deepEqual(a, { w: { a: 1 } }, 'original is not modified');
         t.deepEqual(extend(a, { w: { a: 2 } }), { w: { a: 2 } }, 'property is overwritten');
         t.deepEqual(a, { w: { a: 1 } }, 'original is not modified');
@@ -71,7 +71,7 @@ tape('extend', t => {
     });
     t.test('functions', t => {
         var a1 = { a: 1 };
-        var b1 = extend<{a:number},any>(a1, { a: (x: number) => x + 1 });
+        var b1 = extend(a1, { a: (x: number) => x + 1 });
         t.deepEqual(b1, { a: 2 }, 'propety is changed');
         var a2 = { f: () => {} };
         var f = () => {};

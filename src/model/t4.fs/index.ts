@@ -6,6 +6,7 @@ import buildings from './buildings';
 import { ID as bID } from '../base/buildings';
 import tID from './tribes';
 import Hero from './hero';
+import items from './items';
 
 export default extend(data, {
     units: extend(units, {
@@ -35,5 +36,6 @@ export default extend(data, {
         ],
     }),
     buildings,
+    items,
     Hero
 });
