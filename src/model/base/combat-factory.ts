@@ -19,7 +19,7 @@ export function place(obj: Partial<Place>): Place {
     }, obj);
 }
 
-export function def(obj: Partial<Def>) {
+export function def(obj: Partial<Def> & { tribe?: number }) {
     return extend({
         kind: 'def',
         tribe: 0,
@@ -28,7 +28,7 @@ export function def(obj: Partial<Def>) {
     }, obj);
 }
 
-export function off(obj: Partial<Off>) {
+export function off(obj: Partial<Off> & { tribe?: number }) {
     return extend({
         kind: 'off',
         tribe: 0,
@@ -56,16 +56,16 @@ type PlaceWoWall = {
 export function factory(
     { units, buildings }: { units: Unit[][], buildings: Building[] }
 ) {
-    const walls = {};
+    const walls: {[P:number]: Building} = {};
     buildings
         .filter(b => b.s === SLOT.WALL)
-        .forEach(b => { walls[b.r.r] = b; });
+        .forEach(b => { if (b.r && typeof b.r.r === 'number') walls[b.r.r] = b; });
     return {
-        off: obj => {
+        off: (obj: Partial<Off> & { tribe?: number }) => {
             const result = off(obj);
             return extend(result, { units: units[result.tribe] });
         },
-        def: obj => {
+        def: (obj: Partial<Def> & { tribe?: number }) => {
             const result = def(obj);
             return extend(result, { units: units[result.tribe] });
         },

@@ -54,11 +54,11 @@ tape('army (base)', t => {
     });
 
     t.test('applyLosses', t => {
-        let army;
+        let army: Army;
         
         army = romans({ numbers: [20, 10] });
         army.applyLosses(0.25);
-        t.deepEqual(army.numbers.slice(0, 2), [15, 8]);
+        t.deepEqual((<any>army).numbers.slice(0, 2), [15, 8]);
         t.end();
 
         army = romans({
