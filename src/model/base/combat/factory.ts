@@ -54,7 +54,7 @@ type PlaceWoWall = {
     wall: number
 };
 
-export function factory(
+export default function factory(
     { units, buildings }: { units: Unit[][], buildings: Building[] },
 ) {
     const walls: {[P: number]: Building} = {};

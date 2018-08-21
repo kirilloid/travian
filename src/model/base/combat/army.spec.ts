@@ -45,6 +45,11 @@ tape('army (base)', t => {
             t.equal(army.scanDef, 200, 'scanDef');
             t.end();
         });
+        t.test('zero units are not a scan', t => {
+            const army = romans({ numbers: [] });
+            t.equal(army.isScan(), false, 'isScan');
+            t.end();
+        });
         t.end();
     });
 
@@ -58,7 +63,7 @@ tape('army (base)', t => {
 
         army = romans({
             numbers: [1,2,3, 4,5,6, 7,8, 9,10],
-            upgrades:[9,8,7, 6,5,4, 3,2, 1,0]
+            upgrades:[9,8,7, 6,5,4, 3,2, 1,0],
         });
         t.deepEqual(army.rams, [7, 3], 'rams');
         t.deepEqual(army.cats, [8, 2], 'cats');
@@ -66,7 +71,7 @@ tape('army (base)', t => {
 
     t.test('siege', t => {
         let army;
-        
+
         army = romans({});
         t.deepEqual(army.rams, [0, 0], 'rams');
         t.deepEqual(army.cats, [0, 0], 'cats');
@@ -74,7 +79,7 @@ tape('army (base)', t => {
 
         army = romans({
             numbers: [1,2,3, 4,5,6, 7,8, 9,10],
-            upgrades:[9,8,7, 6,5,4, 3,2, 1,0]
+            upgrades:[9,8,7, 6,5,4, 3,2, 1,0],
         });
         t.deepEqual(army.rams, [7, 3], 'rams');
         t.deepEqual(army.cats, [8, 2], 'cats');

@@ -51,11 +51,15 @@ export default {
     },
     calcBasePoints() {
         const offPts = this.offArmy.getOff();
+        this.log(`off = ${offPts.i}/${offPts.c}`);
         const defPts = this.def.map(e => e.getDef()).reduce(CombatPoints.add);
+        this.log(`def = ${defPts.i}/${defPts.c}`);
         const [off, def] = this.fns.adducedDef(offPts, defPts);
+        this.log(`adduced = ${off}/${def}`);
         this.state.base = { off, def };
         const total = this.def.reduce((n, d) => n + d.getTotal(), this.offArmy.getTotal());
         this.state.immensity = this.fns.immensity(total);
+        this.log(`immensity = ${this.state.immensity}`);
     },
     calcTotalPoints() {
         this.calcDefBoni();
@@ -81,8 +85,8 @@ export default {
     },
     calcCatapults() {
         const { targets } = this.off;
-        const morale = this.cataMorale();
         if (targets.length === 0) { return; }
+        const morale = this.cataMorale();
         const [cats, catUps] = this.offArmy.cats;
         const points = this.fns.demolishPoints(
             cats / targets.length,
@@ -91,7 +95,7 @@ export default {
             this.state.ratio,
             morale,
         );
-        this.log("cata points = " + points);
+        this.log("cata demolish points = " + points);
         this.result.buildings = this.off.targets.map(b => this.fns.demolish(b, points));
     },
     scan() {
@@ -127,10 +131,13 @@ export default {
         };
         this.state.wall = this.place.wall.level;
         if (this.offArmy.isScan()) {
+            this.log('scan');
             this.scan();
         } else if (this.off.type === 'raid') {
+            this.log('raid');
             this.raid();
         } else {
+            this.log('normal');
             this.normal();
         }
         this.loneAttackerDies();

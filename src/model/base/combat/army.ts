@@ -41,7 +41,7 @@ export default class Army<S extends Side> {
     }
     public isScan(): boolean {
         return zipWith(
-            (spy, zero) => zero || spy,
+            (spy, zero) => zero !== spy,
             this.units.map(isSpy),
             this.numbers.map(u => u === 0),
         ).every(Boolean);
