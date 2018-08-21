@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { HashRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 
-import Menu   from './components/Menu';
+import Menu from './components/Menu';
 import Server from './components/Server';
 
-import Conq   from './components/Conq';
+import Conq from './components/Conq';
 import Troops from './components/Troops';
-import Build  from './components/Build';
-import Def    from './components/Def';
+import Build from './components/Build';
+import Def from './components/Def';
 
 const menuData = require('./data/menu.json');
 
@@ -26,22 +26,22 @@ export default class App extends React.Component<
     super(props);
     this.state = {
       lang,
-      model: getInitialModel(document.referrer)
+      model: getInitialModel(document.referrer),
     };
   }
-  setModel(model: VModel) {
+  public setModel(model: VModel) {
     this.setState({
       lang: this.state.lang,
-      model: model,
+      model,
     });
   }
-  setLang(lang: Lang) {
+  public setLang(lang: Lang) {
     this.setState({
-      lang: lang,
+      lang,
       model: this.state.model,
     });
   }
-  render() {
+  public render() {
     const { model, lang } = this.state;
     return (
       <div className={'t' + model.version.base}>

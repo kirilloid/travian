@@ -5,7 +5,7 @@ import TRIBES from '../t3/tribes';
 import { Unit } from '../base';
 
 export default extend(units, {
-	[TRIBES.NATURE]: [
+    [TRIBES.NATURE]: [
         {u:1},
         {u:1},
         {u:1},
@@ -15,6 +15,6 @@ export default extend(units, {
         {u:3},
         {u:3},
         {u:3},
-        {u:5}
-    ]
+        {u:5},
+    ],
 }) as Unit[][];

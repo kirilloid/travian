@@ -6,13 +6,13 @@ import buildings, { ID as bID } from '../t3.6/buildings';
 export const wall4 = (base: number, num: number) =>
     (lvl: number) => ({
         defBonus: roundP(0.001)(base ** lvl) - 1,
-        def: num * lvl
+        def: num * lvl,
     });
 
 const prod4 = (lvl: number) => Math.round(prod(lvl) * 1.4);
 
 export const ID = extend(bID, {
-    SMITHY: bID.BLACKSMITH
+    SMITHY: bID.BLACKSMITH,
 });
 
 export default extend(buildings, {
@@ -30,5 +30,3 @@ export default extend(buildings, {
     [ID.STONEMASON]:{ b: {[ID.MAIN_BUILDING]:5} },
     [ID.HERO_MANSION]:{c:[80, 120, 70, 90] },
 });
-
-

@@ -1,6 +1,6 @@
 import { extend, compose, roundP, limit } from '../../utils';
 
-import combat from '../t4/combat';
+import combat from '../t4/combat/combat';
 
 const immensity = compose(
     roundP(0.0001),
@@ -8,11 +8,11 @@ const immensity = compose(
     (n: number) => 3.7963073 - 2 * n ** 0.02);
 
 const raid = (x: number) => {
-    if (x <= 0.032) return [1, x];
-    if (x >= 31.25) return [1 / x, 1];
+    if (x <= 0.032) { return [1, x]; }
+    if (x >= 31.25) { return [1 / x, 1]; }
     const y = 1.032 / (1 + x);
     return [y, 1.032 - y];
-}
+};
 
 export default extend(combat, { fns: { raid, immensity } });
 

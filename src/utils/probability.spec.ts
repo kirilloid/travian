@@ -4,7 +4,7 @@ import {
     linearInterpolation,
     cubicInterpolation,
     multiplyRangeByOnes,
-    numericInt
+    numericInt,
 } from './probability';
 
 import * as tape from 'tape';
@@ -15,7 +15,7 @@ function approxEqual(t: tape.Test, epsilon: number, actual: number, expected: nu
     const len = Math.min(actStr.length, expStr.length);
     let i;
     for (i = 0; i < len; i++) {
-        if (actStr[i] !== expStr[i]) break;
+        if (actStr[i] !== expStr[i]) { break; }
     }
     const diffStr = `${actStr.slice(0, i)}{${actStr.slice(i, i+2)}~${expStr.slice(i, i+2)}}`;
     if (Math.abs(actual - expected) < epsilon) {
@@ -120,7 +120,7 @@ tape('numericInt', t => {
     t.test('quadratic model', t => {
         const pairs = [
             { min: 1, max: 3 },
-            { min: 1, max: 5 }
+            { min: 1, max: 5 },
         ];
         const dist = numericInt(pairs, 1);
         const precise = model(pairs);
@@ -161,7 +161,7 @@ tape('numericInt', t => {
             avgError += actual - expected;
             errorHysto[Math.floor(Math.abs(actual - expected) * 1e7)]++;
         }
-        while (!errorHysto[errorHysto.length - 1]) errorHysto.pop();
+        while (!errorHysto[errorHysto.length - 1]) { errorHysto.pop(); }
         t.test(errorHysto.join(', ') + ' ' + (avgError * 1e6), t => t.end());
         t.end();
     });

@@ -1,10 +1,10 @@
 import * as tape from 'tape';
 
-import { factory } from '../base/combat/factory';
+import factory from '../base/combat/factory';
 import TRIBES from '../t3/tribes';
 import { almostEqual } from '../../utils/test';
 
-import combat from './combat';
+import combat from './combat/combat';
 import units from './units';
 import buildings from './buildings';
 

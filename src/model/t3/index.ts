@@ -14,5 +14,5 @@ export default extend(data, {
     buildings,
     culture,
     combat,
-    Hero
+    Hero,
 }) as Model<Hero>;

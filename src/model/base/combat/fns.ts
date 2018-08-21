@@ -8,7 +8,7 @@ const roundPercent = roundP(1e-4);
 const earlyRamTable: number[][] = [];
 for (let lvl = 0; lvl <= 20; lvl++) {
     let l;
-    let row = [];
+    const row = [];
     for (l = 0; l <= lvl / 2; l++) {
         row.push(-2 * l ** 2 + (2 * lvl + 1) * l);
     }
@@ -49,7 +49,7 @@ export default {
         return compose(
             roundP(0.0002),
             limit(1.2578, 1.5),
-            (n: number) => 3.7184 - 2 * n ** 0.015
+            (n: number) => 3.7184 - 2 * n ** 0.015,
         )(n);
     },
     raid(x: number): [number, number] {
@@ -68,15 +68,15 @@ export default {
     },
     demolish(level: number, damage: number) {
         damage -= 0.5;
-        if (damage < 0) return level;
-        while (damage >= level && level) damage -= level--;
+        if (damage < 0) { return level; }
+        while (damage >= level && level) { damage -= level--; }
         return level;
     },
     /** returns how many levels of wall was demolished */
     demolishWall(tribeDur: number, level: number, points: number): number {
         const row = earlyRamTable[level];
         let dem = 0;
-        while (Math.floor(tribeDur * row[dem+1]) <= points) dem++;
+        while (Math.floor(tribeDur * row[dem+1]) <= points) { dem++; }
         return level - dem;
-    }
-}
+    },
+};

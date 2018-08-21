@@ -47,5 +47,5 @@ export default {
         ],
     ]) as Unit[][],
     buildings,
-    combat
+    combat,
 };

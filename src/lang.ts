@@ -4,7 +4,7 @@ export type Lang = (path: string, args?: {[P:string]: string} | string[]) => str
 
 export default function lang(path: string, args: any): string {
     const value = path.split('.')
-        .reduce((node, key: string) => node && node[key], data)
+        .reduce((node, key: string) => node && node[key], data);
     return value
         ? value.replace(/\{(\w+)\}/, (_: never, key: string) => args[key])
         : '##' + path + '##';

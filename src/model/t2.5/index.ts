@@ -8,5 +8,5 @@ import * as combat from './combat';
 export default extend(data, {
     units,
     culture,
-    combat
+    combat,
 });

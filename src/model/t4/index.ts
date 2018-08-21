@@ -3,7 +3,7 @@ import { Model } from '../types';
 import units from './units';
 import buildings from './buildings';
 import culture from '../t3/culture';
-import * as combat from './combat';
+import combat from './combat';
 import Hero from './hero';
 import items from './items';
 

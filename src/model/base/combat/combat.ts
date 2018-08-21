@@ -22,15 +22,14 @@ export default {
         immensity: 1,
         get ratio() {
             return this.final.off / this.final.def;
-        }
+        },
     } as BattleState,
     result: {} as CombatResult,
     /**
-     * return morale "malus"
-     * @param {boolean} remorale whether compensate
-     * @returns {number} 
+     * returns morale "malus" (not bonus)
+     * accepts whether to compensate for big defs
      */
-    morale(remorale = false) {
+    morale(remorale: boolean = false) {
         return this.fns.morale(
             this.off.pop,
             this.place.pop,
@@ -45,7 +44,7 @@ export default {
     getDefAbsolute() {
         return this.BASE_VILLAGE_DEF
              + (this.place.def || 0)
-             + (this.place.wall.bonus(this.place.wall.level).def || 0)
+             + (this.place.wall.bonus(this.place.wall.level).def || 0);
     },
     calcDefBoni() {
         this.state.final.def = (this.state.base.def + this.getDefAbsolute()) * this.getDefBonus();
@@ -69,10 +68,10 @@ export default {
     },
     calcRams() {
         const [rams, ramUps] = this.offArmy.rams;
-        if (!rams || !this.state.wall) return;
+        if (!rams || !this.state.wall) { return; }
         const { wall } = this.place;
         const earlyPoints = this.fns.demolishPoints(rams, ramUps, this.place.durBonus, this.state.ratio);
-        // get in-battle wall level 
+        // get in-battle wall level
         this.state.wall = this.fns.demolishWall(wall.durability, wall.level, earlyPoints);
         // recalculate points with new wall bonus
         this.calcTotalPoints();
@@ -83,10 +82,15 @@ export default {
     calcCatapults() {
         const { targets } = this.off;
         const morale = this.cataMorale();
-        if (targets.length === 0) return;
-        let [cats, catUps] = this.offArmy.cats;
-        cats /= targets.length;
-        const points = this.fns.demolishPoints(cats, catUps, this.place.durBonus, this.state.ratio, morale);
+        if (targets.length === 0) { return; }
+        const [cats, catUps] = this.offArmy.cats;
+        const points = this.fns.demolishPoints(
+            cats / targets.length,
+            catUps,
+            this.place.durBonus,
+            this.state.ratio,
+            morale,
+        );
         this.log("cata points = " + points);
         this.result.buildings = this.off.targets.map(b => this.fns.demolish(b, points));
     },
@@ -119,7 +123,7 @@ export default {
             offLosses: 0,
             defLosses: 0,
             wall: this.place.wall.level,
-            buildings: []
+            buildings: [],
         };
         this.state.wall = this.place.wall.level;
         if (this.offArmy.isScan()) {
@@ -154,8 +158,7 @@ export default {
             const off = i + c;
             const morale = this.morale(false);
             this.log(`lone attacker: ${off} * ${morale} = ${off * morale}`);
-            if (off * morale < 84.5) this.result.offLosses = 1;
+            if (off * morale < 84.5) { this.result.offLosses = 1; }
         }
     },
-}
-
+};

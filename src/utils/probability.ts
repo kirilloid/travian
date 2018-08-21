@@ -2,7 +2,7 @@
  * This module contains probability distribution calculators (there are several)
  * Every calculator accepts a set of ranges and then returns a function calculating distribution
  * corresponding to distribution of sum of independantly and uniformly distributed variables
- * 
+ *
  * There are two approaches:
  * - analytical
  * - numeric modelling
@@ -22,7 +22,7 @@ function factorial(n: number): number {
  * Nonetheless, it's good to test other ways since we can control inputs
  */
 export const model = (ranges: range[]): totalArray => {
-    let total = { min: 0, max: 0, volume: 1 };
+    const total = { min: 0, max: 0, volume: 1 };
     ranges.forEach(({ min, max }) => {
         total.min += min;
         total.max += max;
@@ -35,17 +35,17 @@ export const model = (ranges: range[]): totalArray => {
     // E.g. if every range is equal it'd be a hypercube and we'd need to calculate only N nodes
     // with binomal coefficients instead of 2^N vertices
     const variants: variant[] = ranges.reduce((variants, { min, max }) => {
-        let nextVariants: variant[] = [];
-        // kind of flatMap to add a dimension 
+        const nextVariants: variant[] = [];
+        // kind of flatMap to add a dimension
         variants.forEach(({ sum, sign }) => {
             nextVariants.push(
-                { sum: sum + min, sign:  sign },
-                { sum: sum + max, sign: -sign }
+                { sum: sum + min, sign: +sign },
+                { sum: sum + max, sign: -sign },
             );
         });
         // re-order and merge duplicates
         nextVariants.sort((a, b) => a.sum - b.sum);
-        let newVariants = [];
+        const newVariants = [];
         let last = { sum: -1, sign: 1 };
         for (const variant of nextVariants) {
             if (variant.sum === last.sum) {
@@ -62,14 +62,14 @@ export const model = (ranges: range[]): totalArray => {
 
     // almost final version of a calculating function
     const calc = (value: number): number => {
-        if (value <= total.min) return 1;
+        if (value <= total.min) { return 1; }
         let sum = 0;
         for (const item of variants) {
-            if (value <= item.sum) break;
+            if (value <= item.sum) { break; }
             sum += (value - item.sum) ** ranges.length * item.sign;
         }
         return 1 - sum / total.volume / factorial(ranges.length);
-    }
+    };
 
     // the distribution is symmetrical, but our calculation method is not
     // so calculating towards nearest "pole" require less operations and accumulates less error
@@ -78,19 +78,18 @@ export const model = (ranges: range[]): totalArray => {
         : 1 - calc(2 * avg - value);
 };
 
-
 /**
  * utility function: multiplies a vector by 11...11 in <em>linear</em> time
  * works with "sub-pixel" precision
  */
 export function multiplyRangeByOnes(current: number[], ones: number): number[] {
-    let range: number[] = [];
+    const range: number[] = [];
     let slidingWindowSum = 0;
     const fractionalPart = ones % 1;
     ones = Math.floor(ones);
     if (current.length >= ones) {
         for (let i = 0; i < ones; i++) {
-            slidingWindowSum += current[i]
+            slidingWindowSum += current[i];
             range.push(slidingWindowSum);
         }
         for (let i = ones; i < current.length; i++) {
@@ -103,15 +102,15 @@ export function multiplyRangeByOnes(current: number[], ones: number): number[] {
             range.push(slidingWindowSum);
         }
     } else {
-        for (let i = 0; i < current.length; i++) {
-            slidingWindowSum += current[i]
+        for (const c of current) {
+            slidingWindowSum += c;
             range.push(slidingWindowSum);
         }
         for (let i = current.length; i < ones; i++) {
             range.push(slidingWindowSum);
         }
-        for (let i = 0; i < current.length; i++) {
-            slidingWindowSum -= current[i];
+        for (const c of current) {
+            slidingWindowSum -= c;
             range.push(slidingWindowSum);
         }
     }
@@ -128,7 +127,7 @@ export function multiplyRangeByOnes(current: number[], ones: number): number[] {
 export function linearInterpolation(values: totalArray, x: number): number {
     const loPoint = Math.floor(x);
     const hiPoint = Math.ceil(x);
-    if (hiPoint === loPoint) return values(x);
+    if (hiPoint === loPoint) { return values(x); }
     return values(loPoint) * (hiPoint - x)
         +  values(hiPoint) * (x - loPoint);
 }
@@ -136,7 +135,7 @@ export function linearInterpolation(values: totalArray, x: number): number {
 export function cubicInterpolation(values: totalArray, x: number): number {
     const x0 = Math.floor(x);
     const x1 = Math.ceil(x);
-    if (x1 === x0) return values(x);
+    if (x1 === x0) { return values(x); }
     const f0 = values(x0 - 1);
     const f1 = values(x0) - f0;
     const f2 = values(x1) - f0;
@@ -158,8 +157,8 @@ export function cubicInterpolation(values: totalArray, x: number): number {
  */
 export function totalArray(array: number[]): totalArray {
     return index => {
-        if (index < 0) return 1;
-        if (index >= array.length) return 0;
+        if (index < 0) { return 1; }
+        if (index >= array.length) { return 0; }
         return array[index];
     };
 }
@@ -173,7 +172,7 @@ export const numericInt = (ranges: range[], precision = 2): totalArray => {
     const SCALE = 10 ** precision;
 
     // calculate aggregated values
-    let total = { min: 0, max: 0, volume: 1 };
+    const total = { min: 0, max: 0, volume: 1 };
     ranges.forEach(({ min, max }) => {
         const rangeWidth = Math.round((max - min) * SCALE);
         total.min += min;
@@ -185,7 +184,7 @@ export const numericInt = (ranges: range[], precision = 2): totalArray => {
         const rangeWidth = Math.round((max - min) * SCALE);
         return multiplyRangeByOnes(dist, rangeWidth);
     }, [1]);
-    var sum = 0;
+    let sum = 0;
     // integrate distribution density, reverse and normalize it
     for (let i = dist.length - 1; i >= 0; i--) {
         sum += dist[i];

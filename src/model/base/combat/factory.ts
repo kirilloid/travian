@@ -13,7 +13,7 @@ export function place(obj: Partial<Place>): Place {
         wall: {
             level: 0,
             durability: 1,
-            bonus: (lvl: number) => ({ defBonus: 0 })
+            bonus: (lvl: number) => ({ defBonus: 0 }),
         },
         def: 0,
         party: false,
@@ -41,7 +41,7 @@ export function off(obj: Partial<Off> & { tribe?: number }) {
         // hero: Hero
         // metallurgy: number
         party: false,
-        brew: 0
+        brew: 0,
     }, obj);
 }
 
@@ -52,15 +52,15 @@ type PlaceWoWall = {
     def: number
     party: boolean
     wall: number
-}
+};
 
 export function factory(
-    { units, buildings }: { units: Unit[][], buildings: Building[] }
+    { units, buildings }: { units: Unit[][], buildings: Building[] },
 ) {
-    const walls: {[P:number]: Building} = {};
+    const walls: {[P: number]: Building} = {};
     buildings
         .filter(b => b.s === SLOT.WALL)
-        .forEach(b => { if (b.r && typeof b.r.r === 'number') walls[b.r.r] = b; });
+        .forEach(b => { if (b.r && typeof b.r.r === 'number') { walls[b.r.r] = b; } });
     return {
         off: (obj: Partial<Off> & { tribe?: number }) => {
             const result = off(obj);
@@ -77,9 +77,9 @@ export function factory(
             result.wall = {
                 level: wall || 0,
                 bonus: building.f,
-                durability: building.d
+                durability: building.d,
             };
             return result;
-        }
-    }
+        },
+    };
 }

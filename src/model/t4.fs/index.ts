@@ -11,7 +11,7 @@ import items from './items';
 export default extend(data, {
     units: extend(units, {
         [tID.HUNS]: [
-            { b: [bID.BARRACKS], },
+            { b: [bID.BARRACKS] },
             { b: [bID.BARRACKS], r: {[bID.ACADEMY]: 1, [bID.BLACKSMITH]: 1} },
             { b: [bID.BARRACKS], r: {[bID.ACADEMY]: 5, [bID.BLACKSMITH]: 1} },
             { b: [bID.STABLES],  r: {[bID.ACADEMY]: 5, [bID.STABLES]: 1} },
@@ -23,7 +23,7 @@ export default extend(data, {
             { b: [bID.RESIDENCE, bID.PALACE] },
         ],
         [tID.EGYPTIANS]: [
-            { b: [bID.BARRACKS], },
+            { b: [bID.BARRACKS] },
             { b: [bID.BARRACKS], r: {[bID.ACADEMY]: 3, [bID.BLACKSMITH]: 1} },
             { b: [bID.STABLES],  r: {[bID.ACADEMY]: 5, [bID.STABLES]: 1} },
             { b: [bID.STABLES],  r: {[bID.ACADEMY]: 5, [bID.STABLES]: 3} },
@@ -37,5 +37,5 @@ export default extend(data, {
     }),
     buildings,
     items,
-    Hero
+    Hero,
 });

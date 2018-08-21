@@ -1,8 +1,8 @@
 import { sum } from '../../utils';
-import { res, HeroStats, HeroCombatStats, IHero, CombatPoints } from '../types';
+import { res, HeroStats, HeroCombatStats, IHero } from '../types';
 
 export default abstract class Hero<S extends {}, K extends string=string> implements IHero<S, K> {
-    protected skills: {[P: string]: number}
+    protected skills: { [P: string]: number };
     private totalPoints: number;
     private pointsPerLevel: number;
     private maxLevel: number;
@@ -14,11 +14,8 @@ export default abstract class Hero<S extends {}, K extends string=string> implem
         skillKeys.forEach(skill => { this.skills[skill] = 0; });
         this.totalPoints = 0;
     }
-    protected levelExp(level: number) {
-        return 50 * level * (level + 1);
-    }
     public getNeededExp(): number {
-        return this.levelExp(this.getNeededLvl());;
+        return this.levelExp(this.getNeededLvl());
     }
     public getNeededLvl(): number {
         return Math.max(0, Math.ceil(this.totalPoints / this.pointsPerLevel - 1));
@@ -30,7 +27,7 @@ export default abstract class Hero<S extends {}, K extends string=string> implem
         return Object.assign(
             {
                 c: this.getCost(),
-                t: this.getTime()    
+                t: this.getTime(),
             },
             this.getCombat(),
             this.getMisc(),
@@ -51,13 +48,16 @@ export default abstract class Hero<S extends {}, K extends string=string> implem
         this.totalPoints = sum(this.skillKeys.map(skill => this.skills[skill]));
     }
     public getOffBonus() {
-        return this.skills.ab;
+        return this.skills.offBonus * 0.002;
     }
     public getDefBonus() {
-        return this.skills.db;
+        return this.skills.defBonus * 0.002;
     }
-    public abstract getCombat(): HeroCombatStats
-    public abstract getMisc(): S
-    public abstract getCost(): res
-    public abstract getTime(): number
+    public abstract getCombat(): HeroCombatStats;
+    public abstract getMisc(): S;
+    public abstract getCost(): res;
+    public abstract getTime(): number;
+    protected levelExp(level: number) {
+        return 50 * level * (level + 1);
+    }
 }

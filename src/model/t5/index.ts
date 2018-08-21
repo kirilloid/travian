@@ -11,5 +11,5 @@ export default {
     buildings,
     culture,
     combat,
-    Hero
-} as Model<typeof Hero>;
+    Hero,
+} as Model;

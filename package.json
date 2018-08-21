@@ -9,6 +9,7 @@
   "main": "index.js",
   "scripts": {
     "test": "ts-node node_modules/tape/bin/tape src/**/*.spec.ts src/**/**/*.spec.ts | faucet",
+    "lint": "node tslint -c tslint.json 'src/**/*.ts'",
     "build:styles": "stylus css/_index.styl",
     "build:code": "webpack -p",
     "build": "npm run build:styles && npm run build:code"

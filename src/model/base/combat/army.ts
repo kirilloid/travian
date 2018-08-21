@@ -16,28 +16,13 @@ export default class Army<S extends Side> {
         this.numbers = side.numbers;
         this.upgrades = side.upgrades;
     }
-    applyLosses(percent: number) {
+    public applyLosses(percent: number) {
         this.numbers = this.numbers.map(n => Math.round(n * (1 - percent)));
     }
-    upgrade(unit: Unit, stat: number, level: number): number {
-        return roundStat(stat * 1.015 ** level);
-    }
-    foldMap<P=number>(
-        f: (unit: Unit, stat: number, level: number) => P,
-        a: (a: P, b: P) => P,
-        initial: P
-    ) {
-        return zipWith3(
-            f,
-            this.units,
-            this.numbers,
-            this.upgrades
-        ).reduce(a, initial);
-    }
-    getTotal(): number {
+    public getTotal(): number {
         return this.foldMap((_, number) => number, add, 0);
     }
-    getOff(): CombatPoints {
+    public getOff(): CombatPoints {
         return this.foldMap(
             (unit, number, upgrade) => {
                 const points = number * this.upgrade(unit, unit.a, upgrade);
@@ -46,19 +31,19 @@ export default class Army<S extends Side> {
                     : new CombatPoints(0, points);
             }, CombatPoints.add, CombatPoints.zero());
     }
-    getDef(): CombatPoints {
+    public getDef(): CombatPoints {
         return this.foldMap(
             (unit, number, upgrade) => new CombatPoints(
                 this.upgrade(unit, unit.di, upgrade),
-                this.upgrade(unit, unit.dc, upgrade)
+                this.upgrade(unit, unit.dc, upgrade),
             ).mul(number),
             CombatPoints.add, CombatPoints.zero());
     }
-    isScan(): boolean {
+    public isScan(): boolean {
         return zipWith(
             (spy, zero) => zero || spy,
             this.units.map(isSpy),
-            this.numbers.map(u => u === 0)
+            this.numbers.map(u => u === 0),
         ).every(Boolean);
     }
     get scan(): number {
@@ -66,7 +51,7 @@ export default class Army<S extends Side> {
             (unit, number, upgrade) => isSpy(unit)
                 ? number * this.upgrade(unit, unit.s, upgrade)
                 : 0,
-            add, 0
+            add, 0,
         );
     }
     get scanDef(): number {
@@ -74,7 +59,7 @@ export default class Army<S extends Side> {
             (unit, number, upgrade) => isSpy(unit)
                 ? number * this.upgrade(unit, unit.ds, upgrade)
                 : 0,
-            add, 0
+            add, 0,
         );
     }
     get rams(): [number, number] {
@@ -92,5 +77,20 @@ export default class Army<S extends Side> {
             }
         }
         return [0, 0];
+    }
+    protected upgrade(unit: Unit, stat: number, level: number): number {
+        return roundStat(stat * 1.015 ** level);
+    }
+    protected foldMap<P = number>(
+        f: (unit: Unit, stat: number, level: number) => P,
+        a: (a: P, b: P) => P,
+        initial: P,
+    ) {
+        return zipWith3(
+            f,
+            this.units,
+            this.numbers,
+            this.upgrades,
+        ).reduce(a, initial);
     }
 }

@@ -97,7 +97,7 @@ const items: Item[] = [
     { cp: 500 }, // artwork
     { rev: 25 }, // small bandage
     { rev: 33 }, // big bandage
-    { cage: 1 }
+    { cage: 1 },
 ];
 
 export default items;

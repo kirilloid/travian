@@ -3,7 +3,7 @@ import units from '../units';
 import buildings from '../buildings';
 import TRIBES from '../tribes';
 
-import { factory } from './factory';
+import factory from './factory';
 const { place, def, off } = factory({ units, buildings });
 
 import { almostEqual } from '../../../utils/test';
@@ -13,7 +13,7 @@ import { CombatResult } from '../../types';
 
 tape('combat (base) per-method', t => {
     combat.place = place({
-        wall: 5, pop: 100
+        wall: 5, pop: 100,
     });
     combat.def = [new combat.Army(def({
         tribe: TRIBES.GAULS, numbers: [100], upgrades: [10] }))];
@@ -45,7 +45,7 @@ tape('combat (base) e2e', t => {
                 ]);
             t.equal(result[0].defLosses, 1);
             t.equal(result[0].offLosses.toFixed(3), '0.434');
-            t.end(); 
+            t.end();
         });
         t.test('raid', t => {
             const result = combat.combat(
@@ -55,7 +55,7 @@ tape('combat (base) e2e', t => {
                 ]);
             t.equal(result[0].defLosses.toFixed(3), '0.698');
             t.equal(result[0].offLosses.toFixed(3), '0.302');
-            t.end();    
+            t.end();
         });
         t.test('double-wave', t => {
             const result = combat.combat(
@@ -67,7 +67,7 @@ tape('combat (base) e2e', t => {
                 ]);
             t.equal(result[0].offLosses.toFixed(3), '0.302');
             t.equal(result[1].offLosses.toFixed(3), '0.391');
-            t.end();    
+            t.end();
         });
         t.end();
     });
@@ -124,7 +124,7 @@ tape('combat (base) e2e', t => {
               off({ tribe: TRIBES.ROMANS, numbers: [0,0,0, 0,0,0, 0,53], targets: [20] }),
             ]);
         t.equal(result[0].buildings[0], 0, '53 catas completely demolish');
-        
+
         result = combat.combat(
             place({ tribe: TRIBES.GAULS }),
             [ def({ }),
@@ -144,7 +144,7 @@ tape('combat (base) e2e', t => {
             ]);
         t.equal(result[0].wall, 0, '53 rams completely demolish');
         t.equal(combat.state.wall, 10, 'intermediate level is 10');
-        
+
         t.end();
     });
     t.end();

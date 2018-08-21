@@ -14,7 +14,7 @@ export const ID = extend(bID, {
 });
 
 export const SLOT = Object.assign(bSLOT, {
-    DITCH: 41
+    DITCH: 41,
 });
 
 type Building = B & { c1?: res };
@@ -73,11 +73,11 @@ const t5buildings = extend(t4buildings, [
     { t: timeA(22), f: prod, m: 20 },
     { t: timeA(30), f: prod },
     { t: timeA(20), f: prod,  c: [  75,  90,  85,   0], m: 20 },
-    { t: timeC(), },
-    { t: timeC(), },
-    { t: timeC(), },
-    { t: timeC(), },
-    { t: timeC(300), },
+    { t: timeC() },
+    { t: timeC() },
+    { t: timeC() },
+    { t: timeC() },
+    { t: timeC(300) },
     { t: timeB(11.5), c: [ 140, 180, 100,   0], k: 1.33, f: capacity },
     { t: timeB(11),   c: [  80, 100,  70,  20], k: 1.33, f: capacity },
     , // old armory
@@ -115,7 +115,7 @@ const t5buildings = extend(t4buildings, [
 ]);
 t5buildings[ID.NATARIAN_WALL] = extend(t5buildings[ID.EARTH_WALL], {
     id: ID.NATARIAN_WALL,
-    r: undefined
+    r: undefined,
 });
 
 export default t5buildings as Building[];

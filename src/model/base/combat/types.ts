@@ -12,7 +12,8 @@ export type Place = {
     def: number
     party: boolean
     // traps: number
-}
+};
+
 export type Off = {
     kind: 'off'
     pop: number
@@ -25,7 +26,7 @@ export type Off = {
     // metallurgy: number
     party: boolean
     brew: number
-}
+};
 
 export type Def = {
     kind: 'def'
@@ -35,12 +36,14 @@ export type Def = {
 
     // hero: Hero
     // metallurgy: number
-}
+};
 
-export type Side = Off | Def
+export type Side = Off | Def;
 
 export type BattleState = {
-    /** base points of armies, with all army effects (hero, items, upgrades), but w/o global things like wall or moralebonus */
+    /** base points of armies, with all army effects (hero, items, upgrades),
+     * but w/o global things like wall or moralebonus
+     */
     base: {
         off: number
         def: number
@@ -55,6 +58,5 @@ export type BattleState = {
     /** coefficient for battle */
     immensity: number
     /** points ratio */
-    readonly ratio: number 
-}
-
+    readonly ratio: number
+};

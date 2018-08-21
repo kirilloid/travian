@@ -3,6 +3,7 @@ import { almostEqual } from '../../../utils/test';
 import units from '../units';
 
 import fns from './fns';
+import CombatPoints from './points';
 
 tape('combat-fns', t => {
     t.test('immensity', t => {
@@ -25,14 +26,14 @@ tape('combat-fns', t => {
         t.equal(fns.morale(3, 3), 1);
         almostEqual.call(t, fns.morale(4, 3), 0.944);
         almostEqual.call(t, fns.morale(4, 3), 0.944);
-        
+
         // regular ratio
         t.equal(fns.morale(100, 10), 0.667);
         t.equal(fns.morale(50, 10), 0.725);
         t.equal(fns.morale(20, 10), 0.871);
         t.equal(fns.morale(100, 100), 1);
         t.equal(fns.morale(10, 100), 1);
-        
+
         // remorale
         t.equal(fns.morale(100, 10, 0.5), 0.794);
         t.equal(fns.morale(20, 10, 2), 0.871);
@@ -49,8 +50,8 @@ tape('combat-fns', t => {
 
     t.test('adducedDef', t => {
         const [off, def] = fns.adducedDef(
-            { i:  50 * units[2][1].a,  c: 100 * units[2][3].a },
-            { i: 100 * units[0][1].di, c: 100 * units[0][1].dc }
+            new CombatPoints(50 * units[2][1].a, 100 * units[2][3].a),
+            new CombatPoints(100 * units[0][1].di, 100 * units[0][1].dc),
         );
         t.equal(off, 12250);
         almostEqual.call(t, def, 4295.9);
@@ -97,22 +98,24 @@ tape('combat-fns', t => {
         durability?: number
         x: number
         dx?: number
-        threshold: number  
+        threshold: number
     };
 
     t.test('demolishPoints', t => {
-        const testRange = ({
-            catas,
-            upg = 0,
-            durability = 1,
-            x,
-            dx = 1e-8,
-            threshold
-        } : RangeTestConfig, msg: string) => {
+        const testRange = (
+            {   catas,
+                upg = 0,
+                durability = 1,
+                x,
+                dx = 1e-8,
+                threshold,
+            } : RangeTestConfig,
+            msg: string,
+        ) => {
             t.test(msg, t => {
                 const low = fns.demolishPoints(catas, upg, durability, x - dx, 1);
                 const high = fns.demolishPoints(catas, upg, durability, x + dx, 1);
-                
+
                 if (low < threshold
                 &&  high > threshold) {
                     t.ok(true);

@@ -13,5 +13,5 @@ function dryCost(this: Building, level: number): res {
 export default extend(buildings, {
     [ID.CROPLAND]:  { cost: dryCost },
     [ID.GRAINMILL]: { cost: dryCost },
-    [ID.BAKERY]:    { cost: dryCost }
+    [ID.BAKERY]:    { cost: dryCost },
 }) as Building[];
