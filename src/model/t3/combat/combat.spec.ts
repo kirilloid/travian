@@ -1,13 +1,12 @@
 import * as tape from 'tape';
 
-import units from './units';
-import buildings from './buildings';
-import combat from './combat';
-import TRIBES from './tribes';
+import units from '../units';
+import buildings from '../buildings';
+import combat, { factory } from '.';
+import TRIBES from '../tribes';
 
-import { CombatResult } from '../types';
+import { CombatResult } from '../../types';
 
-import { factory } from '../base/combat/factory';
 const { place, def, off } = factory({ units, buildings });
 
 tape('combat (T3)', t => {
@@ -88,7 +87,39 @@ tape('combat (T3)', t => {
             [ def({ }),
               off({ tribe: TRIBES.ROMANS, numbers: [0,0,0, 0,1], upgrades: [0,0,0, 0,4], pop: 1000 })]);
         t.equal(Math.round(result[0].offLosses), 0, 'EI lives');
-        t.end();    
+        t.end();
     });
+
+    t.test('battles with hero', t => {
+        let result: CombatResult[];
+
+        result = combat.combat(
+            place({ }),
+            [ def({ tribe: TRIBES.GAULS, numbers: [100],
+                    hero: { unit: 0, self: 100 }}),
+              off({ tribe: TRIBES.ROMANS, numbers: [0,0,100],
+                    hero: { unit: 2, self: 100 }}),
+            ]);
+        t.equal(result[0].offLosses.toFixed(3), '0.520', 'basic stats');
+
+        // hero dies
+        result = combat.combat(
+            place({ }),
+            [ def({ tribe: TRIBES.GAULS, numbers: [100],
+                    hero: { unit: 0, self: 100, health: 1 }}),
+              off({ tribe: TRIBES.ROMANS, numbers: [0,0,100] }),
+              def({ tribe: TRIBES.GAULS, numbers: [100] }),
+              off({ tribe: TRIBES.ROMANS, numbers: [0,0,100] }),
+            ]);
+        // (100*70 / 5365 + 100*40 + 10) ** 1.5 ≈ 0.645
+        t.equal(result[0].offLosses, 1);
+        t.equal(result[0].defLosses.toFixed(3), '0.645', 'first wave, hero dies');
+        // (135*40 + 10 / 100*70) ** 1.5 ≈ 0.679
+        t.equal(result[1].offLosses.toFixed(3), '0.679', 'second wave, no hero, attackers win');
+        t.equal(result[1].defLosses, 1);
+
+        t.end();
+    });
+
     t.end();
 });

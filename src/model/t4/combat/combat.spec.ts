@@ -1,12 +1,13 @@
 import * as tape from 'tape';
 
-import factory from '../base/combat/factory';
-import TRIBES from '../t3/tribes';
-import { almostEqual } from '../../utils/test';
+import factory from './factory';
+import TRIBES from '../../t3/tribes';
+import { almostEqual } from '../../../utils/test';
 
-import combat from './combat/combat';
-import units from './units';
-import buildings from './buildings';
+import combat from './combat';
+import units from '../units';
+import buildings from '../buildings';
+import Army from './army';
 
 const { place, def, off } = factory({ units, buildings });
 
@@ -49,13 +50,15 @@ tape('combat (e2e)', (t) => {
         t.end();
     });
 
-    t.test('minor change in upgrades', t => {
-        const { offLosses, defLosses } = combat.combat(place({}), [
-            def({ tribe: TRIBES.TEUTONS, numbers: [999999] }),
-            off({ tribe: TRIBES.ROMANS, numbers: [499999] }),
-        ])[0];
-        t.equal(offLosses, 1, 'off');
-        t.equal(Math.round(defLosses * 999999), 999931, 'def');
+    t.test('hero is attacking', t => {
+        const result = combat.combat(
+            place({ }),
+            [ def({ tribe: TRIBES.GAULS, numbers: [100] }),
+              off({ tribe: TRIBES.ROMANS,
+                    hero: { self: 20, items: [{ str: 1000 }] } }),
+            ]);
+        t.equal(result[0].offLosses, 1, 'off');
+        almostEqual.call(t, result[0].defLosses, (3100 / 4010.21) ** 1.5, 'def');
         t.end();
     });
 
