@@ -3,7 +3,7 @@ import { extend } from '../../utils';
 import { Unit as BareUnit } from '../types';
 import units from './units';
 import buildings, { ID } from './buildings';
-import * as combat from './combat';
+import combat from './combat';
 
 export type Unit = BareUnit; /* & {
     b: number[],

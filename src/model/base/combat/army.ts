@@ -1,18 +1,17 @@
-import { roundP, zipWith, zipWith3 } from '../../utils';
+import { roundP, zipWith, zipWith3 } from '../../../utils';
 
-import { Unit, CombatPoints, Side, isSpy, isRam, isCatapult } from '../types';
+import { Unit, isSpy, isRam, isCatapult } from '../../types';
+import { Side } from './types';
+import CombatPoints from './points';
 
 const roundStat = roundP(1e-4);
 const add = (a: number, b: number): number => a + b;
-export const addCP = (a: CombatPoints, b: CombatPoints): CombatPoints =>
-    ({ i: a.i + b.i, c: a.c + b.c })
-const zeroCP: CombatPoints = { i: 0, c: 0 };
 
-export default class Army {
-    private units: Unit[];
-    private numbers: number[];
-    private upgrades: number[];
-    constructor(side: Side) {
+export default class Army<S extends Side> {
+    protected units: Unit[];
+    protected numbers: number[];
+    protected upgrades: number[];
+    constructor(side: S) {
         this.units = side.units;
         this.numbers = side.numbers;
         this.upgrades = side.upgrades;
@@ -21,7 +20,7 @@ export default class Army {
         this.numbers = this.numbers.map(n => Math.round(n * (1 - percent)));
     }
     upgrade(unit: Unit, stat: number, level: number): number {
-        return roundStat(stat + (stat + 300 * unit.u / 7) * (1.007 ** level - 1));
+        return roundStat(stat * 1.015 ** level);
     }
     foldMap<P=number>(
         f: (unit: Unit, stat: number, level: number) => P,
@@ -35,23 +34,25 @@ export default class Army {
             this.upgrades
         ).reduce(a, initial);
     }
-    get total(): number {
+    getTotal(): number {
         return this.foldMap((_, number) => number, add, 0);
     }
-    get off(): CombatPoints {
+    getOff(): CombatPoints {
         return this.foldMap(
             (unit, number, upgrade) => {
                 const points = number * this.upgrade(unit, unit.a, upgrade);
-                return unit.i ? { i: points, c: 0 } : { i: 0, c: points };
-            }, addCP, zeroCP);
+                return unit.i
+                    ? new CombatPoints(points, 0)
+                    : new CombatPoints(0, points);
+            }, CombatPoints.add, CombatPoints.zero());
     }
-    get def(): CombatPoints {
+    getDef(): CombatPoints {
         return this.foldMap(
-            (unit, number, upgrade) => ({
-                i: number * this.upgrade(unit, unit.di, upgrade),
-                c: number * this.upgrade(unit, unit.dc, upgrade)
-            }),
-            addCP, zeroCP);
+            (unit, number, upgrade) => new CombatPoints(
+                this.upgrade(unit, unit.di, upgrade),
+                this.upgrade(unit, unit.dc, upgrade)
+            ).mul(number),
+            CombatPoints.add, CombatPoints.zero());
     }
     isScan(): boolean {
         return zipWith(

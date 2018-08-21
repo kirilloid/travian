@@ -2,15 +2,15 @@ import items, { Item } from '../t4/items';
 
 export default items.concat([
     // 115: egyptians
-	{str: 500, unit: { 50: 3 }},	{str: 1000, unit: { 50: 4 }},	{str: 1500, unit: { 50: 5 }},
-	{str: 500, unit: { 51: 3 }},	{str: 1000, unit: { 51: 4 }},	{str: 1500, unit: { 51: 5 }},
-	{str: 500, unit: { 52: 3 }},	{str: 1000, unit: { 52: 4 }},	{str: 1500, unit: { 52: 5 }},
-	{str: 500, unit: { 54: 6 }},	{str: 1000, unit: { 54: 8 }},	{str: 1500, unit: { 54: 10 }},
-	{str: 500, unit: { 55: 9 }},	{str: 1000, unit: { 55: 12 }},	{str: 1500, unit: { 55: 15 }},
+	{str: 500, utype: 50, ubonus: 3},	{str: 1000, utype: 50, ubonus: 4},	{str: 1500, utype: 50, ubonus: 5},
+	{str: 500, utype: 51, ubonus: 3},	{str: 1000, utype: 51, ubonus: 4},	{str: 1500, utype: 51, ubonus: 5},
+	{str: 500, utype: 52, ubonus: 3},	{str: 1000, utype: 52, ubonus: 4},	{str: 1500, utype: 52, ubonus: 5},
+	{str: 500, utype: 54, ubonus: 6},	{str: 1000, utype: 54, ubonus: 8},	{str: 1500, utype: 54, ubonus: 10},
+	{str: 500, utype: 55, ubonus: 9},	{str: 1000, utype: 55, ubonus: 12},	{str: 1500, utype: 55, ubonus: 15},
 	// 130: huns
-	{str: 500, unit: { 60: 3 }},	{str: 1000, unit: { 60: 4 }},	{str: 1500, unit: { 60: 5 }},
-	{str: 500, unit: { 61: 3 }},	{str: 1000, unit: { 61: 4 }},	{str: 1500, unit: { 61: 5 }},
-	{str: 500, unit: { 63: 6 }},	{str: 1000, unit: { 63: 8 }},	{str: 1500, unit: { 63: 10 }},
-	{str: 500, unit: { 64: 6 }},	{str: 1000, unit: { 64: 8 }},	{str: 1500, unit: { 64: 10 }},
-    {str: 500, unit: { 65: 9 }},	{str: 1000, unit: { 65: 12 }},	{str: 1500, unit: { 65: 15 }},
+	{str: 500, utype: 60, ubonus: 3},	{str: 1000, utype: 60, ubonus: 4},	{str: 1500, utype: 60, ubonus: 5},
+	{str: 500, utype: 61, ubonus: 3},	{str: 1000, utype: 61, ubonus: 4},	{str: 1500, utype: 61, ubonus: 5},
+	{str: 500, utype: 63, ubonus: 6},	{str: 1000, utype: 63, ubonus: 8},	{str: 1500, utype: 63, ubonus: 10},
+	{str: 500, utype: 64, ubonus: 6},	{str: 1000, utype: 64, ubonus: 8},	{str: 1500, utype: 64, ubonus: 10},
+    {str: 500, utype: 65, ubonus: 9},	{str: 1000, utype: 65, ubonus: 12},	{str: 1500, utype: 65, ubonus: 15},
 ]) as Item[];

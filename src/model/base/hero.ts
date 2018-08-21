@@ -1,5 +1,5 @@
 import { sum } from '../../utils';
-import { res, HeroStats, HeroCombatStats, IHero } from '../types';
+import { res, HeroStats, HeroCombatStats, IHero, CombatPoints } from '../types';
 
 export default abstract class Hero<S extends {}, K extends string=string> implements IHero<S, K> {
     protected skills: {[P: string]: number}
@@ -13,6 +13,9 @@ export default abstract class Hero<S extends {}, K extends string=string> implem
         this.maxLevel = 100;
         skillKeys.forEach(skill => { this.skills[skill] = 0; });
         this.totalPoints = 0;
+    }
+    protected levelExp(level: number) {
+        return 50 * level * (level + 1);
     }
     public getNeededExp(): number {
         return this.levelExp(this.getNeededLvl());;
@@ -47,8 +50,11 @@ export default abstract class Hero<S extends {}, K extends string=string> implem
         this.skills[skill] = level;
         this.totalPoints = sum(this.skillKeys.map(skill => this.skills[skill]));
     }
-    protected levelExp(level: number) {
-        return 50 * level * (level + 1);
+    public getOffBonus() {
+        return this.skills.ab;
+    }
+    public getDefBonus() {
+        return this.skills.db;
     }
     public abstract getCombat(): HeroCombatStats
     public abstract getMisc(): S

@@ -21,8 +21,8 @@ export const tribeCosts: res[] = [
     [115, 180, 130, 75]
 ];
 
-type H4K = 'strength' | 'offBonus' | 'defBonus' | 'resources';
-type H4S = { ab: number, db: number, res: number };
+export type H4K = 'strength' | 'offBonus' | 'defBonus' | 'resources';
+export type H4S = { ab: number, db: number, res: number };
 
 export default class Hero4 extends Hero<H4S, H4K> {
     private mul: number;

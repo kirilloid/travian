@@ -38,13 +38,15 @@ export type HeroStats = HeroCombatStats & {
     c: res
     t: number
 }
-export interface IHero<S={}, K='string'> {
+export interface IHero<S=Object, K='string'> {
     getNeededLvl(): number
     getNeededExp(): number
     getSkills(): K[]
     getStats(): HeroStats & S
     setSkill(skill: K, level: number): void
     getCombat(): HeroCombatStats
+    getOffBonus(): number
+    getDefBonus(): number
     getMisc(): S
     getCost(): res
     getTime(): number
@@ -77,52 +79,6 @@ export function isRam(u: Unit): u is UnitRam { return u.k === 'r'; }
 export function isSpy(u: Unit): u is UnitSpy { return u.k === 's'; }
 
 // combat
-export type CombatPoints = {
-    i: number
-    c: number
-}
-
-export type Off = {
-    kind: 'off'
-    pop: number
-    units: Unit[]
-    numbers: number[]
-    upgrades: number[]
-    type: 'attack' | 'raid'
-    targets: number[]
-    // hero: Hero
-    // metallurgy: number
-    party: boolean
-    brew: number
-}
-
-export type Def = {
-    kind: 'def'
-    units: Unit[]
-    numbers: number[]
-    upgrades: number[]
-
-    // hero: Hero
-    // metallurgy: number
-}
-
-export type Side = Off | Def
-
-// all fields should be are pre-computed
-export type Place = {
-    tribe: number
-    pop: number
-    durBonus: number
-    wall: {
-        level: number
-        durability: number
-        bonus: (lvl: number) => { defBonus: number, def?: number }
-    }
-    def: number
-    party: boolean
-    // traps: number
-}
-
 export type CombatResult = {
     offLosses: number
     defLosses: number,

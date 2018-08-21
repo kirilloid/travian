@@ -1,16 +1,15 @@
 import * as tape from 'tape';
-import units from './units';
-import buildings from './buildings';
+import units from '../units';
+import buildings from '../buildings';
+import TRIBES from '../tribes';
 
-import { factory } from './combat-factory';
-
-import { almostEqual } from '../../utils/test';
+import { factory } from './factory';
 const { place, def, off } = factory({ units, buildings });
 
-import TRIBES from './tribes';
+import { almostEqual } from '../../../utils/test';
 
 import combat from './combat';
-import { CombatResult } from '../types';
+import { CombatResult } from '../../types';
 
 tape('combat (base) per-method', t => {
     combat.place = place({
@@ -22,8 +21,8 @@ tape('combat (base) per-method', t => {
         tribe: TRIBES.ROMANS, numbers: [0,0,100], upgrades: [0,0,5], pop: 200 }));
 
     combat.calcBasePoints();
-    const offPts = 7400.57;
-    const defPts = 4598.62;
+    const offPts = 7540.99;
+    const defPts = 4642.16;
     almostEqual.call(t, combat.state.base.off, offPts);
     almostEqual.call(t, combat.state.base.def, defPts);
     combat.state.final.off = combat.state.base.off;
@@ -133,12 +132,6 @@ tape('combat (base) e2e', t => {
             ]);
         t.equal(result[0].buildings[0], 5, '50 catas demolish only partially');
 
-        result = combat.combat(
-            place({ tribe: TRIBES.GAULS }),
-            [ def({ }),
-              off({ tribe: TRIBES.ROMANS, numbers: [0,0,0, 0,0,0, 0,50], targets: [20], pop: 1000 }),
-            ]);
-        t.equal(result[0].buildings[0], 15, '+ moralebonus for catas');
         t.end();
     });
 
@@ -153,32 +146,6 @@ tape('combat (base) e2e', t => {
         t.equal(combat.state.wall, 10, 'intermediate level is 10');
         
         t.end();
-    });
-
-    t.test('lone attacker', t => {
-        let result: CombatResult[];
-        result = combat.combat(
-            place({ tribe: TRIBES.GAULS }),
-            [ def({ }),
-              off({ tribe: TRIBES.ROMANS, numbers: [0,0,1], upgrades: [0,0,17] })]);
-        t.equal(Math.round(result[0].offLosses), 1, 'imperian dies');
-        result = combat.combat(
-            place({ tribe: TRIBES.GAULS }),
-            [ def({ }),
-              off({ tribe: TRIBES.ROMANS, numbers: [0,0,1], upgrades: [0,0,18] })]);
-        t.equal(Math.round(result[0].offLosses), 0, 'imperian lives');
-
-        result = combat.combat(
-            place({ tribe: TRIBES.GAULS }),
-            [ def({ }),
-              off({ tribe: TRIBES.ROMANS, numbers: [0,0,0, 0,1], upgrades: [0,0,0, 0,3], pop: 1000 })]);
-        t.equal(Math.round(result[0].offLosses), 1, 'EI dies');
-        result = combat.combat(
-            place({ tribe: TRIBES.GAULS }),
-            [ def({ }),
-              off({ tribe: TRIBES.ROMANS, numbers: [0,0,0, 0,1], upgrades: [0,0,0, 0,4], pop: 1000 })]);
-        t.equal(Math.round(result[0].offLosses), 0, 'EI lives');
-        t.end();    
     });
     t.end();
 });

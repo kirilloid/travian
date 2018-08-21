@@ -1,6 +1,6 @@
 import * as tape from 'tape';
 
-import { factory } from '../base/combat-factory';
+import { factory } from '../base/combat/factory';
 import TRIBES from '../t3/tribes';
 import { almostEqual } from '../../utils/test';
 
@@ -48,5 +48,16 @@ tape('combat (e2e)', (t) => {
             ])[0].buildings[0], 1);
         t.end();
     });
+
+    t.test('minor change in upgrades', t => {
+        const { offLosses, defLosses } = combat.combat(place({}), [
+            def({ tribe: TRIBES.TEUTONS, numbers: [999999] }),
+            off({ tribe: TRIBES.ROMANS, numbers: [499999] }),
+        ])[0];
+        t.equal(offLosses, 1, 'off');
+        t.equal(Math.round(defLosses * 999999), 999931, 'def');
+        t.end();
+    });
+
     t.end();
 });

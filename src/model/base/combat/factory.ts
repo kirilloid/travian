@@ -1,6 +1,7 @@
-import { extend } from '../../utils';
-import { Building, SLOT } from './buildings';
-import { Place, Def, Off, Unit } from '../types';
+import { extend } from '../../../utils';
+import { Building, SLOT } from '../buildings';
+import { Unit } from '../../types';
+import { Place, Def, Off } from './types';
 
 const ZEROES = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 

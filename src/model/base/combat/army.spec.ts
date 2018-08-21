@@ -1,10 +1,10 @@
 import * as tape from 'tape';
 
-import units from './units';
-import { Side } from '../types';
+import units from '../units';
+import { Side } from './types';
 
 import Army from './army';
-import { extend } from '../../utils';
+import { extend } from '../../../utils';
 
 const ZEROES = [0,0,0,0,0, 0,0,0,0,0];
 const romans = (obj: Partial<Side>) => new Army(extend<Side>({
@@ -15,16 +15,11 @@ const romans = (obj: Partial<Side>) => new Army(extend<Side>({
 }, obj));
 
 tape('army (base)', t => {
-    t.test('upgrade', t => {
-        t.equal(Army.prototype.upgrade(units[0][0], 40, 0), 40);
-        t.equal(Army.prototype.upgrade(units[0][0], 40, 20), 52.4048);
-        t.end();
-    });
     t.test('stats (100 legs + 30 EI)', t => {
         const army = romans({ numbers: [100,0,0, 0,30] });
-        t.equal(army.total, 130, 'total');
-        t.deepEqual(army.off, { i: 4000, c: 3600 }, 'off');
-        t.deepEqual(army.def, { i: 5450, c: 6500 }, 'def');
+        t.equal(army.getTotal(), 130, 'total');
+        t.deepEqual(army.getOff(), { i: 4000, c: 3600 }, 'off');
+        t.deepEqual(army.getDef(), { i: 5450, c: 6500 }, 'def');
         t.end();
     });
 
@@ -54,7 +49,7 @@ tape('army (base)', t => {
     });
 
     t.test('applyLosses', t => {
-        let army: Army;
+        let army: Army<Side>;
         
         army = romans({ numbers: [20, 10] });
         army.applyLosses(0.25);

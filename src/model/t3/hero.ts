@@ -30,6 +30,9 @@ export default class Hero3 extends Hero<H3S, H3K> {
             dc: round5((2*dc/3 + 27.5/corr) * def + 5*dc/3),
         }        
     }
+    public isCavalry() {
+        return this.unit.i === 1;
+    }
     public getCost() {
         return this.unit.c.map(this.resCost, this) as res;
     }

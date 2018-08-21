@@ -1,7 +1,7 @@
 import * as tape from 'tape';
-import { almostEqual } from '../../utils/test';
+import { almostEqual } from '../../../utils/test';
+import units from '../units';
 
-import units from './units';
 import fns from './fns';
 
 tape('combat-fns', t => {

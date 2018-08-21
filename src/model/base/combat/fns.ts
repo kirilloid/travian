@@ -1,6 +1,7 @@
-import { roundP, limit, compose } from '../../utils';
+import { roundP, limit, compose } from '../../../utils';
 
-import { CombatPoints } from '../types';
+import { Unit } from '../../types';
+import CombatPoints from './points';
 
 const roundPercent = roundP(1e-4);
 
@@ -19,14 +20,23 @@ for (let lvl = 0; lvl <= 20; lvl++) {
     row.push(1e9);
     earlyRamTable.push(row);
 }
+
 export default {
+    getUnitOff(unit: Unit): CombatPoints {
+        return unit.i
+            ? new CombatPoints(unit.a, 0)
+            : new CombatPoints(0, unit.a);
+    },
+    getUnitDef(unit: Unit): CombatPoints {
+        return new CombatPoints(unit.di, unit.dc);
+    },
     morale(offPop: number, defPop: number, ptsRatio = 1) {
         if (offPop <= defPop) { return 1; }
         const popRatio = offPop / Math.max(defPop, 3);
         return Math.max(0.667, roundP(1e-3)(popRatio ** (-0.2 * Math.min(ptsRatio, 1))));
     },
     cataMorale(offPop: number, defPop: number) {
-        return limit(0.3333, 1)((offPop / defPop) ** -0.3);
+        return 1;
     },
     adducedDef(off: CombatPoints, def: CombatPoints): [number, number] {
         const totalOff = off.i + off.c;
