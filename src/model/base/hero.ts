@@ -29,7 +29,7 @@ export default abstract class Hero<S extends {}, K extends string=string> implem
                 c: this.getCost(),
                 t: this.getTime(),
             },
-            this.getCombat(),
+            this.getCombatStats(),
             this.getMisc(),
         );
     }
@@ -43,7 +43,6 @@ export default abstract class Hero<S extends {}, K extends string=string> implem
         if (level < 0 || level > this.maxLevel) {
             throw new RangeError(`skill is out of range: ${skill}=${level}`);
         }
-        this.getStats();
         this.skills[skill] = level;
         this.totalPoints = sum(this.skillKeys.map(skill => this.skills[skill]));
     }
@@ -53,7 +52,7 @@ export default abstract class Hero<S extends {}, K extends string=string> implem
     public getDefBonus() {
         return this.skills.defBonus * 0.002;
     }
-    public abstract getCombat(): HeroCombatStats;
+    public abstract getCombatStats(): HeroCombatStats;
     public abstract getMisc(): S;
     public abstract getCost(): res;
     public abstract getTime(): number;

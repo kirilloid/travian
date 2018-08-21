@@ -1,6 +1,6 @@
 import { roundP, limit } from '../../utils';
 
-import { res, IHero } from '../types';
+import { res } from '../types';
 
 import Hero from '../base/hero';
 import ID from '../base/tribes';
@@ -43,15 +43,15 @@ export default class Hero4 extends Hero<H4S, H4K> {
     public levelExp(level: number) {
         return super.levelExp(level) / 2;
     }
-    public getCombat() {
+    public getCombatStats() {
         const str = this.getStrength();
         return { a: str, di: str, dc: str };
     }
     public getMisc(): H4S {
         const { offBonus, defBonus, resources } = this.skills;
         return {
-            ab: offBonus * 0.25,
-            db: defBonus * 0.25,
+            ab: offBonus * 0.2,
+            db: defBonus * 0.2,
             res: resources * 6,
         };
     }

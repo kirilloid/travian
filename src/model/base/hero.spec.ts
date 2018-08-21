@@ -4,7 +4,7 @@ import Hero from './hero';
 import { res } from '../types';
 
 class RealHero extends Hero<{}, 'a' | 'b'> {
-    public getCombat() { return { a: 0, di: 0, dc: 0 } }
+    public getCombatStats() { return { a: 0, di: 0, dc: 0 } }
     public getCost(): res { return [0,0,0,0]; }
     public getMisc(): {} { return {}; }
     public getTime() { return 0; }

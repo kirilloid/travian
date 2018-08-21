@@ -20,7 +20,7 @@ export default class Hero3 extends Hero<H3S, H3K> {
     constructor(private unit: Unit) {
         super(['off', 'def', 'offBonus', 'defBonus', 'regen']);
     }
-    public getCombat() {
+    public getCombatStats() {
         const { a, di, dc } = this.unit;
         const { off, def } = this.skills;
         const corr = (di / dc) ** 0.2;

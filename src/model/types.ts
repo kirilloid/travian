@@ -22,7 +22,7 @@ export type Model<H=IHero> = {
     units: Unit[][]
     buildings: Building[]
     culture: (villages: number) => number
-    combat: { combat: any },
+    combat: { combat(place: any, sides: any[]): CombatResult[] },
     // Hero?: H
 };
 
@@ -44,7 +44,7 @@ export interface IHero<S=object, K='string'> {
     getSkills(): K[];
     getStats(): HeroStats & S;
     setSkill(skill: K, level: number): void;
-    getCombat(): HeroCombatStats;
+    getCombatStats(): HeroCombatStats;
     getOffBonus(): number;
     getDefBonus(): number;
     getMisc(): S;
