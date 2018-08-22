@@ -8,18 +8,18 @@ import { roundP, limit, compose } from '../utils';
 import { numericInt, range } from '../utils/probability';
 
 type OffSide = {
-    id: number
-    pop: number
-    tribe: number
-    admins: number
-    party: boolean
-    brew: boolean
-}
+    id: number,
+    pop: number,
+    tribe: number,
+    admins: number,
+    party: boolean,
+    brew: boolean,
+};
 
 type DefSide = {
-    pop: number
-    party: boolean
-}
+    pop: number,
+    party: boolean,
+};
 
 const popMalus = compose(roundP(1e-3), limit(0.667, 1));
 
@@ -32,7 +32,7 @@ function timesToConq(units: [number, number][], { def, off }: ConqState) {
                     * (brew ? 0.5 : 1);
         const patty = (party ? 5 : 0)
                     - (def.party ? 5 : 0);
-        let [min, max] = units[tribe]
+        const [min, max] = units[tribe]
             .map(value => (value + patty) * malus * admins);
         ranges.push({ min, max });
         totalMin += min;
@@ -45,29 +45,29 @@ function timesToConq(units: [number, number][], { def, off }: ConqState) {
             const min = Math.ceil(loyalty / totalMax);
             const max = Math.ceil(loyalty / totalMin);
             return (min === max) ? `${max}` : `${min}–${max}`;
-        }
-    }
+        },
+    };
 }
 
 function formatPercent(f: (v: number) => number, loyalty: number) {
     const number = f(loyalty);
-    if (f(loyalty + 1) === 1) return "100%";
-    if (f(loyalty - 1) === 1) return "\u{2248}100%";
+    if (f(loyalty + 1) === 1) { return '100%'; }
+    if (f(loyalty - 1) === 1) { return '\u{2248}100%'; }
     return (number * 100).toFixed(2).replace(/\.?0+$/, '') + '%';
 }
 
 type ConqProps = {
-    model: Model
-    lang: Lang
-}
+    model: Model,
+    lang: Lang,
+};
 type ConqState = {
-    loyalty: number
-    def: DefSide
-    off: OffSide[]
-}
+    loyalty: number,
+    def: DefSide,
+    off: OffSide[],
+};
 export default class Conq extends React.Component<ConqProps, ConqState> {
     private aid: number;
-    private lastOff: OffSide
+    private lastOff: OffSide;
     constructor(props: ConqProps) {
         super(props);
         this.aid = 0;
@@ -85,42 +85,10 @@ export default class Conq extends React.Component<ConqProps, ConqState> {
                 pop: 1000,
                 party: false,
             },
-            off: [this.lastOff]
+            off: [this.lastOff],
         };
     }
-    setLoyalty(value: number) {
-        this.setState(update(
-            this.state,
-            { loyalty: { $set: value } }
-        ));
-    }
-    setOffField(index: number, field: 'pop' | 'tribe' | 'admins', value: number) {
-        this.setState(update(
-            this.state,
-            { off: { [index]: { [field]: { $set: value } } } }));
-        if (index === this.state.off.length - 1) {
-            this.lastOff[field] = value;
-        }
-    }
-    setDefPop(value: number) {
-        this.setState(update(
-            this.state,
-            { def: { pop: { $set: value } } }));
-    }
-    addOff() {
-        this.lastOff = update(this.lastOff, { id: { $set: this.aid++ } })
-        this.setState(update(
-            this.state, 
-            { off: { $push: [this.lastOff] } as any }
-        ));        
-    }
-    removeOff(i: number) {
-        this.setState(update(
-            this.state, 
-            { off: { $splice: [[i, 1]] } }
-        ));        
-    }
-    render() {
+    public render() {
         const { model, lang } = this.props;
         const admins = model.units
             .map(raceUnits => raceUnits.find(isAdmin));
@@ -166,5 +134,37 @@ export default class Conq extends React.Component<ConqProps, ConqState> {
             <span dangerouslySetInnerHTML={{
                 __html: lang('conq_times', [conqStats.total(this.state.loyalty)])}} />
         </div>);
+    }
+    protected setLoyalty(value: number) {
+        this.setState(update(
+            this.state,
+            { loyalty: { $set: value } },
+        ));
+    }
+    protected setOffField(index: number, field: 'pop' | 'tribe' | 'admins', value: number) {
+        this.setState(update(
+            this.state,
+            { off: { [index]: { [field]: { $set: value } } } }));
+        if (index === this.state.off.length - 1) {
+            this.lastOff[field] = value;
+        }
+    }
+    protected setDefPop(value: number) {
+        this.setState(update(
+            this.state,
+            { def: { pop: { $set: value } } }));
+    }
+    protected addOff() {
+        this.lastOff = update(this.lastOff, { id: { $set: this.aid++ } });
+        this.setState(update(
+            this.state,
+            { off: { $push: [this.lastOff] } as any },
+        ));
+    }
+    protected removeOff(i: number) {
+        this.setState(update(
+            this.state,
+            { off: { $splice: [[i, 1]] } },
+        ));
     }
 }

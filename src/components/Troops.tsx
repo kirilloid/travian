@@ -30,7 +30,7 @@ const UnitComponent = ({ lang, unit, tribe, index } : UnitProps) =>
         <td className="value-numeric"
             title={lang('per_day', [Math.floor(86400 / unit.t).toString()])}
             >{timeI2S(unit.t)}</td>
-    </tr>
+    </tr>;
 
 const TroopsTable = ({ lang, units, tribe } : { lang: Lang, units: Unit[], tribe: number }) =>
     <table className="wire">
@@ -52,34 +52,34 @@ const TroopsTable = ({ lang, units, tribe } : { lang: Lang, units: Unit[], tribe
             </tr>
             {units.map((unit, u) => <UnitComponent key={u} lang={lang} tribe={tribe} unit={unit} index={u} />)}
         </tbody>
-    </table>
+    </table>;
 
 type TroopsProps = {
-    units: Unit[][]
-    lang: Lang
-    tribe?: string
-}
+    units: Unit[][],
+    lang: Lang,
+    tribe?: string,
+};
 type TroopsState = {
-    tribe: number
-}
+    tribe: number,
+};
 
 export default class Troops extends React.Component<TroopsProps, TroopsState> {
-    constructor(props: TroopsProps) {
-        super(props);
-        let tribe = 0;
-        if (typeof props.tribe !== 'undefined') {
-            tribe = parseInt(props.tribe) - 1;
-        }
-        this.state = { tribe };
-    }
-    static getDerivedStateFromProps(nextProps: TroopsProps, prevState: TroopsState) {
+    private static getDerivedStateFromProps(nextProps: TroopsProps, prevState: TroopsState) {
         if (prevState.tribe >= nextProps.units.length) {
             // TODO: notify user about changed tribe
             return { tribe: 0 };
         }
         return null;
     }
-    render() {
+    constructor(props: TroopsProps) {
+        super(props);
+        let tribe = 0;
+        if (typeof props.tribe !== 'undefined') {
+            tribe = +props.tribe - 1;
+        }
+        this.state = { tribe };
+    }
+    public render() {
         const { lang, units } = this.props;
         const { tribe } = this.state;
         return [
@@ -92,11 +92,11 @@ export default class Troops extends React.Component<TroopsProps, TroopsState> {
                         .map((name, idx) => ({
                             content: <TribeIcon tribe={idx+1} />,
                             title: lang(`objects.tribes.${name}`),
-                            value: idx
+                            value: idx,
                         }))}
                 />
             </div>,
-            <TroopsTable lang={lang} units={units[tribe]} tribe={tribe} />
+            <TroopsTable lang={lang} units={units[tribe]} tribe={tribe} />,
         ];
     }
 }

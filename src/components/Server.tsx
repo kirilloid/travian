@@ -4,17 +4,10 @@ import { Lang } from '../lang';
 
 export default class Server extends React.Component<{
     version: string,
-    onChange: (evt: any) => void, 
-    lang: Lang
+    onChange: (evt: any) => void,
+    lang: Lang,
 }> {
-    mapVersion(stringVersion: string) {
-        const version = parseVersion(stringVersion);
-        return {
-            version,
-            ...getModel(version.full)
-        }
-    }
-    render() {
+    public render() {
         const _ = this.props.lang;
         return (<div>
             <label htmlFor="server">Server:</label>
@@ -26,11 +19,18 @@ export default class Server extends React.Component<{
                         {group.servers.map(server =>
                             <option value={server.version} key={server.version}>
                                 {_(`terms.servers.${server.title}`)}
-                            </option>
+                            </option>,
                         )}
-                    </optgroup>
+                    </optgroup>,
                 )}
             </select>
         </div>);
+    }
+    protected mapVersion(stringVersion: string) {
+        const version = parseVersion(stringVersion);
+        return {
+            version,
+            ...getModel(version.full),
+        };
     }
 }

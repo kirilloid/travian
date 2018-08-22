@@ -2,7 +2,7 @@ import * as tape from 'tape';
 
 import units from '../units';
 import buildings from '../buildings';
-import { factory } from '../combat';
+import factory from './factory';
 import Army from './army';
 import TRIBES from '../tribes';
 

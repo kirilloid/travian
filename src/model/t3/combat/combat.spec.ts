@@ -2,7 +2,8 @@ import * as tape from 'tape';
 
 import units from '../units';
 import buildings from '../buildings';
-import combat, { factory } from '.';
+import combat from '.';
+import factory from './factory';
 import TRIBES from '../tribes';
 
 import { CombatResult } from '../../types';
@@ -11,8 +12,9 @@ const { place, def, off } = factory({ units, buildings });
 
 tape('combat (T3)', t => {
     t.test('upgrade', t => {
-        t.equal(combat.Army.prototype.upgrade(units[0][0], 40, 0), 40);
-        t.equal(combat.Army.prototype.upgrade(units[0][0], 40, 20), 52.4048);
+        const { upgrade } = combat.Army.prototype;
+        t.equal(upgrade(units[0][0], 40, 0), 40);
+        t.equal(upgrade(units[0][0], 40, 20), 52.4048);
         t.end();
     });
 

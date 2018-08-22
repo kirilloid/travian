@@ -9,7 +9,7 @@ import fns from './fns';
 export default {
     Army,
     fns,
-    log(message: string): void {},
+    log(message: string): void { /* do nothing */ },
     BASE_VILLAGE_DEF: 10,
     place: {} as Place,
     def: [] as Army<Side>[],

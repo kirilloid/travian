@@ -1,24 +1,24 @@
 import * as React from 'react';
 import { Build as BuildIcon } from './Icon';
 import { sortBy } from '../utils';
-import { Building } from '../model/base/buildings'
+import { Building } from '../model/base/buildings';
 import { Lang } from '../lang';
 
 export default class Buildings extends React.Component<
     { buildings: Building[], lang: Lang }
 > {
-    render() {
+    public render() {
         const { buildings, lang } = this.props;
         const sortedBuildings = sortBy(
             buildings.slice(),
-            b => lang(b.nameKey())
+            b => lang(b.nameKey()),
         );
-        
+
         return <div>
             {[1, 2, 3].map(type =>
                 <BuildList key={type}
                     lang={lang}
-                    buildings={sortedBuildings.filter(b => b.y === type)}/>
+                    buildings={sortedBuildings.filter(b => b.y === type)}/>,
             )}
         </div>;
     }

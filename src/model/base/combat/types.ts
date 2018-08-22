@@ -1,38 +1,38 @@
 import { Unit } from '../../types';
 
 export type Place = {
-    tribe: number
-    pop: number
-    durBonus: number
+    tribe: number,
+    pop: number,
+    durBonus: number,
     wall: {
-        level: number
-        durability: number
-        bonus: (lvl: number) => { defBonus: number, def?: number }
+        level: number,
+        durability: number,
+        bonus: (lvl: number) => { defBonus: number, def?: number },
     }
-    def: number
-    party: boolean
+    def: number,
+    party: boolean,
     // traps: number
 };
 
 export type Off = {
-    kind: 'off'
-    pop: number
-    units: Unit[]
-    numbers: number[]
-    upgrades: number[]
-    type: 'attack' | 'raid'
-    targets: number[]
+    kind: 'off',
+    pop: number,
+    units: Unit[],
+    numbers: number[],
+    upgrades: number[],
+    type: 'attack' | 'raid',
+    targets: number[],
     // hero: Hero
     // metallurgy: number
-    party: boolean
-    brew: number
+    party: boolean,
+    brew: number,
 };
 
 export type Def = {
-    kind: 'def'
-    units: Unit[]
-    numbers: number[]
-    upgrades: number[]
+    kind: 'def',
+    units: Unit[],
+    numbers: number[],
+    upgrades: number[],
 
     // hero: Hero
     // metallurgy: number
@@ -45,18 +45,18 @@ export type BattleState = {
      * but w/o global things like wall or moralebonus
      */
     base: {
-        off: number
-        def: number
-    }
+        off: number,
+        def: number,
+    },
     /** final points with all bonuses */
     final: {
-        off: number
-        def: number
-    }
+        off: number,
+        def: number,
+    },
     /** current level of wall, coincides with place.wall except for early ramming phase */
-    wall: number
+    wall: number,
     /** coefficient for battle */
-    immensity: number
+    immensity: number,
     /** points ratio */
-    readonly ratio: number
+    readonly ratio: number,
 };

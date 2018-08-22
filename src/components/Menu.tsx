@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 import { Icon } from './Icon';
 
 function MenuIcon({ icon }: { icon: string }) {
-    return <Icon classes={['i-menu', 'i-menu-' + icon]} />
+    return <Icon classes={['i-menu', 'i-menu-' + icon]} />;
 }
 
 type MenuItemProp = { icon: string, text: string, path: string };
@@ -19,5 +19,5 @@ export default function Menu(props: { items: MenuItemProp[] }) {
     return (<nav>{
         props.items.map(({icon, text, path}) =>
             <MenuItem key={path} icon={icon} text={text} path={path} />)
-    }</nav>)
+    }</nav>);
 }

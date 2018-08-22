@@ -86,30 +86,34 @@ export const SLOT: {[P: string]: slot} = {
 };
 
 export type BConfig = {
-    id: number
-    m?: number  // max level
-    c: res      // cost
-    k: number   // cost growth base
-    u: number   // upkeep/population base
-    cp: number  // culture points base
-    t: (l: number) => number // time
-    f: (l: number) => any // benefit (numeric)
-    e: number   // extra (benefit)
-    y: number   // type (benefit)
+    id: number,
+    m?: number,     // max level
+    c: res,         // cost
+    k: number,      // cost growth base
+    u: number,      // upkeep/population base
+    cp: number,     // culture points base
+    t: (l: number) => number, // time
+    f: (l: number) => any, // benefit (numeric)
+    e: number,      // extra (benefit)
+    y: number,      // type (benefit)
     r?: {
-        m?: true,    // can we have multiple instances of it
+        m?: true,   // can we have multiple instances of it
         r?: number, // race (tribe), 1-based
         c?: number, // limitations for capital, it's simpler to have it in the base type
     }
-    b?: { [P: number]: number } // prerequisites: other buildings id -> level map
-    nt?: string // name translation key override
-    dt?: string // description translation key override
-    s?: slot // does it belong to a specific slot
-    d?: number // durability
+    b?: { [P: number]: number }, // prerequisites: other buildings id -> level map
+    nt?: string,    // name translation key override
+    dt?: string,    // description translation key override
+    s?: slot,       // does it belong to a specific slot
+    d?: number,     // durability
 };
 
+const BUILDING_DEFAULTS = { d: 1, m: 20 };
+
+type BConfigured = BConfig & typeof BUILDING_DEFAULTS;
+
 const round5 = roundP(5);
-export class BMethods<C extends BConfig = BConfig> {
+export class BMethods<C extends BConfigured = BConfigured> {
     constructor(config: C) {
         return Object.assign<BMethods<C>, C>(this, config);
     }
@@ -138,12 +142,11 @@ export class BMethods<C extends BConfig = BConfig> {
         return 'objects.buildings.descriptions.' + (this.dt || 'b_' + (this.id + 1));
     }
 }
-const BUILDING_DEFAULTS = { d: 1, m: 20 };
 export function building(config: BConfig & Partial<Building>): Building {
     return Object.assign(
         Object.create(BMethods.prototype), BUILDING_DEFAULTS, config);
 }
-export type Building = BMethods & BConfig & typeof BUILDING_DEFAULTS;
+export type Building = BMethods & BConfigured;
 export default extend([
     building({id: ID.WOODJACK,      c: [  40, 100,  50,  60], k: 1.67, u: 2, cp:1, t:time(1780/3,1.6, 1000/3),e:1, y:1, f: prod, s: SLOT.RES, m:20 }),
     building({id: ID.CLAYPIT,       c: [  80,  40,  80,  50], k: 1.67, u: 2, cp:1, t:time(1660/3,1.6, 1000/3),e:1, y:1, f: prod, s: SLOT.RES, m:21 }),
