@@ -1,24 +1,28 @@
-import { IHero } from '../../types';
+import Hero from '../../base/hero';
 import CombatPoints from '../../base/combat/points';
 
 export type HeroContext = { health: number };
 
-export abstract class BaseArmyHero<H extends IHero<any, any>, C extends { health: number }> {
+export abstract class BaseArmyHero<H extends Hero, C extends HeroContext> {
     constructor(
         protected hero: H,
         protected context: C,
     ) {}
-    public abstract getOff(): CombatPoints;
-    public getDef(): CombatPoints {
-        if (this.context.health === 0) { return CombatPoints.zero(); }
-        const { di, dc } = this.hero.getCombatStats();
-        return new CombatPoints(di, dc);
+    public getOff(): CombatPoints {
+        return this.context.health
+            ? this.hero.getOff()
+            : CombatPoints.zero();
     }
-    public getOffBonus() {
+    public getDef(): CombatPoints {
+        return this.context.health
+            ? this.hero.getDef()
+            : CombatPoints.zero();
+    }
+    public getOffBonus(): number {
         if (this.context.health === 0) { return 0; }
         return this.hero.getOffBonus();
     }
-    public getDefBonus() {
+    public getDefBonus(): number {
         if (this.context.health === 0) { return 0; }
         return this.hero.getDefBonus();
     }

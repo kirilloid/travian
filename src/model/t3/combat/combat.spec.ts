@@ -8,7 +8,7 @@ import TRIBES from '../tribes';
 
 import { CombatResult } from '../../types';
 
-const { place, def, off } = factory({ units, buildings });
+const f = factory({ units, buildings });
 
 tape('combat (T3)', t => {
     t.test('upgrade', t => {
@@ -19,7 +19,7 @@ tape('combat (T3)', t => {
     });
 
     t.test('stats', t => {
-        const army = new combat.Army(off({ numbers: [10] }));
+        const army = new combat.Army(f.off({ numbers: [10] }));
         t.equal(army.getOff().i, 400);
         t.equal(combat.Army.prototype.upgrade(units[0][0], 40, 20), 52.4048);
         t.end();
@@ -29,9 +29,9 @@ tape('combat (T3)', t => {
         let result: CombatResult[];
 
         result = combat.combat(
-            place({ tribe: TRIBES.GAULS }),
-            [ def({ }),
-              off({ tribe: TRIBES.ROMANS, numbers: [0,0,0, 0,0,0, 0,50], targets: [20], pop: 1000 }),
+            f.place({ tribe: TRIBES.GAULS }),
+            [ f.def({ }),
+              f.off({ tribe: TRIBES.ROMANS, numbers: [0,0,0, 0,0,0, 0,50], targets: [20], pop: 1000 }),
             ]);
         t.equal(result[0].buildings[0], 15, '+ moralebonus for catas');
         t.end();
@@ -40,27 +40,27 @@ tape('combat (T3)', t => {
     t.test('scans', t => {
         let result: CombatResult[];
         result = combat.combat(
-            place({ tribe: TRIBES.GAULS }),
-            [ def({ tribe: TRIBES.GAULS, numbers: [100] }),
-              off({ tribe: TRIBES.ROMANS, numbers: [0,0,0,100] }),
+            f.place({ tribe: TRIBES.GAULS }),
+            [ f.def({ tribe: TRIBES.GAULS, numbers: [100] }),
+              f.off({ tribe: TRIBES.ROMANS, numbers: [0,0,0,100] }),
             ]);
         t.equal(result[0].offLosses, 0, 'no scans in def');
         result = combat.combat(
-            place({ tribe: TRIBES.GAULS }),
-            [ def({ tribe: TRIBES.GAULS, numbers: [0,0,100] }),
-              off({ tribe: TRIBES.ROMANS, numbers: [0,0,0,100] }),
+            f.place({ tribe: TRIBES.GAULS }),
+            [ f.def({ tribe: TRIBES.GAULS, numbers: [0,0,100] }),
+              f.off({ tribe: TRIBES.ROMANS, numbers: [0,0,0,100] }),
             ]);
         t.equal(result[0].offLosses.toFixed(3), '0.432', 'some scans in def');
         result = combat.combat(
-            place({ tribe: TRIBES.GAULS, wall: 20 }),
-            [ def({ tribe: TRIBES.GAULS, numbers: [0,0,100] }),
-              off({ tribe: TRIBES.ROMANS, numbers: [0,0,0,100] }),
+            f.place({ tribe: TRIBES.GAULS, wall: 20 }),
+            [ f.def({ tribe: TRIBES.GAULS, numbers: [0,0,100] }),
+              f.off({ tribe: TRIBES.ROMANS, numbers: [0,0,0,100] }),
             ]);
         t.equal(result[0].offLosses.toFixed(3), '0.906', '+ wall');
         result = combat.combat(
-            place({ tribe: TRIBES.GAULS, wall: 20 }),
-            [ def({ tribe: TRIBES.GAULS, numbers: [0,0,100] }),
-              off({ tribe: TRIBES.ROMANS, numbers: [0,0,0,150], pop: 1000 }),
+            f.place({ tribe: TRIBES.GAULS, wall: 20 }),
+            [ f.def({ tribe: TRIBES.GAULS, numbers: [0,0,100] }),
+              f.off({ tribe: TRIBES.ROMANS, numbers: [0,0,0,150], pop: 1000 }),
             ]);
         t.equal(result[0].offLosses.toFixed(3), '0.906', '+ moralebonus');
         t.end();
@@ -69,25 +69,25 @@ tape('combat (T3)', t => {
     t.test('lone attacker', t => {
         let result: CombatResult[];
         result = combat.combat(
-            place({ tribe: TRIBES.GAULS }),
-            [ def({ }),
-              off({ tribe: TRIBES.ROMANS, numbers: [0,0,1], upgrades: [0,0,17] })]);
+            f.place({ tribe: TRIBES.GAULS }),
+            [ f.def({ }),
+              f.off({ tribe: TRIBES.ROMANS, numbers: [0,0,1], upgrades: [0,0,17] })]);
         t.equal(Math.round(result[0].offLosses), 1, 'imperian dies');
         result = combat.combat(
-            place({ tribe: TRIBES.GAULS }),
-            [ def({ }),
-              off({ tribe: TRIBES.ROMANS, numbers: [0,0,1], upgrades: [0,0,18] })]);
+            f.place({ tribe: TRIBES.GAULS }),
+            [ f.def({ }),
+              f.off({ tribe: TRIBES.ROMANS, numbers: [0,0,1], upgrades: [0,0,18] })]);
         t.equal(Math.round(result[0].offLosses), 0, 'imperian lives');
 
         result = combat.combat(
-            place({ tribe: TRIBES.GAULS }),
-            [ def({ }),
-              off({ tribe: TRIBES.ROMANS, numbers: [0,0,0, 0,1], upgrades: [0,0,0, 0,3], pop: 1000 })]);
+            f.place({ tribe: TRIBES.GAULS }),
+            [ f.def({ }),
+              f.off({ tribe: TRIBES.ROMANS, numbers: [0,0,0, 0,1], upgrades: [0,0,0, 0,3], pop: 1000 })]);
         t.equal(Math.round(result[0].offLosses), 1, 'EI dies');
         result = combat.combat(
-            place({ tribe: TRIBES.GAULS }),
-            [ def({ }),
-              off({ tribe: TRIBES.ROMANS, numbers: [0,0,0, 0,1], upgrades: [0,0,0, 0,4], pop: 1000 })]);
+            f.place({ tribe: TRIBES.GAULS }),
+            [ f.def({ }),
+              f.off({ tribe: TRIBES.ROMANS, numbers: [0,0,0, 0,1], upgrades: [0,0,0, 0,4], pop: 1000 })]);
         t.equal(Math.round(result[0].offLosses), 0, 'EI lives');
         t.end();
     });
@@ -96,22 +96,22 @@ tape('combat (T3)', t => {
         let result: CombatResult[];
 
         result = combat.combat(
-            place({ }),
-            [ def({ tribe: TRIBES.GAULS, numbers: [100],
+            f.place({ }),
+            [ f.def({ tribe: TRIBES.GAULS, numbers: [100],
                     hero: { unit: 0, self: 100 }}),
-              off({ tribe: TRIBES.ROMANS, numbers: [0,0,100],
+              f.off({ tribe: TRIBES.ROMANS, numbers: [0,0,100],
                     hero: { unit: 2, self: 100 }}),
             ]);
         t.equal(result[0].offLosses.toFixed(3), '0.520', 'basic stats');
 
         // hero dies
         result = combat.combat(
-            place({ }),
-            [ def({ tribe: TRIBES.GAULS, numbers: [100],
+            f.place({ }),
+            [ f.def({ tribe: TRIBES.GAULS, numbers: [100],
                     hero: { unit: 0, self: 100, health: 1 }}),
-              off({ tribe: TRIBES.ROMANS, numbers: [0,0,100] }),
-              def({ tribe: TRIBES.GAULS, numbers: [100] }),
-              off({ tribe: TRIBES.ROMANS, numbers: [0,0,100] }),
+              f.off({ tribe: TRIBES.ROMANS, numbers: [0,0,100] }),
+              f.def({ tribe: TRIBES.GAULS, numbers: [100] }),
+              f.off({ tribe: TRIBES.ROMANS, numbers: [0,0,100] }),
             ]);
         // (100*70 / 5365 + 100*40 + 10) ** 1.5 ≈ 0.645
         t.equal(result[0].offLosses, 1);

@@ -7,9 +7,8 @@ import { almostEqual } from '../../../utils/test';
 import combat from './combat';
 import units from '../units';
 import buildings from '../buildings';
-import Army from './army';
 
-const { place, def, off } = factory({ units, buildings });
+const f = factory({ units, buildings });
 
 tape('combat (new upgrade formula)', (t) => {
     const { upgrade } = combat.Army.prototype;
@@ -20,9 +19,9 @@ tape('combat (new upgrade formula)', (t) => {
 
 tape('combat (e2e)', (t) => {
     t.test('minor change in upgrades', t => {
-        const { offLosses, defLosses } = combat.combat(place({}), [
-            def({ tribe: TRIBES.TEUTONS, numbers: [999999] }),
-            off({ tribe: TRIBES.ROMANS, numbers: [499999] }),
+        const { offLosses, defLosses } = combat.combat(f.place({}), [
+            f.def({ tribe: TRIBES.TEUTONS, numbers: [999999] }),
+            f.off({ tribe: TRIBES.ROMANS, numbers: [499999] }),
         ])[0];
         t.equal(offLosses, 1, 'off');
         t.equal(Math.round(defLosses * 999999), 999931, 'def');
@@ -38,23 +37,23 @@ tape('combat (e2e)', (t) => {
      */
     t.test('catapults with remorale', t => {
         t.equal(combat.combat(
-            place({ pop: 1000 }),
-            [ def({ tribe: TRIBES.ROMANS, numbers: [0,999999] }),
-              off({ tribe: TRIBES.GAULS, numbers: [0,670175,0, 0,0,0, 0,20], pop: 2000, targets: [5] }),
+            f.place({ pop: 1000 }),
+            [ f.def({ tribe: TRIBES.ROMANS, numbers: [0,999999] }),
+              f.off({ tribe: TRIBES.GAULS, numbers: [0,670175,0, 0,0,0, 0,20], pop: 2000, targets: [5] }),
             ])[0].buildings[0], 0);
         t.equal(combat.combat(
-            place({ pop: 1000 }),
-            [ def({ tribe: TRIBES.ROMANS, numbers: [0,999999] }),
-              off({ tribe: TRIBES.GAULS, numbers: [0,670174,0, 0,0,0, 0,20], pop: 2000, targets: [5] }),
+            f.place({ pop: 1000 }),
+            [ f.def({ tribe: TRIBES.ROMANS, numbers: [0,999999] }),
+              f.off({ tribe: TRIBES.GAULS, numbers: [0,670174,0, 0,0,0, 0,20], pop: 2000, targets: [5] }),
             ])[0].buildings[0], 1);
         t.end();
     });
 
     t.test('hero is attacking', t => {
         const result = combat.combat(
-            place({ }),
-            [ def({ tribe: TRIBES.GAULS, numbers: [100] }),
-              off({ tribe: TRIBES.ROMANS,
+            f.place({ }),
+            [ f.def({ tribe: TRIBES.GAULS, numbers: [100] }),
+              f.off({ tribe: TRIBES.ROMANS,
                     hero: { self: 20, items: [{ str: 1000 }] } }),
             ]);
         t.equal(result[0].offLosses, 1, 'off');

@@ -44,6 +44,31 @@ export type Item = {
     vis?:  number | number[] // visibility (discovery) at rally point
 };
 
+export type ItemEffect = {
+    arm?:  number
+    cp?:   number
+    cav?:  number
+    exp?:  number
+    fret?: number
+    fvil?: number
+    fall?: number
+    horse?:number
+    inf?:  number
+    nat?:  number
+    raid?: number
+    reg?:  number
+    spd?:  number
+    str?:  number
+    ts?:   number
+    utype?: number
+    ubonus?: number
+    rev?:  number
+    cage?: number
+    // T5
+    eva?:  number
+    vis?:  number
+};
+
 const items: Item[] = [
     { exp: 15 }, { exp: 20 }, { exp: 25 },
     { reg: 10 }, { reg: 15 }, { reg: 20 },

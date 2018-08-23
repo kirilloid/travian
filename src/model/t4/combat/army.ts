@@ -1,51 +1,49 @@
-import { roundP, zipWith, sum } from '../../../utils';
+import { roundP } from '../../../utils';
 import { Unit } from '../../base';
 import CombatPoints from '../../base/combat/points';
 import bCombat from '../../base/combat';
-import { Item } from '../items';
-import ArmyHero from './hero';
+import Hero4 from '../hero';
 import { Side } from './factory';
 
 const roundStat = roundP(1e-4);
 
 export default class Army extends bCombat.Army<Side> {
-    protected hero?: ArmyHero;
+    protected hero?: Hero4;
+    protected health?: number;
     constructor(side: Side) {
         super(side);
         this.hero = side.hero;
+        this.health = side.health;
     }
     public getOff() {
         const unitsOff = super.getOff();
-        if (!this.hero) { return unitsOff; }
+        if (!this.hero || !this.health) { return unitsOff; }
         // skill strength
         const heroOff = this.hero.getOff();
-        const str = sum(this.getBonusType('str'));
-        const nat = 1 + sum(this.getBonusType('nat')) / 100;
-        const bonus = this.hero.getOffBonus();
+        const index = this.hero.getItemsTotal('utype') % 10;
+        const unitBonus = this.hero.getItemsTotal('ubonus');
         return CombatPoints.sum([
             unitsOff,
             heroOff,
-            new CombatPoints(str, str).mask(heroOff),
-            this.sumUnitBonus(bCombat.fns.getUnitOff),
-        ]).mul((1 + bonus) * nat);
+            CombatPoints.def(unitBonus * this.numbers[index]),
+        ]).mul(1 + this.hero.getOffBonus());
     }
     public getDef() {
         const unitsDef = super.getDef();
-        if (!this.hero) { return unitsDef; }
-        const str = sum(this.getBonusType('str'));
-        const bonus = this.hero.getOffBonus();
+        if (!this.hero || !this.health) { return unitsDef; }
+        const index = this.hero.getItemsTotal('utype') % 10;
+        const unitBonus = this.hero.getItemsTotal('ubonus');
         return CombatPoints.sum([
             unitsDef,
             this.hero.getDef(),
-            new CombatPoints(str, str),
-            this.sumUnitBonus(bCombat.fns.getUnitDef),
-        ]).mul((1 + bonus));
+            CombatPoints.def(unitBonus * this.numbers[index]),
+        ]).mul(1 + this.hero.getDefBonus());
     }
     public applyLosses(losses: number) {
         super.applyLosses(losses);
         if (this.hero) {
-            const armBonus = sum(this.getBonusType('arm'));
-            this.hero.applyLosses(Math.max(losses - armBonus / 100, 0));
+            const armBonus = this.hero.getItemsTotal('arm');
+            this.health = Math.max(losses - armBonus / 100, 0);
         }
     }
     protected upgrade(unit: Unit, stat: number, level: number) {
@@ -53,28 +51,5 @@ export default class Army extends bCombat.Army<Side> {
         return roundStat(stat
             + (stat + 300 * upkeep / 7) * (1.007 ** level - 1)
             + upkeep * 0.0021);
-    }
-    protected getBonusType(key: keyof Item): number[] {
-        const result: number[] = [];
-        if (this.hero) {
-            this.hero.getItems().forEach((item: Item) => {
-                const value = item[key];
-                if (typeof value === 'number') {
-                    result.push(value);
-                }
-            });
-        }
-        return result;
-    }
-    protected sumUnitBonus(getCP: (unit: Unit) => CombatPoints): CombatPoints {
-        return zipWith(
-            (bonus: number, type: number) => {
-                const index = type % 10;
-                const total = this.numbers[index] * bonus;
-                return getCP(this.units[index]).mul(total);
-            },
-            this.getBonusType('ubonus'),
-            this.getBonusType('utype'),
-        ).reduce(CombatPoints.add, CombatPoints.zero());
     }
 }

@@ -23,9 +23,7 @@ for (let lvl = 0; lvl <= 20; lvl++) {
 
 export default {
     getUnitOff(unit: Unit): CombatPoints {
-        return unit.i
-            ? new CombatPoints(unit.a, 0)
-            : new CombatPoints(0, unit.a);
+        return CombatPoints.off(unit.a, unit.i);
     },
     getUnitDef(unit: Unit): CombatPoints {
         return new CombatPoints(unit.di, unit.dc);

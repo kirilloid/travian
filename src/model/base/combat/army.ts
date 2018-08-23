@@ -26,9 +26,7 @@ export default class Army<S extends Side> {
         return this.foldMap(
             (unit, number, upgrade) => {
                 const points = number * this.upgrade(unit, unit.a, upgrade);
-                return unit.i
-                    ? new CombatPoints(points, 0)
-                    : new CombatPoints(0, points);
+                return CombatPoints.off(points, unit.i);
             }, CombatPoints.add, CombatPoints.zero());
     }
     public getDef(): CombatPoints {

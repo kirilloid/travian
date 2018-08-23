@@ -2,9 +2,12 @@ import * as tape from 'tape';
 
 import Hero from './hero';
 import { res } from '../types';
+import CombatPoints from './combat/points';
 
-class RealHero extends Hero<{}, 'a' | 'b'> {
-    public getCombatStats() { return { a: 0, di: 0, dc: 0 } }
+class RealHero extends Hero {
+    public getSpeed() { return 1; }
+    public getOff() { return CombatPoints.zero(); }
+    public getDef() { return CombatPoints.zero(); }
     public getCost(): res { return [0,0,0,0]; }
     public getMisc(): {} { return {}; }
     public getTime() { return 0; }
@@ -31,6 +34,7 @@ tape('hero (base)', t => {
         t.throws(() => hero.setSkill('a', -1), 'negative value');
         t.throws(() => hero.setSkill('a', 200), 'too big value');
         t.throws(() => hero.setSkill('a', NaN), 'NaN');
+        t.throws(() => hero.setSkill('c', 0), 'wrong key');
         t.end();
     });
     t.end();

@@ -1,4 +1,5 @@
 import { roundP, limit } from '../../utils';
+import CombatPoints from '../base/combat/points';
 import { res, Unit } from '../types';
 
 const round5 = roundP(5);
@@ -13,25 +14,26 @@ const round = (value: number) => {
     return roundP(10)(value);
 };
 
-export type H3S = { ab: number, db: number, reg: number };
-export type H3K = 'off' | 'def' | 'offBonus' | 'defBonus' | 'regen';
-
-export default class Hero3 extends Hero<H3S, H3K> {
+export default class Hero3 extends Hero {
     constructor(private unit: Unit) {
         super(['off', 'def', 'offBonus', 'defBonus', 'regen']);
     }
-    public getCombatStats() {
-        const { a, di, dc } = this.unit;
-        const { off, def } = this.skills;
-        const corr = (di / dc) ** 0.2;
-        return {
-            a : round5((2*a /3 + 27.5)      * off + 5*a /4),
-            di: round5((2*di/3 + 27.5*corr) * def + 5*di/3),
-            dc: round5((2*dc/3 + 27.5/corr) * def + 5*dc/3),
-        };
+    public getSpeed() {
+        return this.unit.v;
     }
-    public isCavalry() {
-        return this.unit.i !== 1;
+    public getOff() {
+        const { a } = this.unit;
+        const atk = round5((2*a/3 + 27.5) * this.skills.off + 5*a / 4);
+        return CombatPoints.off(atk, this.unit.i);
+    }
+    public getDef() {
+        const { di, dc } = this.unit;
+        const { def } = this.skills;
+        const corr = (di / dc) ** 0.2;
+        return new CombatPoints(
+            round5((2*di/3 + 27.5*corr) * def + 5*di/3),
+            round5((2*dc/3 + 27.5/corr) * def + 5*dc/3),
+        );
     }
     public getCost() {
         return this.unit.c.map(this.resCost, this) as res;

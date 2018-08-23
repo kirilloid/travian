@@ -38,7 +38,6 @@ export function off(obj: Partial<Off> & { tribe?: number }) {
         upgrades: ZEROES,
         type: 'attack',
         targets: [],
-        // hero: Hero
         // metallurgy: number
         party: false,
         brew: 0,
@@ -46,12 +45,12 @@ export function off(obj: Partial<Off> & { tribe?: number }) {
 }
 
 type PlaceWoWall = {
-    tribe: number
-    pop: number
-    durBonus: number
-    def: number
-    party: boolean
-    wall: number
+    tribe: number,
+    pop: number,
+    durBonus: number,
+    def: number,
+    party: boolean,
+    wall: number,
 };
 
 export default function factory(

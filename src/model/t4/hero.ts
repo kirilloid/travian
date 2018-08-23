@@ -1,13 +1,15 @@
-import { roundP, limit } from '../../utils';
+import { roundP, limit, sum } from '../../utils';
 
 import { res } from '../types';
+import { ItemEffect } from './items';
 
 import Hero from '../base/hero';
 import ID from '../base/tribes';
+import CombatPoints from '../base/combat/points';
 
 const limitLvl = limit(1, 24);
 
-function resCost(this: Hero<string>, res: number) {
+function resCost(this: Hero4, res: number) {
     const lvl = this.getNeededLvl();
     const num = res * (1 + lvl / 24) * (1 + lvl);
     if (lvl >= 10) { return roundP(100)(num); }
@@ -21,47 +23,68 @@ export const tribeCosts: res[] = [
     [115, 180, 130, 75],
 ];
 
-export type H4K = 'strength' | 'offBonus' | 'defBonus' | 'resources';
-export type H4S = { ab: number, db: number, res: number };
-
-export default class Hero4 extends Hero<H4S, H4K> {
+export default class Hero4 extends Hero {
     protected res: number;
-    protected spd_i: number;
-    protected spd_c: number;
+    protected speedOnFoot: number;
+    protected speedMounted: number;
     protected tribeCosts: res[];
+    protected mount: number;
     private mul: number;
-    constructor(protected tribe: number) {
+    constructor(
+        protected tribe: number,
+        protected items: ItemEffect[] = [],
+    ) {
         super(['strength', 'offBonus', 'defBonus', 'resources']);
-        this.spd_i = 7;
-        this.spd_c = 0;
+        this.speedOnFoot = 7;
+        this.speedMounted = 14;
         this.tribeCosts = tribeCosts;
-        if (tribe === ID.GAULS) { this.spd_c = 5; }
+        if (tribe === ID.GAULS) { this.speedMounted += 5; }
         this.mul = 80;
         if (tribe === ID.ROMANS) { this.mul = 100; }
         this.res = 1;
+        this.mount = 0;
     }
-    public levelExp(level: number) {
-        return super.levelExp(level) / 2;
+    public setMount(mounted: number): void {
+        this.mount = mounted;
     }
-    public getCombatStats() {
-        const str = this.getStrength();
-        return { a: str, di: str, dc: str };
+    public getSpeed(): number {
+        return this.mount
+            ? this.speedMounted
+            : this.speedOnFoot;
     }
-    public getMisc(): H4S {
-        const { offBonus, defBonus, resources } = this.skills;
-        return {
-            ab: offBonus * 0.2,
-            db: defBonus * 0.2,
-            res: resources * 6,
-        };
+    public getItemsTotal(name: keyof ItemEffect): number {
+        return sum(this.items
+            .filter(item => name in item)
+            .map(item => item[name] || 0));
+    }
+    public getOff(): CombatPoints {
+        const selfStr = this.getStrength();
+        const itemStr = this.getItemsTotal('str');
+        const str = selfStr + itemStr;
+        return CombatPoints.off(str, !this.mount);
+    }
+    public getDef(): CombatPoints {
+        const selfStr = this.getStrength();
+        const itemStr = this.getItemsTotal('str');
+        const str = selfStr + itemStr;
+        return new CombatPoints(str, str);
+    }
+    public getOffBonus(): number {
+        return super.getOffBonus() + this.getItemsTotal('nat') / 100;
+    }
+    public getResources(): number {
+        return this.skills.resources * 6;
     }
     public getCost(): res {
         return this.tribeCosts[this.tribe].map(resCost, this) as res;
     }
-    public getTime() {
+    public getTime(): number {
         return limitLvl(this.getNeededLvl()) * 3600;
     }
-    protected getStrength() {
+    protected getStrength(): number {
         return this.skills.strength * this.mul + 100;
+    }
+    protected levelExp(level: number): number {
+        return super.levelExp(level) / 2;
     }
 }

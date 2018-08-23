@@ -4,53 +4,66 @@ import { Off as bOff, Def as bDef } from '../../base/combat';
 import { Building } from '../../base/buildings';
 import { Unit } from '../../types';
 import bFactory from '../../base/combat/factory';
-import ArmyHero from './hero';
 import Hero3 from '../hero';
 
-export type Off = bOff & { hero?: ArmyHero };
-export type Def = bDef & { hero?: ArmyHero };
-export type Side = Off | Def;
+export type Off<H> = bOff & { hero?: H, health?: number };
+export type Def<H> = bDef & { hero?: H, health?: number };
+export type Side = Off<Hero3> | Def<Hero3>;
 
-export default function factory(
+type HeroParams = {
+    unit: number,
+    health?: number,
+    bonus?: number,
+    self?: number,
+};
+
+export type HeroFactory<H,P> = (tribe: number, params: P) => H;
+
+export function baseFactory<H,P extends { health?: number }>(
     { units, buildings }: { units: Unit[][], buildings: Building[] },
 ) {
     const { off: bOff, def: bDef, place } = bFactory({ units, buildings });
-    function heroF(
-        { tribe, unit: unitIndex, health = 100, bonus = 0, self = 0 }
-        : { tribe: number, unit: number, health?: number, bonus?: number, self?: number },
-    ): ArmyHero {
-        const unit = units[tribe][unitIndex];
-        const hero = new Hero3(unit);
-        hero.setSkill('off', self);
-        hero.setSkill('def', self);
-        hero.setSkill('offBonus', bonus);
-        hero.setSkill('defBonus', bonus);
-        return new ArmyHero(hero, { health });
-    }
-    function off(obj: Partial<bOff> & { tribe?: number,
-            hero?: { health?: number, unit: number, bonus?: number, self?: number } }): Off {
+
+    function off(
+        this: { hero: HeroFactory<H,P> },
+        obj: Partial<bOff> & { tribe?: number, hero?: P },
+    ): Off<H> {
         const { hero, ...bObj } = obj;
         const result = bOff(bObj);
         const { tribe } = result;
         if (typeof hero !== 'undefined') {
-            const armyHero = heroF({ tribe, ...hero });
-            // result.hero = undefined;
-            return extend(result, { hero: armyHero });
+            const { health = 100 } = hero;
+            return extend(result, { hero: this.hero(tribe, hero), health });
         } else {
             return result;
         }
     }
-    function def(obj: Partial<bDef> & { tribe?: number,
-            hero?: { health?: number, unit: number, bonus?: number, self?: number } }): Def {
+    function def(
+        this: { hero: HeroFactory<H,P> },
+        obj: Partial<bDef> & { tribe?: number, hero?: P },
+    ): Def<H> {
         const { hero, ...bObj } = obj;
         const result = bDef(bObj);
         const { tribe } = result;
         if (typeof hero !== 'undefined') {
-            const armyHero = heroF({ tribe, ...hero });
-            return extend(result, { hero: armyHero });
+            const { health = 100 } = hero;
+            return extend(result, { hero: this.hero(tribe, hero), health });
         } else {
             return result;
         }
     }
     return { off, def, place };
+}
+
+export default function factory(model: any) {
+    const hero: HeroFactory<Hero3, HeroParams> = (tribe, { unit: unitIndex, bonus = 0, self = 0 }) => {
+        const unit = model.units[tribe][unitIndex];
+        const hero = new Hero3(unit);
+        hero.setSkill('off', self);
+        hero.setSkill('def', self);
+        hero.setSkill('offBonus', bonus);
+        hero.setSkill('defBonus', bonus);
+        return hero;
+    };
+    return extend(baseFactory<Hero3, HeroParams>(model), { hero });
 }

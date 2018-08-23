@@ -1,12 +1,13 @@
 import { sum } from '../../utils';
-import { res, HeroStats, HeroCombatStats, IHero } from '../types';
+import { res } from '../types';
+import CombatPoints from './combat/points';
 
-export default abstract class Hero<S extends {}, K extends string=string> implements IHero<S, K> {
+export default abstract class Hero {
     protected skills: { [P: string]: number };
     private totalPoints: number;
     private pointsPerLevel: number;
     private maxLevel: number;
-    constructor(private skillKeys: K[]) {
+    constructor(private skillKeys: string[]) {
         this.skillKeys = skillKeys;
         this.skills = {};
         this.pointsPerLevel = skillKeys.length;
@@ -20,20 +21,10 @@ export default abstract class Hero<S extends {}, K extends string=string> implem
     public getNeededLvl(): number {
         return Math.max(0, Math.ceil(this.totalPoints / this.pointsPerLevel - 1));
     }
-    public getSkills(): K[] {
+    public getSkills(): string[] {
         return this.skillKeys;
     }
-    public getStats(): HeroStats & S {
-        return Object.assign(
-            {
-                c: this.getCost(),
-                t: this.getTime(),
-            },
-            this.getCombatStats(),
-            this.getMisc(),
-        );
-    }
-    public setSkill(skill: K, level: number) {
+    public setSkill(skill: string, level: number) {
         if (!(skill in this.skills)) {
             throw new RangeError(`Unsupported skill: ${skill}`);
         }
@@ -46,14 +37,15 @@ export default abstract class Hero<S extends {}, K extends string=string> implem
         this.skills[skill] = level;
         this.totalPoints = sum(this.skillKeys.map(skill => this.skills[skill]));
     }
+    public abstract getSpeed(): number;
+    public abstract getOff(): CombatPoints;
+    public abstract getDef(): CombatPoints;
     public getOffBonus() {
         return this.skills.offBonus * 0.002;
     }
     public getDefBonus() {
         return this.skills.defBonus * 0.002;
     }
-    public abstract getCombatStats(): HeroCombatStats;
-    public abstract getMisc(): S;
     public abstract getCost(): res;
     public abstract getTime(): number;
     protected levelExp(level: number) {

@@ -10,7 +10,8 @@ tape('hero (T3)', t => {
         const unit = units[ID.ROMANS][0];
         const hero = new Hero(unit as UnitRegular);
         t.test('level 0', t => {
-            t.deepEqual(hero.getCombatStats(), { a: 50, di: 60, dc: 85 }, 'combat');
+            t.deepEqual(hero.getOff(), { i: 50, c: 0 }, 'off');
+            t.deepEqual(hero.getDef(), { i: 60, c: 85 }, 'def');
             t.deepEqual(hero.getCost(), [240, 200, 300, 60], 'cost');
             t.equal(hero.getTime(), 3200, 'time');
             t.equal(hero.getNeededLvl(), 0, 'lvl');
@@ -20,7 +21,8 @@ tape('hero (T3)', t => {
         t.test('level 40', t => {
             hero.setSkill('off', 100);
             hero.setSkill('def', 100);
-            t.deepEqual(hero.getCombatStats(), { a: 5465, di: 4950, dc: 6370 }, 'combat');
+            t.deepEqual(hero.getOff(), { i: 5465, c: 0 }, 'off');
+            t.deepEqual(hero.getDef(), { i: 4950, c: 6370 }, 'def');
             t.deepEqual(hero.getCost(), [27000, 23000, 33000, 9100], 'cost');
             t.equal(hero.getTime(), 128000, 'time');
             t.equal(hero.getNeededLvl(), 39, 'lvl');
@@ -43,7 +45,8 @@ tape('hero (T3)', t => {
         const unit = units[ID.TEUTONS][4];
         const hero = new Hero(unit as UnitRegular);
         t.test('level 0', t => {
-            t.deepEqual(hero.getCombatStats(), { a: 70, di: 165, dc: 65 }, 'combat');
+            t.deepEqual(hero.getOff(), { i: 0, c: 70 }, 'off');
+            t.deepEqual(hero.getDef(), { i: 165, c: 65 }, 'def');
             t.deepEqual(hero.getCost(), [740, 540, 580, 150], 'cost');
             t.equal(hero.getTime(), 4800, 'time');
             t.end();
@@ -52,7 +55,8 @@ tape('hero (T3)', t => {
         t.test('level 40', t => {
             hero.setSkill('off', 100);
             hero.setSkill('def', 100);
-            t.deepEqual(hero.getCombatStats(), { a: 6485, di: 10135, dc: 5025 }, 'combat');
+            t.deepEqual(hero.getOff(), { i: 0, c: 6485 }, 'off');
+            t.deepEqual(hero.getDef(), { i: 10135, c: 5025 }, 'def');
             t.deepEqual(hero.getCost(), [77500, 57500, 61500, 18000], 'cost');
             t.equal(hero.getTime(), 192000, 'time');
             t.end();

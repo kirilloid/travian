@@ -2,6 +2,14 @@ export default class CombatPoints {
     public static zero() {
         return new CombatPoints(0, 0);
     }
+    public static off(value: number, isInfantry: boolean): CombatPoints {
+        return isInfantry
+            ? new CombatPoints(value, 0)
+            : new CombatPoints(0, value);
+    }
+    public static def(value: number): CombatPoints {
+        return new CombatPoints(value, value);
+    }
     public static add(a: CombatPoints, b: CombatPoints): CombatPoints {
         return a.add(b);
     }
