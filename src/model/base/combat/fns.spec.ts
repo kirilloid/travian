@@ -93,12 +93,12 @@ tape('combat-fns', t => {
     });
 
     type RangeTestConfig = {
-        catas: number
-        upg?: number
-        durability?: number
-        x: number
-        dx?: number
-        threshold: number
+        catas: number,
+        upg?: number,
+        durability?: number,
+        x: number,
+        dx?: number,
+        threshold: number,
     };
 
     t.test('demolishPoints', t => {

@@ -5,11 +5,12 @@ import { Build as BuildIcon } from './Icon';
 import RadioGroup from '../widgets/RadioGroup';
 import { extend, sortBy, resSum, map } from '../utils';
 
-type LBuilding = { building: Building, level: number };
-type VState = { [P: string]: LBuilding };
-type StateWithROI = { def: number, cost: number, state: VState };
+type BuildConfig = {[P: string]: Building};
+type Build = { building: Building, level: number };
+type Village = { [P: string]: Build };
+type FullState = { def: number, cost: number, state: Village };
 
-function totalDef(state: VState): number {
+function totalDef(state: Village): number {
     const total = {
         def: 10,
         defBonus: 1,
@@ -25,7 +26,7 @@ function totalDef(state: VState): number {
     return Math.round(total.def * total.defBonus);
 }
 
-function incBuildLevel({ state, cost }: StateWithROI, type: string): StateWithROI | null {
+function incBuildLevel({ state, cost }: FullState, type: string): FullState | null {
     const { building, level } = state[type];
     const nextLevel = level + 1;
     const nextState = extend(state, { [type]: { level: nextLevel } });
@@ -37,9 +38,9 @@ function incBuildLevel({ state, cost }: StateWithROI, type: string): StateWithRO
     };
 }
 
-function getNext(current: StateWithROI): StateWithROI {
+function getNext(current: FullState): FullState {
     const { cost, def } = current;
-    const nextStates: StateWithROI[] = [];
+    const nextStates: FullState[] = [];
     for (const key in current.state) {
         if (current.state.hasOwnProperty(key)) {
             const next = incBuildLevel(current, key);
@@ -52,12 +53,12 @@ function getNext(current: StateWithROI): StateWithROI {
     return nextStates.slice(-1)[0];
 }
 
-function getInitial(buildings: {[P: string]: Building}): StateWithROI {
+function getInitial(buildings: BuildConfig): FullState {
     const state = map(buildings, building => ({ building, level: 0 }));
     return { state, cost: 0, def: totalDef(state) };
 }
 
-function getOrder(buildings: {[P: string]: Building}): StateWithROI[] {
+function getOrder(buildings: BuildConfig): FullState[] {
     let current = getInitial(buildings);
     const order = [current];
     // tslint:disable-next-line:no-conditional-assignment
@@ -67,7 +68,29 @@ function getOrder(buildings: {[P: string]: Building}): StateWithROI[] {
     return order;
 }
 
-const propLevels = (state: VState) =>
+function diffKey(a: Village, b: Village): string {
+    for (const key in a) {
+        if (a[key] !== b[key]) { return key; }
+    }
+    return '';
+}
+
+function compactOrder(states: FullState[]): FullState[] {
+    let [preLast, last] = states;
+    const tail = states.slice(2);
+    const out: FullState[] = [preLast, last];
+    for (const current of tail) {
+        if (diffKey(preLast.state, last.state) === diffKey(last.state, current.state)) {
+            out.pop();
+        }
+        out.push(current);
+        preLast = last;
+        last = current;
+    }
+    return out;
+}
+
+const propLevels = (state: Village) =>
     Object.keys(state)
         .map(key => state[key].level)
         .join('_');
@@ -80,26 +103,32 @@ type DefInnerProps = {
     lang: Lang,
 };
 
-export default class DefInner extends React.Component<DefInnerProps, {
+type DefInnerState = {
     base: number,
     wall: number,
-    ditch: number,
-}> {
+};
+
+type DefInnerStateWithDitch = DefInnerState & { ditch: number };
+
+export default class DefInner extends React.Component<
+    DefInnerProps,
+    DefInnerState | DefInnerStateWithDitch
+> {
     constructor(props: DefInnerProps) {
         super(props);
-        this.state = {
-            base: props.bases[0].id,
-            wall: props.walls[0].id,
-            ditch: props.ditch.length
-                ? props.ditch[0].id
-                : 0,
-        };
+        this.state = props.ditch.length
+            ? { base: props.bases[0].id,
+                wall: props.walls[0].id,
+                ditch: props.ditch[0].id }
+            : { base: props.bases[0].id,
+                wall: props.walls[0].id };
     }
     public setStateKey(key: string, value: any) {
         this.setState(extend(this.state, { [key]: value }));
     }
     public render() {
         const { buildings, walls, bases } = this.props;
+        const initialState = map(this.state, (id: number) => buildings[id]);
         return <div>
             <RadioGroup
                 key="base"
@@ -119,8 +148,8 @@ export default class DefInner extends React.Component<DefInnerProps, {
                     value: building.id,
                 }))}
             />
-            {getOrder(map(this.state, id => buildings[id]))
-                .map(({ state }) => <div key={propLevels(state)}>
+            {compactOrder(getOrder(initialState))
+                .map(({ state }: FullState) => <div key={propLevels(state)}>
                     {Object.keys(state).sort().map(key => state[key].building.id ? <span key={key}>
                         <BuildIcon id={state[key].building.id} />
                         {state[key].level}

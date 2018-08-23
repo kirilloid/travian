@@ -12,6 +12,7 @@ export default class Def extends React.Component<
         const bases: Building[] = [];
         const ditch: Building[] = [];
         const { buildings, lang } = this.props;
+        // build configuration
         buildings.forEach(building => {
             const bonus = building.f(0);
             if (typeof bonus !== 'object') { return; }

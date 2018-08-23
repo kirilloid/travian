@@ -75,10 +75,15 @@ export function timeI2S(seconds: number): string {
     ].join(':');
 }
 
-export function map<T, S>(item: {[key: string]: T}, fn: (i: T) => S): {[key: string]: S} {
-    const copy: {[key: string]: S} = {};
-    Object.keys(item)
-        .forEach(key => { copy[key] = fn(item[key]); });
+type StrMap<T> = {[key: string]: T};
+
+export function map<T, S>(item: StrMap<T>, fn: (i: T) => S): StrMap<S> {
+    const copy: StrMap<S> = {};
+    for (const key in item) {
+        if (item.hasOwnProperty(key)) {
+            copy[key] = fn(item[key]);
+        }
+    }
     return copy;
 }
 
@@ -87,6 +92,10 @@ interface ICompose {
     <A, B, C, D>(f3: (c: C) => D, f2: (b: B) => C, f1: (a: A) => B): (a: A) => D;
 }
 export const compose: ICompose = (...a: ((arg: any) => any)[]) => (n: any): any => a.reduceRight((v, f) => f(v), n);
+
+const tocp = (c: string) => 56806 - 97 + c.charCodeAt(0);
+export const flag = (iso: string) =>
+    String.fromCharCode(55356, tocp(iso[0]), 55356, tocp(iso[1]));
 
 export function zipWith<A, B, C>(fn: (a: A, b: B) => C, a: A[], b: B[]): C[] {
     const n = Math.min(a.length, b.length);

@@ -1,4 +1,4 @@
-import { extend, sortBy, roundP, map, timeI2S, limit, compose } from '.';
+import { extend, sortBy, roundP, timeI2S, limit, compose, flag } from '.';
 import * as tape from 'tape';
 
 tape('extend', t => {
@@ -62,6 +62,7 @@ tape('extend', t => {
     });
     t.test('classes', t => {
         class A {}
+        // tslint:disable-next-line:max-classes-per-file
         class B extends A {}
         const b = new B();
         const b2 = extend(b, { x: 5 });
@@ -73,7 +74,9 @@ tape('extend', t => {
         const a1 = { a: 1 };
         const b1 = extend(a1, { a: (x: number) => x + 1 });
         t.deepEqual(b1, { a: 2 }, 'propety is changed');
+        // tslint:disable-next-line:no-empty
         const a2 = { f: () => {} };
+        // tslint:disable-next-line:no-empty
         const f = () => {};
         const b2 = extend(a2, { f });
         t.deepEqual(b2, { f }, 'function is overriden');
@@ -111,13 +114,13 @@ tape('roundP', t => {
     t.end();
 });
 
-tape('map', t => {
+/* tape('map', t => {
     const a = { a: 1 };
     const a2 = map(a, x => x * 2);
     t.deepEqual(a2, { a: 2 });
     t.deepEqual(a, { a: 1 }, 'original is not modified');
     t.end();
-});
+}); */
 
 tape('sortBy', t => {
     const a = [1, 10, 4];
@@ -153,5 +156,11 @@ tape('compose', t => {
     const m2 = (x: number) => x * 2;
     t.equal(compose(p5, m2)(1), 7, '1 *2 +5');
     t.equal(compose(m2, p5)(1),12, '1 +5 *2');
+    t.end();
+});
+
+tape('flag', t => {
+    t.equal(flag('ru'), '🇷🇺');
+    t.equal(flag('cz'), '🇨🇿');
     t.end();
 });

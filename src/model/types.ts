@@ -1,5 +1,4 @@
 import { Building } from './base/buildings';
-import CombatPoints from './base/combat/points';
 
 export type VersionInfo = {
     original: string,
