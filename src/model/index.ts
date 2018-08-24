@@ -6,12 +6,12 @@ import t4 from './t4';
 import t4fin from './t4.fin';
 import t4fs from './t4.fs';
 import t4pp from './t4.pp';
-import t36 from './t3.6';
+import t35 from './t3.5';
 import t25 from './t2.5';
 
 const model: { [version: string]: Model } = {
     '2.5': t25,
-    '3.6': t36,
+    '3.5': t35,
     '4': t4,
     '4.fin': t4fin,
     '4.fs': t4fs,
@@ -118,6 +118,7 @@ function detectVersion(url: string): string {
     try {
         localStorage.setItem('version', fromServer);
     } finally {
+        // tslint:disable-next-line:no-unsafe-finally
         return fromServer;
     }
 }

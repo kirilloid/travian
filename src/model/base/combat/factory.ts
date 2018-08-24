@@ -44,10 +44,9 @@ export function off(obj: Partial<Off> & { tribe?: number }) {
     }, obj);
 }
 
-type PlaceWoWall = {
+export type PlaceConfig = {
     tribe: number,
     pop: number,
-    durBonus: number,
     def: number,
     party: boolean,
     wall: number,
@@ -69,7 +68,7 @@ export default function factory(
             const result = def(obj);
             return extend(result, { units: units[result.tribe] });
         },
-        place: (obj: Partial<PlaceWoWall>): Place => {
+        place: (obj: Partial<PlaceConfig>): Place => {
             const { wall, ...rest } = obj;
             const result = place(rest);
             const building = walls[result.tribe];

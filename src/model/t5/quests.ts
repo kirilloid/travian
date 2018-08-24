@@ -212,6 +212,10 @@ export default [
     },
 
 // Markus
+    { // finish tutorial
+        check: {  },
+        bonus: { res: [25, 25, 25, 25] },
+    },
     { // rename a village
         check: {  },
         bonus: { res: [50, 75, 25, 100] },
@@ -410,7 +414,7 @@ export default [
     },
 
     // Chief
-    { // recycle
+    { // recycle a building
         check: {},
         bonus: { res: [50, 50, 100, 50] },
     },

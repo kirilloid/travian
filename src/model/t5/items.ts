@@ -1,12 +1,23 @@
-import bItems, { Item } from '../t4/items';
+import bItems, { Item as BItem } from '../t4/items';
 import { extend } from '../../utils';
 
 const r = (b:number, d:number=b/10) => [b-2*d, b-d, b, b+d, b+2*d];
-const t3 = b => [15*b, 16*b, 17*b, 18*b, 20*b];
+const tier3 = (b: number) => [15*b, 16*b, 17*b, 18*b, 20*b];
 
-const var1 = v => r(v, 1);
-const mvar1 = name => ({ [name]: var1 });
-const weapon = { str: v => v > 1000 ? t3(100) : r(v) };
+const var1 = (v: number) => r(v, 1);
+// generic mapper for properties
+const mvar1: <N extends keyof Item>(name: N) => ({ [P in N]: (v: number) => number[] })
+    = name => ({ [name]: var1 });
+const weapon = { str: (v: number) => v > 1000 ? tier3(100) : r(v) };
+
+export type Item = {
+    [P in keyof BItem]: number | number[]
+} & {
+    eva?:  number | number[], // evade troops
+    vis?:  number | number[], // visibility (discovery) at rally point
+};
+
+export type ItemEffect = { [P in keyof Item]: number };
 
 const items: Item[] = extend(extend(bItems, [
     // helms of experience are removed
@@ -37,7 +48,7 @@ const items: Item[] = extend(extend(bItems, [
     { fret: r(30, 5) }, { fret: r(50, 5) }, { fret: r(90, 5) }, // map
     { fvil: [25,30,35] }, { fvil: [35,40,45] }, { fvil: [45,50,55] }, // pennant
     mvar1('fall'), mvar1('fall'), mvar1('fall'), // standard
-    { vis: r(5, 1) }, { vis: r(10, 1) }, { vis: t3(1) }, // spy glass
+    { vis: r(5, 1) }, { vis: r(10, 1) }, { vis: tier3(1) }, // spy glass
     { raid: r(10, 1) }, { raid: r(15, 1) }, { raid: r(20, 1) }, // pouch
     weapon, weapon, weapon, // shield
     mvar1('nat'), mvar1('nat'), mvar1('nat'), // horn
@@ -45,13 +56,13 @@ const items: Item[] = extend(extend(bItems, [
     { reg:r(20,2)}, { reg:r(30,2)}, { reg:r(40,2)}, // of health
     { reg:r(10,1)}, { reg:r(15,1)}, { reg:r(20,2)}, // scale, arm is inherited
     weapon, weapon, weapon, // breastplate
-    { str:r(250)}, { str:r(500)},  { str:t3(50)}, // chainmail arm is inherited
+    { str:r(250)}, { str:r(500)},  { str:tier3(50)}, // chainmail arm is inherited
     // boots
     // of experience
     { exp: r(15,1), reg: undefined },
     { exp: r(20,1), reg: undefined },
     { exp: [25,26,27,28,30], reg: undefined },
-    { ts: r(25,5) }, { ts: r(50) }, { ts: t3(5) }, // mercenary
+    { ts: r(25,5) }, { ts: r(50) }, { ts: tier3(5) }, // mercenary
     { spd: [2,3] }, { spd: [4,5] }, { spd: [5,6] }, // spurs
 ]), {
     // first horse is the same

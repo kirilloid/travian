@@ -36,11 +36,11 @@ export default class Hero4 extends Hero {
     ) {
         super(['strength', 'offBonus', 'defBonus', 'resources']);
         this.speedOnFoot = 7;
-        this.speedMounted = 14;
+        this.speedMounted = 0;
         this.tribeCosts = tribeCosts;
         if (tribe === ID.GAULS) { this.speedMounted += 5; }
         this.mul = 80;
-        if (tribe === ID.ROMANS) { this.mul = 100; }
+        this.mul = tribe === ID.ROMANS ? 100 : 80;
         this.res = 1;
         this.mount = 0;
     }
@@ -49,13 +49,18 @@ export default class Hero4 extends Hero {
     }
     public getSpeed(): number {
         return this.mount
-            ? this.speedMounted
+            ? this.speedMounted + this.mount
             : this.speedOnFoot;
     }
     public getItemsTotal(name: keyof ItemEffect): number {
-        return sum(this.items
-            .filter(item => name in item)
-            .map(item => item[name] || 0));
+        let total = 0;
+        for (const item of this.items) {
+            const value = item[name];
+            if (typeof value === 'number') {
+                total += value;
+            }
+        }
+        return total;
     }
     public getOff(): CombatPoints {
         const selfStr = this.getStrength();

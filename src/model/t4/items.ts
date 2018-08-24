@@ -20,54 +20,28 @@
 */
 
 export type Item = {
-    arm?:  number | number[] // self-armor
-    cp?:   number | number[] // culture points
-    cav?:  number | number[] // cavalry train bonus
-    exp?:  number | number[] // experience bonus
-    fret?: number | number[] // faster return
-    fvil?: number | number[] // faster travel between vaillages
-    fall?: number | number[] // faster travel within alliance
-    horse?:number | number[] // hero speed on horse
-    inf?:  number | number[] // infantry train bonus
-    nat?:  number | number[] // bonus against natars
-    raid?: number | number[] // plunder bonus
-    reg?:  number | number[] // regeneration
-    spd?:  number | number[] // hero speed bonus (abs)
-    str?:  number | number[] // hero self strength
-    ts?:   number | number[] // Tournament Square effect
-    utype?: number
-    ubonus?: number
-    rev?:  number
-    cage?: number
-    // T5
-    eva?:  number | number[] // evade troops
-    vis?:  number | number[] // visibility (discovery) at rally point
+    arm?:  number,  // self-armor
+    cp?:   number,  // culture points
+    cav?:  number,  // cavalry train bonus
+    exp?:  number,  // experience bonus
+    fret?: number,  // faster return
+    fvil?: number,  // faster travel between vaillages
+    fall?: number,  // faster travel within alliance
+    horse?:number,  // hero speed on horse
+    inf?:  number,  // infantry train bonus
+    nat?:  number,  // bonus against natars
+    raid?: number,  // plunder bonus
+    reg?:  number,  // regeneration
+    spd?:  number,  // hero speed bonus (abs)
+    str?:  number,  // hero self strength
+    ts?:   number,  // Tournament Square effect
+    utype?: number,
+    ubonus?: number,
+    rev?:  number,             // bandages
+    cage?: number,
 };
 
-export type ItemEffect = {
-    arm?:  number
-    cp?:   number
-    cav?:  number
-    exp?:  number
-    fret?: number
-    fvil?: number
-    fall?: number
-    horse?:number
-    inf?:  number
-    nat?:  number
-    raid?: number
-    reg?:  number
-    spd?:  number
-    str?:  number
-    ts?:   number
-    utype?: number
-    ubonus?: number
-    rev?:  number
-    cage?: number
-    // T5
-    eva?:  number
-    vis?:  number
-};
+export type ItemEffect = { [P in keyof Item]: number };
 
 const items: Item[] = [
     { exp: 15 }, { exp: 20 }, { exp: 25 },
@@ -128,6 +102,7 @@ const items: Item[] = [
 export default items;
 
 export const ID = {
+    HORSE: 102,
     OINTMENT: 106,
     SMALL_BANDAGE: 112,
     BIG_BANDAGE: 113,

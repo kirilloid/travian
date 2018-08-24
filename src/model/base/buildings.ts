@@ -68,7 +68,6 @@ export const ID = {
     TOWNHALL: 23,
     RESIDENCE: 24,
     PALACE: 25,
-    TREASURY: 26,
     TRADE_OFFICE: 27,
     GREAT_BARRACKS: 28,
     GREAT_STABLES: 29,

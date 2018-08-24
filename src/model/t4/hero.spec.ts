@@ -1,7 +1,8 @@
 import * as tape from 'tape';
 
-import ID from '../base/tribes';
+import TRIBES from '../base/tribes';
 import Hero from './hero';
+import items, { ID as iID } from './items';
 
 class RealHero extends Hero {
     public getStrength(): number {
@@ -11,7 +12,7 @@ class RealHero extends Hero {
 
 tape('hero (T4)', t => {
     t.test('romans', t => {
-        const hero = new RealHero(ID.ROMANS);
+        const hero = new RealHero(TRIBES.ROMANS);
         t.test('level 0', t => {
             t.deepEqual(hero.getStrength(), 100, 'strength');
             t.deepEqual(hero.getCost(), [130, 120, 180, 80], 'cost');
@@ -42,8 +43,9 @@ tape('hero (T4)', t => {
         });
         t.end();
     });
+
     t.test('teutons', t => {
-        const hero = new RealHero(ID.TEUTONS);
+        const hero = new RealHero(TRIBES.TEUTONS);
         t.test('level 0', t => {
             t.equal(hero.getStrength(), 100, 'strength');
             t.deepEqual(hero.getCost(), [180, 130, 120, 80], 'cost');
@@ -69,5 +71,14 @@ tape('hero (T4)', t => {
         });
         t.end();
     });
+
+    t.test('speed', t => {
+        const hero = new RealHero(TRIBES.GAULS);
+        t.equal(hero.getSpeed(), 7);
+        hero.setMount(items[iID.HORSE].horse || 0);
+        t.equal(hero.getSpeed(), 19);
+        t.end();
+    });
+
     t.end();
 });

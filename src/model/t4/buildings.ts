@@ -1,7 +1,7 @@
 import { extend, roundP } from '../../utils';
 
 import { time, prod } from '../base/buildings';
-import buildings, { ID as bID } from '../t3.6/buildings';
+import buildings, { ID as bID } from '../t3.5/buildings';
 
 export const wall4 = (base: number, num: number) =>
     (lvl: number) => ({

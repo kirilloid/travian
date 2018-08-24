@@ -66,6 +66,24 @@ tape('combat (T3)', t => {
         t.end();
     });
 
+    t.test('catapults', t => {
+        let result: CombatResult[];
+        result = combat.combat(
+            f.place({ }),
+            [ f.def({ }),
+              f.off({ tribe: TRIBES.ROMANS, numbers: [0,0,100, 0,0,0, 0,10], targets: [5] }),
+            ]);
+        t.deepEqual(result[0].buildings, [0], 'work OK');
+
+        result = combat.combat(
+            f.place({ stone: 20 }),
+            [ f.def({ }),
+              f.off({ tribe: TRIBES.ROMANS, numbers: [0,0,100, 0,0,0, 0,10], targets: [5] }),
+            ]);
+        t.deepEqual(result[0].buildings, [3], 'work weaker with stonemason');
+        t.end();
+    });
+
     t.test('lone attacker', t => {
         let result: CombatResult[];
         result = combat.combat(

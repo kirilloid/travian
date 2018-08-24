@@ -1,14 +1,18 @@
 import { extend } from '../../../utils';
 
+import { Unit } from '../../types';
 import { Off as bOff, Def as bDef } from '../../base/combat';
 import { Building } from '../../base/buildings';
-import { Unit } from '../../types';
-import bFactory from '../../base/combat/factory';
+import { ID } from '../buildings';
+import { Place } from '../../base/combat/types';
+import bFactory, { PlaceConfig as BPlaceConfig } from '../../base/combat/factory';
 import Hero3 from '../hero';
 
 export type Off<H> = bOff & { hero?: H, health?: number };
 export type Def<H> = bDef & { hero?: H, health?: number };
 export type Side = Off<Hero3> | Def<Hero3>;
+
+type PlaceConfig = BPlaceConfig & { stone: number };
 
 type HeroParams = {
     unit: number,
@@ -22,7 +26,8 @@ export type HeroFactory<H,P> = (tribe: number, params: P) => H;
 export function baseFactory<H,P extends { health?: number }>(
     { units, buildings }: { units: Unit[][], buildings: Building[] },
 ) {
-    const { off: bOff, def: bDef, place } = bFactory({ units, buildings });
+    const { off: bOff, def: bDef, place: bPlace } = bFactory({ units, buildings });
+    const stoneBonus = buildings[ID.STONEMASON].f;
 
     function off(
         this: { hero: HeroFactory<H,P> },
@@ -51,6 +56,14 @@ export function baseFactory<H,P extends { health?: number }>(
         } else {
             return result;
         }
+    }
+    function place({ stone = 0, ...misc } : Partial<PlaceConfig>): Place {
+        const place = bPlace(misc);
+        if (typeof stone !== 'undefined') {
+            // TODO: implement stonemason didn't work on walls before t3.5
+            place.durBonus *= 1 + stoneBonus(stone) / 100;
+        }
+        return place;
     }
     return { off, def, place };
 }
