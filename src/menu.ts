@@ -1,0 +1,18 @@
+export default [
+  { icon: "troops",
+    path: "troops",
+    text: "Troops tables",
+  },
+  { icon: "conq",
+    path: "conq",
+    text: "Conquering Simulator",
+  },
+  { icon: "build",
+    path: "build",
+    text: "Buildings tables",
+  },
+  { icon: "def",
+    path: "def",
+    text: "Defense calculator",
+  },
+];

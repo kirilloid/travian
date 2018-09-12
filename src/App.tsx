@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { Provider } from 'react-redux';
+import store from './store';
 import { HashRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 
 import Menu from './components/Menu';
@@ -9,14 +11,12 @@ import Troops from './components/Troops';
 import Build from './components/Build';
 import Def from './components/Def';
 
-const menuData = require('./data/menu.json');
+import menuData from './menu';
 
-import { Model, VersionInfo } from './model/types';
+import { VModel } from './model/types';
 
 import lang, { Lang } from './lang';
 import { getInitialModel } from './model';
-
-type VModel = Model & { version: VersionInfo };
 
 export default class App extends React.Component<
   {  },
@@ -45,32 +45,32 @@ export default class App extends React.Component<
     const { model, lang } = this.state;
     return (
       <div className={'t' + model.version.base}>
-        <Router basename={this.state.route}>
-          <div>
-            <Menu items={menuData} />
-            <div className="line">
-              <Server lang={lang}
-                version={model.version.original}
-                onChange={model => this.setModel(model)}/>
-            </div>
-            <Switch>
-              <Route path="/troops/:tribe" render={(props) =>
-                <Troops units={model.units}
-                        lang={lang}
-                        tribe={props.match.params.tribe} />} />
-              <Redirect from="/troops" to="/troops/1-romans" />
-            </Switch>
-            <Route path="/conq" render={() =>
-              <Conq model={model}
+        <Provider store={store}>
+          <Router basename={this.state.route}>
+            <div>
+              <Menu items={menuData} />
+              <div className="line">
+                <Server lang={lang}
+                  version={model.version.original}
+                  onChange={model => this.setModel(model)}/>
+              </div>
+              <Switch>
+                <Route path="/troops/:tribe" render={(props) =>
+                  <Troops units={model.units}
+                          lang={lang}
+                          tribe={props.match.params.tribe} />} />
+                <Redirect from="/troops" to="/troops/1-romans" />
+              </Switch>
+              <Route path="/conq"><Conq /></Route>
+              <Route path="/build" render={() =>
+                <Build buildings={model.buildings}
+                      lang={lang} />} />
+              <Route path="/def" component={() =>
+                <Def buildings={model.buildings}
                     lang={lang} />} />
-            <Route path="/build" render={() =>
-              <Build buildings={model.buildings}
-                     lang={lang} />} />
-            <Route path="/def" component={() =>
-              <Def buildings={model.buildings}
-                   lang={lang} />} />
-          </div>
-        </Router>
+            </div>
+          </Router>
+        </Provider>
       </div>
     );
   }

@@ -1,4 +1,6 @@
 import * as React from 'react';
+
+import { ButtonEl } from '../widgets/types';
 import { Building } from '../model/base/buildings';
 import { Lang } from '../lang';
 import { Build as BuildIcon } from './Icon';
@@ -111,6 +113,13 @@ type DefInnerState = {
 
 type DefInnerStateWithDitch = DefInnerState & { ditch: number };
 
+function getBuildButtons(buildings: Building[]): ButtonEl<number>[] {
+    return buildings.map(({ id }) => ({
+        content: <BuildIcon id={id} />,
+        value: id,
+    }));
+}
+
 export default class DefInner extends React.Component<
     DefInnerProps,
     DefInnerState | DefInnerStateWithDitch
@@ -128,34 +137,31 @@ export default class DefInner extends React.Component<
         this.setState(extend(this.state, { [key]: value }));
     }
     public render() {
-        const { buildings, walls, bases } = this.props;
-        const initialState = map(this.state, (id: number) => buildings[id]);
+        const initialState = map(this.state, (id: number) => this.props.buildings[id]);
         return <div>
             <RadioGroup
                 key="base"
                 value={this.state.base}
                 onChange={value => this.setStateKey('base', +value)}
-                buttons={bases.map(building => ({
-                    content: <BuildIcon id={building.id} />,
-                    value: building.id,
-                }))}
+                buttons={getBuildButtons(this.props.bases)}
             />
             <RadioGroup
                 key="wall"
                 value={this.state.wall}
                 onChange={value => this.setStateKey('wall', +value)}
-                buttons={walls.map(building => ({
-                    content: <BuildIcon id={building.id} />,
-                    value: building.id,
-                }))}
+                buttons={getBuildButtons(this.props.walls)}
             />
-            {compactOrder(getOrder(initialState))
-                .map(({ state }: FullState) => <div key={propLevels(state)}>
-                    {Object.keys(state).sort().map(key => state[key].building.id ? <span key={key}>
-                        <BuildIcon id={state[key].building.id} />
-                        {state[key].level}
-                    </span> : null)}
-                </div>)}
+            {compactOrder(getOrder(initialState)).map(DefEntry)}
         </div>;
     }
 }
+
+const DefEntry = ({ state }: FullState) =>
+    <div key={propLevels(state)}>
+        {Object.keys(state).sort().map(key => state[key].building.id
+            ? <span key={key}>
+                <BuildIcon id={state[key].building.id} />
+                {state[key].level}
+            </span>
+            : null)}
+    </div>;

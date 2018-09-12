@@ -26,6 +26,8 @@ export type Model<H=IHero> = {
     // Hero?: H
 };
 
+export type VModel = Model & { version: VersionInfo };
+
 export type res = [number, number, number, number];
 
 // hero

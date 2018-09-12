@@ -1,4 +1,4 @@
-import { VersionInfo, ServerGroup, Model } from './types';
+import { ServerGroup, VersionInfo, Model, VModel } from './types';
 
 import t5 from './t5';
 import t5dry from './t5.dry';
@@ -123,11 +123,11 @@ function detectVersion(url: string): string {
     }
 }
 
-export function getInitialModel(url: string): Model & { version: VersionInfo } {
-    const versionString = detectVersion(url);
+export function modelFromVersion(versionString: string): VModel {
     const version = parseVersion(versionString);
-    return {
-        version,
-        ...getModel(version.full),
-    };
+    return { ...getModel(version.full), version };
+}
+
+export function getInitialModel(url: string): VModel {
+    return modelFromVersion(detectVersion(url));
 }
