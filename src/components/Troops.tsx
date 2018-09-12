@@ -8,7 +8,12 @@ import { timeI2S, resSum } from '../utils';
 import { Lang } from '../lang';
 import { Unit } from '../model/base';
 
-type UnitProps = { lang: Lang, unit: Unit, tribe: number, index: number };
+type UnitProps = {
+    lang: Lang,
+    unit: Unit,
+    tribe: number,
+    index: number,
+};
 
 const tribeNames = ['romans','teutons','gauls','nature','natar','egyptians','huns'];
 

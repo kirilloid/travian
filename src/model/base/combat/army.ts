@@ -1,4 +1,4 @@
-import { roundP, zipWith, zipWith3 } from '../../../utils';
+import { roundP, zipWith } from '../../../utils';
 
 import { Unit, isSpy, isRam, isCatapult } from '../../types';
 import { Side } from './types';
@@ -84,7 +84,7 @@ export default class Army<S extends Side> {
         a: (a: P, b: P) => P,
         initial: P,
     ) {
-        return zipWith3(
+        return zipWith(
             f,
             this.units,
             this.numbers,

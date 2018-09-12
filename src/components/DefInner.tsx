@@ -5,9 +5,9 @@ import { Build as BuildIcon } from './Icon';
 import RadioGroup from '../widgets/RadioGroup';
 import { extend, sortBy, resSum, map } from '../utils';
 
-type BuildConfig = {[P: string]: Building};
+type BuildConfig = Record<string, Building>;
 type Build = { building: Building, level: number };
-type Village = { [P: string]: Build };
+type Village = Record<string, Build>;
 type FullState = { def: number, cost: number, state: Village };
 
 function totalDef(state: Village): number {
@@ -80,7 +80,8 @@ function compactOrder(states: FullState[]): FullState[] {
     const tail = states.slice(2);
     const out: FullState[] = [preLast, last];
     for (const current of tail) {
-        if (diffKey(preLast.state, last.state) === diffKey(last.state, current.state)) {
+        if (diffKey(preLast.state, last.state)
+        === diffKey(last.state, current.state)) {
             out.pop();
         }
         out.push(current);

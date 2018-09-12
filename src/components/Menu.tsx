@@ -17,7 +17,7 @@ function MenuItem({ icon, text, path }: MenuItemProp) {
 
 export default function Menu(props: { items: MenuItemProp[] }) {
     return (<nav>{
-        props.items.map(({icon, text, path}) =>
-            <MenuItem key={path} icon={icon} text={text} path={path} />)
+        props.items.map((arg: MenuItemProp) =>
+            <MenuItem {...arg} key={arg.path} />)
     }</nav>);
 }

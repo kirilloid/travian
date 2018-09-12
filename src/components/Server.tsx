@@ -1,10 +1,13 @@
 import * as React from 'react';
+import { Model, VersionInfo } from '../model/types';
 import { getModel, getServers, parseVersion } from '../model';
 import { Lang } from '../lang';
 
+type VModel = Model & { version: VersionInfo };
+
 export default class Server extends React.Component<{
     version: string,
-    onChange: (evt: any) => void,
+    onChange: (evt: VModel) => void,
     lang: Lang,
 }> {
     public render() {
@@ -26,7 +29,7 @@ export default class Server extends React.Component<{
             </select>
         </div>);
     }
-    protected mapVersion(stringVersion: string) {
+    protected mapVersion(stringVersion: string): VModel {
         const version = parseVersion(stringVersion);
         return {
             version,

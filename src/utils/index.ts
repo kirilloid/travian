@@ -75,10 +75,11 @@ export function timeI2S(seconds: number): string {
     ].join(':');
 }
 
-type StrMap<T> = {[key: string]: T};
-
-export function map<T, S>(item: StrMap<T>, fn: (i: T) => S): StrMap<S> {
-    const copy: StrMap<S> = {};
+export function map<T, S>(
+    item: Record<string, T>,
+    fn: (i: T) => S
+): Record<string, S> {
+    const copy: Record<string, S> = {};
     for (const key in item) {
         if (item.hasOwnProperty(key)) {
             copy[key] = fn(item[key]);
@@ -97,20 +98,16 @@ const tocp = (c: string) => 56806 - 97 + c.charCodeAt(0);
 export const flag = (iso: string) =>
     String.fromCharCode(55356, tocp(iso[0]), 55356, tocp(iso[1]));
 
-export function zipWith<A, B, C>(fn: (a: A, b: B) => C, a: A[], b: B[]): C[] {
-    const n = Math.min(a.length, b.length);
-    const out = [];
-    for (let i = 0; i < n; i++) {
-        out.push(fn(a[i], b[i]));
-    }
-    return out;
+interface IZipWith {
+    <A, B, C>(fn: (a: A, b: B) => C, a: A[], b: B[]): C[]
+    <A, B, C, D>(fn: (a: A, b: B, c: C) => D, a: A[], b: B[], c: C[]): D[]
 }
 
-export function zipWith3<A, B, C, D>(fn: (a: A, b: B, c: C) => D, a: A[], b: B[], c: C[]): D[] {
-    const n = Math.min(a.length, b.length, c.length);
+export const zipWith: IZipWith = (fn: any, ...args: any[][]) => {
+    const n = Math.min(...args.map(e => e.length));
     const out = [];
     for (let i = 0; i < n; i++) {
-        out.push(fn(a[i], b[i], c[i]));
+        out.push(fn(args.map(e => e[i])));
     }
     return out;
 }

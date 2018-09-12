@@ -6,18 +6,19 @@ const tier3 = (b: number) => [15*b, 16*b, 17*b, 18*b, 20*b];
 
 const var1 = (v: number) => r(v, 1);
 // generic mapper for properties
-const mvar1: <N extends keyof Item>(name: N) => ({ [P in N]: (v: number) => number[] })
-    = name => ({ [name]: var1 });
+const mvar1 = <N extends keyof Item>(name: N) =>
+    ({ [name]: var1 }) as ({ [P in N]: (v: number) => number[] });
 const weapon = { str: (v: number) => v > 1000 ? tier3(100) : r(v) };
 
-export type Item = {
-    [P in keyof BItem]: number | number[]
-} & {
-    eva?:  number | number[], // evade troops
-    vis?:  number | number[], // visibility (discovery) at rally point
-};
+export type Item = Partial<Record<
+    keyof BItem
+        | 'eva' // evade troops
+        | 'vis' // visibility (discovery) at rally point
+        ,
+    number | number[]
+>>;
 
-export type ItemEffect = { [P in keyof Item]: number };
+export type ItemEffect = Record<keyof Item, number>;
 
 const items: Item[] = extend(extend(bItems, [
     // helms of experience are removed
