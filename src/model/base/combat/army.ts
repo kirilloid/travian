@@ -39,6 +39,8 @@ export default class Army<S extends Side> {
     }
     public isScan(): boolean {
         return zipWith(
+            // EITHER unit is spy, OR there are zero of them
+            // which is essentially XOR or !== for boolean
             (spy, zero) => zero !== spy,
             this.units.map(isSpy),
             this.numbers.map(u => u === 0),
@@ -60,6 +62,7 @@ export default class Army<S extends Side> {
             add, 0,
         );
     }
+    /** @return rams number and their upgrade level */
     get rams(): [number, number] {
         for (let i = 0; i < 10; i++) {
             if (isRam(this.units[i])) {
@@ -68,6 +71,7 @@ export default class Army<S extends Side> {
         }
         return [0, 0];
     }
+    /** @return catapults number and their upgrade level */
     get cats(): [number, number] {
         for (let i = 0; i < 10; i++) {
             if (isCatapult(this.units[i])) {
@@ -76,10 +80,11 @@ export default class Army<S extends Side> {
         }
         return [0, 0];
     }
+    // technically a static method
     protected upgrade(unit: Unit, stat: number, level: number): number {
         return roundStat(stat * 1.015 ** level);
     }
-    protected foldMap<P = number>(
+    protected foldMap<P>(
         f: (unit: Unit, stat: number, level: number) => P,
         a: (a: P, b: P) => P,
         initial: P,

@@ -19,7 +19,7 @@ function factorial(n: number): number {
 /**
  * Calculator using precise analytical model, which is stupid inclusion-exclusion formula
  * could be improved with optimization, but the worst-case is still exponential
- * Nonetheless, it's good to test other ways since we can control inputs
+ * Nonetheless, it's good as a reference implementation to compare with others
  */
 export const model = (ranges: range[]): totalArray => {
     const total = { min: 0, max: 0, volume: 1 };
@@ -79,8 +79,8 @@ export const model = (ranges: range[]): totalArray => {
 };
 
 /**
- * utility function: multiplies a vector by 11...11 in <em>linear</em> time
- * works with "sub-pixel" precision
+ * utility function: multiplies a vector (kind of bigint) by 11...11
+ * in <em>linear</em> time, works with "sub-pixel" precision
  */
 export function multiplyRangeByOnes(current: number[], ones: number): number[] {
     const range: number[] = [];

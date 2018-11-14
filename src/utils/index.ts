@@ -77,7 +77,7 @@ export function timeI2S(seconds: number): string {
 
 export function map<T, S>(
     item: Record<string, T>,
-    fn: (i: T) => S
+    fn: (i: T) => S,
 ): Record<string, S> {
     const copy: Record<string, S> = {};
     for (const key in item) {
@@ -99,8 +99,8 @@ export const flag = (iso: string) =>
     String.fromCharCode(55356, tocp(iso[0]), 55356, tocp(iso[1]));
 
 interface IZipWith {
-    <A, B, C>(fn: (a: A, b: B) => C, a: A[], b: B[]): C[]
-    <A, B, C, D>(fn: (a: A, b: B, c: C) => D, a: A[], b: B[], c: C[]): D[]
+    <A, B, C>(fn: (a: A, b: B) => C, a: A[], b: B[]): C[];
+    <A, B, C, D>(fn: (a: A, b: B, c: C) => D, a: A[], b: B[], c: C[]): D[];
 }
 
 export const zipWith: IZipWith = (fn: any, ...args: any[][]) => {
@@ -110,4 +110,4 @@ export const zipWith: IZipWith = (fn: any, ...args: any[][]) => {
         out.push(fn(args.map(e => e[i])));
     }
     return out;
-}
+};

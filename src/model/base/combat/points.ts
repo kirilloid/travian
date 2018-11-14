@@ -1,4 +1,8 @@
+/**
+ * Monoid class (vector)
+ */
 export default class CombatPoints {
+    // factory methods
     public static zero() {
         return new CombatPoints(0, 0);
     }
@@ -10,6 +14,7 @@ export default class CombatPoints {
     public static def(value: number): CombatPoints {
         return new CombatPoints(value, value);
     }
+    // operation methods
     public static add(a: CombatPoints, b: CombatPoints): CombatPoints {
         return a.add(b);
     }
@@ -22,6 +27,7 @@ export default class CombatPoints {
         return total;
     }
     constructor(public i: number, public c: number) {}
+    // instance methods
     public add(that: CombatPoints) {
         return new CombatPoints(this.i + that.i, this.c + that.c);
     }

@@ -10,7 +10,7 @@ import { loyalty, updateDef, updateOff, deleteOff, addOff } from './conq.redux';
 import { isAdmin, UnitAdmin } from '../model/types';
 import lang from '../lang';
 
-import { roundP, limit, compose, extend } from '../utils';
+import { roundP, limit, compose } from '../utils';
 import { numericInt, range } from '../utils/probability';
 import { State, OffSide, Action } from './conq.redux';
 
@@ -112,12 +112,8 @@ const ConqOff: React.ComponentClass<ConqOffOwnProps> = connect<ConqOffDerivedPro
 });
 
 const Conq = (
-    { dispatch, ...props }:
-    { dispatch: Dispatch<Action> } &
-    { conqStats: any, state: State },
+    { dispatch, conqStats, state }: { dispatch: Dispatch<Action>, conqStats: any, state: State },
 ) => {
-    const { conqStats, state } = props;
-
     return <div>
         <label htmlFor="def_pop">{lang('terms.population')}</label>
         <input type="number" id="def_pop"

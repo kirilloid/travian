@@ -1,3 +1,7 @@
+/**
+ * Helper functions, adaptors
+ */
+
 import { extend } from '../../../utils';
 import { Building, SLOT } from '../buildings';
 import { Unit } from '../../types';

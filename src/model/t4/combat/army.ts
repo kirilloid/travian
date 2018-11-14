@@ -41,9 +41,9 @@ export default class Army extends bCombat.Army<Side> {
     }
     public applyLosses(losses: number) {
         super.applyLosses(losses);
-        if (this.hero) {
+        if (this.hero && this.health) {
             const armBonus = this.hero.getItemsTotal('arm');
-            this.health = Math.max(losses - armBonus / 100, 0);
+            this.health = Math.max(this.health - losses - armBonus / 100, 0);
         }
     }
     protected upgrade(unit: Unit, stat: number, level: number) {

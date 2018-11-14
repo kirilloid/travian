@@ -5,6 +5,10 @@ import CombatPoints from './points';
 
 const roundPercent = roundP(1e-4);
 
+/**
+ * table for early ramming phase, number of
+ * demolish points is earlyRamTable[levelFrom][levelTo]
+ */
 const earlyRamTable: number[][] = [];
 for (let lvl = 0; lvl <= 20; lvl++) {
     let l;
@@ -43,12 +47,8 @@ export default {
         const totalDef = def.i * infantryPart + def.c * cavalryPart;
         return [totalOff, totalDef];
     },
-    immensity(n: number) {
-        return compose(
-            roundP(0.0002),
-            limit(1.2578, 1.5),
-            (n: number) => 3.7184 - 2 * n ** 0.015,
-        )(n);
+    immensity(_: number) {
+        return 1.5;
     },
     raid(x: number): [number, number] {
         return [1 / (1 + x), x / (1 + x)];
@@ -59,10 +59,10 @@ export default {
     siegeUpgrade(level: number): number {
         return roundP(0.005)(1.0205 ** level);
     },
-    demolishPoints(catas: number, upg: number, durability: number, ptsRatio: number, morale: number = 1) {
+    demolishPoints(catas: number, upgLvl: number, durability: number, ptsRatio: number, morale: number = 1) {
         // D = 4σ∙C – ½
         const effCatas = Math.floor(catas / durability) * morale;
-        return 4 * this.sigma(ptsRatio) * effCatas * this.siegeUpgrade(upg);
+        return 4 * this.sigma(ptsRatio) * effCatas * this.siegeUpgrade(upgLvl);
     },
     demolish(level: number, damage: number) {
         damage -= 0.5;

@@ -22,7 +22,7 @@ type HeroParams = {
 export default function factory(
     { units, buildings }: { units: Unit[][], buildings: Building[] },
 ) {
-    const { off, def, place } = baseFactory<Hero4, HeroParams>({ units, buildings });
+    const factories = baseFactory<Hero4, HeroParams>({ units, buildings });
     const hero: HeroFactory<Hero4, HeroParams> = (
         tribe,
         { bonus = 0, self = 0, mounted = false, items = [] },
@@ -35,5 +35,5 @@ export default function factory(
         return hero;
     };
 
-    return { off, def, place, hero };
+    return { ...factories, hero };
 }

@@ -26,7 +26,7 @@ export default {
     } as BattleState,
     result: {} as CombatResult,
     /**
-     * returns morale "malus" (not bonus)
+     * returns morale "malus" (inverse of bonus)
      * accepts whether to compensate for big defs
      */
     morale(remorale: boolean = false) {

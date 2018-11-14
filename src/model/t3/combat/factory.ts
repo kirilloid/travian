@@ -68,7 +68,7 @@ export function baseFactory<H,P extends { health?: number }>(
     return { off, def, place };
 }
 
-export default function factory(model: any) {
+export default function factory(model: { units: Unit[][], buildings: Building[] }) {
     const hero: HeroFactory<Hero3, HeroParams> = (tribe, { unit: unitIndex, bonus = 0, self = 0 }) => {
         const unit = model.units[tribe][unitIndex];
         const hero = new Hero3(unit);

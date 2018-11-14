@@ -1,5 +1,6 @@
 import { Unit } from '../../types';
 
+/** place of battle with all bonuses, defensive buildings */
 export type Place = {
     tribe: number,
     pop: number,
@@ -14,6 +15,7 @@ export type Place = {
     // traps: number
 };
 
+/* attacking armies */
 export type Off = {
     kind: 'off',
     pop: number,
@@ -28,6 +30,7 @@ export type Off = {
     brew: number,
 };
 
+/* attacking armies */
 export type Def = {
     kind: 'def',
     units: Unit[],
@@ -40,6 +43,7 @@ export type Def = {
 
 export type Side = Off | Def;
 
+/** battle state and "registers" to save intermediate calculation values */
 export type BattleState = {
     /** base points of armies, with all army effects (hero, items, upgrades),
      * but w/o global things like wall or moralebonus
