@@ -107,7 +107,7 @@ export const zipWith: IZipWith = (fn: any, ...args: any[][]) => {
     const n = Math.min(...args.map(e => e.length));
     const out = [];
     for (let i = 0; i < n; i++) {
-        out.push(fn(args.map(e => e[i])));
+        out.push(fn(...args.map(e => e[i])));
     }
     return out;
 };

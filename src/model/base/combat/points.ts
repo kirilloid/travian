@@ -11,7 +11,7 @@ export default class CombatPoints {
             ? new CombatPoints(value, 0)
             : new CombatPoints(0, value);
     }
-    public static def(value: number): CombatPoints {
+    public static both(value: number): CombatPoints {
         return new CombatPoints(value, value);
     }
     // operation methods

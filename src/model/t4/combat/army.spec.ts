@@ -31,6 +31,9 @@ tape('combat (hero influence)', (t) => {
 tape('combat (hero can die and won\'t with armor)', (t) => {
     let army: Army;
 
+    army = new Army(f.off({ hero: { health: 0 } }));
+    t.deepEqual(army.getOff(), { i: 0, c: 0 });
+
     army = new Army(f.off({ hero: { health: 5 } }));
     army.applyLosses(0.07);
     t.deepEqual(army.getOff(), { i: 0, c: 0 });

@@ -6,12 +6,6 @@ import fns from './fns';
 import CombatPoints from './points';
 
 tape('combat-fns', t => {
-    t.test('immensity', t => {
-        t.equal(fns.immensity(1000), 1.5, 'lo');
-        t.equal(fns.immensity(1000000), 1.2578, 'hi');
-        t.end();
-    });
-
     t.test('morale', t => {
         // anomaly around 3 pop
         t.equal(fns.morale(1, 1), 1);

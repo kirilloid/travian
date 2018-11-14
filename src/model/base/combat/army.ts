@@ -16,11 +16,11 @@ export default class Army<S extends Side> {
         this.numbers = side.numbers;
         this.upgrades = side.upgrades;
     }
-    public applyLosses(percent: number) {
-        this.numbers = this.numbers.map(n => Math.round(n * (1 - percent)));
+    public applyLosses(losses: number) {
+        this.numbers = this.numbers.map(n => Math.round(n * (1 - losses)));
     }
     public getTotal(): number {
-        return this.foldMap((_, number) => number, add, 0);
+        return this.numbers.reduce(add, 0);
     }
     public getOff(): CombatPoints {
         return this.foldMap(
@@ -89,7 +89,7 @@ export default class Army<S extends Side> {
         a: (a: P, b: P) => P,
         initial: P,
     ) {
-        return zipWith(
+        return zipWith<Unit, number, number, P>(
             f,
             this.units,
             this.numbers,

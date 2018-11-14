@@ -1,4 +1,4 @@
-import { extend, sortBy, roundP, timeI2S, limit, compose, flag } from '.';
+import { extend, sortBy, roundP, timeI2S, limit, compose, flag, zipWith } from '.';
 import * as tape from 'tape';
 
 tape('extend', t => {
@@ -156,6 +156,11 @@ tape('compose', t => {
     const m2 = (x: number) => x * 2;
     t.equal(compose(p5, m2)(1), 7, '1 *2 +5');
     t.equal(compose(m2, p5)(1),12, '1 +5 *2');
+    t.end();
+});
+
+tape('zipWith', t => {
+    t.deepEqual(zipWith((a, b) => a + b, [0, 1], [3, 7]), [3, 8]);
     t.end();
 });
 

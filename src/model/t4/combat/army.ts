@@ -9,6 +9,7 @@ const roundStat = roundP(1e-4);
 
 export default class Army extends bCombat.Army<Side> {
     protected hero?: Hero4;
+    /** max health is 100 */
     protected health?: number;
     constructor(side: Side) {
         super(side);
@@ -25,7 +26,7 @@ export default class Army extends bCombat.Army<Side> {
         return CombatPoints.sum([
             unitsOff,
             heroOff,
-            CombatPoints.def(unitBonus * this.numbers[index]),
+            CombatPoints.both(unitBonus * this.numbers[index]),
         ]).mul(1 + this.hero.getOffBonus());
     }
     public getDef() {
@@ -36,14 +37,15 @@ export default class Army extends bCombat.Army<Side> {
         return CombatPoints.sum([
             unitsDef,
             this.hero.getDef(),
-            CombatPoints.def(unitBonus * this.numbers[index]),
+            CombatPoints.both(unitBonus * this.numbers[index]),
         ]).mul(1 + this.hero.getDefBonus());
     }
+    /** losses is fractional */
     public applyLosses(losses: number) {
         super.applyLosses(losses);
         if (this.hero && this.health) {
             const armBonus = this.hero.getItemsTotal('arm');
-            this.health = Math.max(this.health - losses - armBonus / 100, 0);
+            this.health = Math.max(this.health - losses * 100 + armBonus, 0);
         }
     }
     protected upgrade(unit: Unit, stat: number, level: number) {
